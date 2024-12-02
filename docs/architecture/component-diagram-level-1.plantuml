@@ -1,0 +1,29 @@
+@startuml
+
+'!theme mono
+'COMMENT - skinparam linetype ortho
+
+component carpbm as "carp-bm" {
+
+	component service
+	component rest
+
+	rest --> service
+
+}
+
+interface rest_carp_bm as "REST"
+rest -RIGHT- rest_carp_bm
+
+component carpbmshell as "carp-bm-shell" {
+
+	component shell
+	component client
+
+	shell -UP-> client
+
+}
+
+client --( rest_carp_bm
+
+@enduml
