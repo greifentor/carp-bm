@@ -24,6 +24,7 @@ This document contains architecture descriptions and documentation.
 ## Architecture Constraints
 
 * Clean Architecture (hexagonal architecture).
+* Trying a domain and transaction based implementation.
 
 
 ## Context & Scope
