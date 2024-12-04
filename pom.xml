@@ -59,6 +59,7 @@
 		</pluginManagement>
 	</build>
 	<modules>
+		<module>rest</module>
 		<module>service</module>
 	</modules>
 	<dependencies>
