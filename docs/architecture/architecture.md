@@ -14,6 +14,8 @@ This document contains architecture descriptions and documentation.
 ### Quality Goals
 
 * SOLID
+* TDD
+* Minimal code.
 
 
 ### Relevant Stakeholders
