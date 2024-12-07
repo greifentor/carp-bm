@@ -1,3 +1,3 @@
 package de.ollie.carp.bm.core.model;
 
-public class SitzungToken {}
+public class Spielrunde {}

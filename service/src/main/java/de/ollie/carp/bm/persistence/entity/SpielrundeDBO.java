@@ -12,9 +12,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "Sitzung")
-@Table(name = "SITZUNG")
-public class SitzungDBO {
+@Entity(name = "Spielrunde")
+@Table(name = "SPIELRUNDE")
+public class SpielrundeDBO {
 
 	@Id
 	@Column(name = "ID", nullable = false)

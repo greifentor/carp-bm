@@ -15,9 +15,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "SitzungImage")
-@Table(name = "SITZUNG_IMAGE")
-public class SitzungImageDBO {
+@Entity(name = "SpielrundeImage")
+@Table(name = "SPIELRUNDE_IMAGE")
+public class SpielrundeImageDBO {
 
 	@Id
 	@Column(name = "ID", nullable = false)
@@ -27,7 +27,7 @@ public class SitzungImageDBO {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ImageDBO image;
 
-	@JoinColumn(name = "SITZUNG", nullable = false, referencedColumnName = "ID")
+	@JoinColumn(name = "SPIELRUNDE", nullable = false, referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)
-	private SitzungDBO sitzung;
+	private SpielrundeDBO spielrunde;
 }

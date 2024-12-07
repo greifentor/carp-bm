@@ -1,7 +1,7 @@
 package de.ollie.carp.bm.rest.v1;
 
 import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.Sitzung;
+import de.ollie.carp.bm.core.model.Spielrunde;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.SitzungService;
 import de.ollie.carp.bm.core.service.TokenService;
@@ -30,7 +30,7 @@ public class TokenController {
 		@PathVariable int x,
 		@PathVariable int y
 	) {
-		Sitzung sitzung = sitzungService.findById(sitzungId).orElseThrow(() -> new NoSuchElementException());
+		Spielrunde sitzung = sitzungService.findById(sitzungId).orElseThrow(() -> new NoSuchElementException());
 		Token token = tokenService.findById(tokenId).orElseThrow(() -> new NoSuchElementException());
 		tokenService.addTokenToMapOfSitzung(sitzung, token, new Coordinates().setX(x).setY(y));
 	}

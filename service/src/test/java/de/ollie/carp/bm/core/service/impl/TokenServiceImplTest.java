@@ -5,10 +5,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.Sitzung;
-import de.ollie.carp.bm.core.model.SitzungToken;
+import de.ollie.carp.bm.core.model.Spielrunde;
+import de.ollie.carp.bm.core.model.SpielrundeToken;
 import de.ollie.carp.bm.core.model.Token;
-import de.ollie.carp.bm.core.service.port.persistence.SitzungTokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,16 +23,16 @@ class TokenServiceImplTest {
 	private Coordinates coordinates;
 
 	@Mock
-	private Sitzung sitzung;
+	private Spielrunde sitzung;
 
 	@Mock
-	private SitzungToken sitzungToken;
+	private SpielrundeToken sitzungToken;
 
 	@Mock
 	private Token token;
 
 	@Mock
-	private SitzungTokenPersistencePort sitzungTokenPersistencePort;
+	private SpielrundeTokenPersistencePort sitzungTokenPersistencePort;
 
 	@InjectMocks
 	private TokenServiceImpl unitUnderTest;
@@ -45,7 +45,7 @@ class TokenServiceImplTest {
 			// Run
 			unitUnderTest.addTokenToMapOfSitzung(sitzung, token, coordinates);
 			// Check
-			verify(sitzungTokenPersistencePort, times(1)).addTokenToMapOfSitzung(sitzung, token, coordinates);
+			verify(sitzungTokenPersistencePort, times(1)).addTokenToMapOfSpielrunde(sitzung, token, coordinates);
 			verifyNoMoreInteractions(sitzungTokenPersistencePort);
 		}
 	}
