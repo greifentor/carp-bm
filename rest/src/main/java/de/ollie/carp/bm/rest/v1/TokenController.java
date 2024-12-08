@@ -3,7 +3,7 @@ package de.ollie.carp.bm.rest.v1;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Spielrunde;
 import de.ollie.carp.bm.core.model.Token;
-import de.ollie.carp.bm.core.service.SitzungService;
+import de.ollie.carp.bm.core.service.SpielrundeService;
 import de.ollie.carp.bm.core.service.TokenService;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -23,20 +23,20 @@ public class TokenController {
 
 	static final String URL = RestBase.URL + "/token";
 
-	private final SitzungService sitzungService;
+	private final SpielrundeService spielrundeService;
 	private final TokenService tokenService;
 
-	@PostMapping("/{tokenId}/{sitzungId}/{x}/{y}")
-	ResponseEntity<HttpStatus> setTokenToMapOfSitzung(
+	@PostMapping("/{tokenId}/{spielrundeId}/{x}/{y}")
+	ResponseEntity<HttpStatus> setTokenToBattleMapOfSpielrunde(
 		@PathVariable UUID tokenId,
-		@PathVariable UUID sitzungId,
+		@PathVariable UUID spielrundeId,
 		@PathVariable int x,
 		@PathVariable int y
 	) {
 		System.out.println("\n\nGOTCHA!!!\n\n");
-		Spielrunde sitzung = sitzungService.findById(sitzungId).orElseThrow(NoSuchElementException::new);
+		Spielrunde spielrunde = spielrundeService.findById(spielrundeId).orElseThrow(NoSuchElementException::new);
 		Token token = tokenService.findById(tokenId).orElseThrow(NoSuchElementException::new);
-		tokenService.addTokenToMapOfSitzung(sitzung, token, new Coordinates().setX(x).setY(y));
+		tokenService.addTokenToMapOfSitzung(spielrunde, token, new Coordinates().setX(x).setY(y));
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 }
