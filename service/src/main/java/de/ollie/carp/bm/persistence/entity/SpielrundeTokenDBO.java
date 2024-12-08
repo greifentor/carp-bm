@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "SpielrundeBattleMap")
+@Entity(name = "SpielrundeToken")
 @Table(name = "SPIELRUNDE_TOKEN")
 public class SpielrundeTokenDBO {
 
@@ -25,7 +25,7 @@ public class SpielrundeTokenDBO {
 
 	@JoinColumn(name = "TOKEN", nullable = false, referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)
-	private TokenDBO battleMap;
+	private TokenDBO token;
 
 	@JoinColumn(name = "SPIELRUNDE", nullable = false, referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)
