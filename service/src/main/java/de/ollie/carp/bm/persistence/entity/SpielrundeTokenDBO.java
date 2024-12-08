@@ -15,17 +15,17 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "SpielrundeImage")
-@Table(name = "SPIELRUNDE_IMAGE")
-public class SpielrundeImageDBO {
+@Entity(name = "SpielrundeBattleMap")
+@Table(name = "SPIELRUNDE_TOKEN")
+public class SpielrundeTokenDBO {
 
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
-	@JoinColumn(name = "IMAGE", nullable = false, referencedColumnName = "ID")
+	@JoinColumn(name = "TOKEN", nullable = false, referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)
-	private ImageDBO image;
+	private TokenDBO battleMap;
 
 	@JoinColumn(name = "SPIELRUNDE", nullable = false, referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)

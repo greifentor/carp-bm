@@ -6,8 +6,11 @@ import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.SitzungService;
 import de.ollie.carp.bm.core.service.TokenService;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +27,16 @@ public class TokenController {
 	private final TokenService tokenService;
 
 	@PostMapping("/{tokenId}/{sitzungId}/{x}/{y}")
-	void setTokenToMapOfSitzung(
+	ResponseEntity<HttpStatus> setTokenToMapOfSitzung(
 		@PathVariable UUID tokenId,
 		@PathVariable UUID sitzungId,
 		@PathVariable int x,
 		@PathVariable int y
 	) {
-		Spielrunde sitzung = sitzungService.findById(sitzungId).orElseThrow(() -> new NoSuchElementException());
-		Token token = tokenService.findById(tokenId).orElseThrow(() -> new NoSuchElementException());
+		System.out.println("\n\nGOTCHA!!!\n\n");
+		Spielrunde sitzung = sitzungService.findById(sitzungId).orElseThrow(NoSuchElementException::new);
+		Token token = tokenService.findById(tokenId).orElseThrow(NoSuchElementException::new);
 		tokenService.addTokenToMapOfSitzung(sitzung, token, new Coordinates().setX(x).setY(y));
+		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 }
