@@ -22,6 +22,12 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	@Override
+	public Token createTokenWithName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public Optional<Token> findById(UUID tokenId) {
 		// TODO Auto-generated method stub
 		return Optional.empty();

@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TokenService {
-	Token createTokenWithName(String name);
-
 	void addTokenToMapOfSitzung(Spielrunde sitzung, Token token, Coordinates coordinates);
+
+	Token createTokenWithName(String name);
 
 	Optional<Token> findById(UUID tokenId);
 }
