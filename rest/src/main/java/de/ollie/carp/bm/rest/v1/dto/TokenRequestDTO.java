@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class TokenIncomingDTO {
+public class TokenRequestDTO {
 
 	private String accessToken;
 

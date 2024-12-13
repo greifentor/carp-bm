@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
-import de.ollie.carp.bm.rest.v1.dto.TokenIncomingDTO;
-import de.ollie.carp.bm.rest.v1.dto.TokenOutgoingDTO;
+import de.ollie.carp.bm.rest.v1.dto.TokenRequestDTO;
+import de.ollie.carp.bm.rest.v1.dto.TokenResponseDTO;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -33,10 +33,10 @@ public class TokenControllerTest {
 	private TokenDTOMapper tokenDTOMapper;
 
 	@Mock
-	private TokenIncomingDTO tokenIncomingDTO;
+	private TokenRequestDTO tokenRequestDTO;
 
 	@Mock
-	private TokenOutgoingDTO tokenOutgoingDTO;
+	private TokenResponseDTO tokenResponseDTO;
 
 	@Mock
 	private TokenService tokenService;
@@ -51,12 +51,12 @@ public class TokenControllerTest {
 		void happyRun() {
 			// Prepare
 			Token token = mock(Token.class);
-			ResponseEntity<TokenOutgoingDTO> expected = ResponseEntity.ok(tokenOutgoingDTO);
-			when(tokenIncomingDTO.getName()).thenReturn(NAME);
+			ResponseEntity<TokenResponseDTO> expected = ResponseEntity.ok(tokenResponseDTO);
+			when(tokenRequestDTO.getName()).thenReturn(NAME);
 			when(tokenService.createTokenWithName(NAME)).thenReturn(token);
-			when(tokenDTOMapper.toOutgoingDTO(token)).thenReturn(tokenOutgoingDTO);
+			when(tokenDTOMapper.toResponseDTO(token)).thenReturn(tokenResponseDTO);
 			// Run
-			ResponseEntity<TokenOutgoingDTO> returned = unitUnderTest.createTokenWithName(tokenIncomingDTO);
+			ResponseEntity<TokenResponseDTO> returned = unitUnderTest.createTokenWithName(tokenRequestDTO);
 			// Check
 			assertEquals(expected, returned);
 		}

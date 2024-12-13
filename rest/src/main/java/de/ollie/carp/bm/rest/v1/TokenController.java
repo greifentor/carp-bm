@@ -6,8 +6,8 @@ import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.SpielrundeService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
-import de.ollie.carp.bm.rest.v1.dto.TokenIncomingDTO;
-import de.ollie.carp.bm.rest.v1.dto.TokenOutgoingDTO;
+import de.ollie.carp.bm.rest.v1.dto.TokenRequestDTO;
+import de.ollie.carp.bm.rest.v1.dto.TokenResponseDTO;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,11 +33,11 @@ public class TokenController {
 	private final TokenService tokenService;
 	private final SecurityChecker securityChecker;
 
-	@PostMapping("/token/{name}")
-	public ResponseEntity<TokenOutgoingDTO> createTokenWithName(@RequestBody TokenIncomingDTO tokenIncomming) {
+	@PostMapping
+	public ResponseEntity<TokenResponseDTO> createTokenWithName(@RequestBody TokenRequestDTO tokenIncomming) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(tokenIncomming.getAccessToken());
 		Token token = tokenService.createTokenWithName(tokenIncomming.getName());
-		return ResponseEntity.ok(tokenDTOMapper.toOutgoingDTO(token));
+		return ResponseEntity.ok(tokenDTOMapper.toResponseDTO(token));
 	}
 
 	@PostMapping("/{tokenId}/{spielrundeId}/{x}/{y}")
