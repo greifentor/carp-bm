@@ -19,4 +19,7 @@ public class TokenDBO {
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
+
+	@Column(name = "NAME", nullable = false, unique = true)
+	private String name;
 }

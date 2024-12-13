@@ -1,14 +1,17 @@
 package de.ollie.carp.bm.core.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Spielrunde;
 import de.ollie.carp.bm.core.model.SpielrundeToken;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class TokenServiceImplTest {
+
+	private static final String NAME = "name";
 
 	@Mock
 	private Coordinates coordinates;
@@ -34,6 +39,9 @@ class TokenServiceImplTest {
 	@Mock
 	private SpielrundeTokenPersistencePort sitzungTokenPersistencePort;
 
+	@Mock
+	private TokenPersistencePort tokenPersistencePort;
+
 	@InjectMocks
 	private TokenServiceImpl unitUnderTest;
 
@@ -47,6 +55,22 @@ class TokenServiceImplTest {
 			// Check
 			verify(sitzungTokenPersistencePort, times(1)).addTokenToMapOfSpielrunde(sitzung, token, coordinates);
 			verifyNoMoreInteractions(sitzungTokenPersistencePort);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_createTokenWithName_String {
+
+		@Test
+		void delegatesToTokenPersistencePortMethodCorrectly() {
+			// Prepare
+			when(tokenPersistencePort.createTokenWithName(NAME)).thenReturn(token);
+			// Run
+			Token returned = unitUnderTest.createTokenWithName(NAME);
+			// Check
+			assertSame(token, returned);
+			verify(tokenPersistencePort, times(1)).createTokenWithName(NAME);
+			verifyNoMoreInteractions(tokenPersistencePort);
 		}
 	}
 }

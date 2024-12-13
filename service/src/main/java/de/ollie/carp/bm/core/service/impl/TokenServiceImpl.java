@@ -5,6 +5,7 @@ import de.ollie.carp.bm.core.model.Spielrunde;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
 import jakarta.inject.Named;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class TokenServiceImpl implements TokenService {
 
 	private final SpielrundeTokenPersistencePort sitzungTokenPersistencePort;
+	private final TokenPersistencePort tokenPersistencePort;
 
 	@Override
 	public void addTokenToMapOfSitzung(Spielrunde sitzung, Token token, Coordinates coordinates) {
@@ -23,8 +25,7 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public Token createTokenWithName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return tokenPersistencePort.createTokenWithName(name);
 	}
 
 	@Override
