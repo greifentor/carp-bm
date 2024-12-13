@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import de.ollie.carp.bm.persistence.entity.TokenDBO;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,6 +30,7 @@ class TokenDBOFactoryTest {
 	@Nested
 	class TestsOfMethod_createWithName_String {
 
+		@Test
 		void returnsANewTokenDBO() {
 			// Prepare
 			when(uuidFactory.create()).thenReturn(UID0);
@@ -36,6 +38,7 @@ class TokenDBOFactoryTest {
 			assertNotNull(unitUnderTest.createWithName(NAME));
 		}
 
+		@Test
 		void returnsANewTokenDBOWithSetName() {
 			// Prepare
 			when(uuidFactory.create()).thenReturn(UID0);
@@ -45,6 +48,7 @@ class TokenDBOFactoryTest {
 			assertEquals(NAME, returned.getName());
 		}
 
+		@Test
 		void returnsANewTokenDBOWithSetUUID() {
 			// Prepare
 			when(uuidFactory.create()).thenReturn(UID0);
@@ -54,6 +58,7 @@ class TokenDBOFactoryTest {
 			assertEquals(UID0, returned.getId());
 		}
 
+		@Test
 		void returnsANewTokenDBOOnEachCall() {
 			// Prepare
 			when(uuidFactory.create()).thenReturn(UID0, UID1);
