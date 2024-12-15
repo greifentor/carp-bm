@@ -1,4 +1,4 @@
-package de.ollie.carp.bm.client.rest;
+package de.ollie.carp.bm.client.rest.v1;
 
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.client.rest.v1.dto.TokenRequestDTO;
