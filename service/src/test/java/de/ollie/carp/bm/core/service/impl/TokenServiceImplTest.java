@@ -12,6 +12,7 @@ import de.ollie.carp.bm.core.model.SpielrundeToken;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,6 +71,23 @@ class TokenServiceImplTest {
 			// Check
 			assertSame(token, returned);
 			verify(tokenPersistencePort, times(1)).createTokenWithName(NAME);
+			verifyNoMoreInteractions(tokenPersistencePort);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findAll {
+
+		@Test
+		void delegatesToTokenPersistencePortMethodCorrectly() {
+			// Prepare
+			List<Token> persistencePortReturn = List.of(token);
+			when(tokenPersistencePort.findAll()).thenReturn(persistencePortReturn);
+			// Run
+			List<Token> returned = unitUnderTest.findAll();
+			// Check
+			assertSame(persistencePortReturn, returned);
+			verify(tokenPersistencePort, times(1)).findAll();
 			verifyNoMoreInteractions(tokenPersistencePort);
 		}
 	}

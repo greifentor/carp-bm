@@ -61,6 +61,7 @@
 	<modules>
 		<module>client</module>
 		<module>rest</module>
+		<module>rest-server</module>
 		<module>service</module>
 		<module>swing-gui</module>
 	</modules>

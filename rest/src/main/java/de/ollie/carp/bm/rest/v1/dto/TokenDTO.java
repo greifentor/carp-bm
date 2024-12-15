@@ -1,4 +1,4 @@
-package de.ollie.carp.bm.client.rest.v1.dto;
+package de.ollie.carp.bm.rest.v1.dto;
 
 import java.util.UUID;
 import lombok.Data;
@@ -8,9 +8,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class TokenRequestDTO {
-
-	private String accessToken;
+public class TokenDTO {
 
 	private UUID id;
 	private String name;

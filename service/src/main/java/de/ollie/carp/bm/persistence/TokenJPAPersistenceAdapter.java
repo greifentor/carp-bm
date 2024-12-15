@@ -8,6 +8,7 @@ import de.ollie.carp.bm.persistence.factory.TokenDBOFactory;
 import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.TokenDBORepository;
 import jakarta.inject.Named;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -25,5 +26,10 @@ public class TokenJPAPersistenceAdapter implements TokenPersistencePort {
 		}
 		TokenDBO tokenDBO = factory.createWithName(name);
 		return mapper.toModel(repository.save(tokenDBO));
+	}
+
+	@Override
+	public List<Token> findAll() {
+		return mapper.toModels(repository.findAll());
 	}
 }

@@ -7,6 +7,7 @@ import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
 import jakarta.inject.Named;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,11 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public Token createTokenWithName(String name) {
 		return tokenPersistencePort.createTokenWithName(name);
+	}
+
+	@Override
+	public List<Token> findAll() {
+		return tokenPersistencePort.findAll();
 	}
 
 	@Override

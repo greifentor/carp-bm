@@ -6,19 +6,22 @@ import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.SpielrundeService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
-import de.ollie.carp.bm.rest.v1.dto.TokenRequestDTO;
-import de.ollie.carp.bm.rest.v1.dto.TokenResponseDTO;
+import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,18 +30,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TokenController {
 
-	static final String URL = RestBase.URL + "/token";
+	public static final String URL = RestBase.URL + "/token";
 
 	private final SpielrundeService spielrundeService;
 	private final TokenDTOMapper tokenDTOMapper;
 	private final TokenService tokenService;
 	private final SecurityChecker securityChecker;
 
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<TokenDTO>> findAllTokens(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		return ResponseEntity.ok(tokenDTOMapper.toDTOList(tokenService.findAll()));
+	}
+
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TokenResponseDTO> createTokenWithName(@RequestBody TokenRequestDTO tokenIncomming) {
-		securityChecker.throwExceptionIfAccessTokenInvalid(tokenIncomming.getAccessToken());
+	public ResponseEntity<TokenDTO> createTokenWithName(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@RequestBody TokenDTO tokenIncomming
+	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		Token token = tokenService.createTokenWithName(tokenIncomming.getName());
-		return ResponseEntity.ok(tokenDTOMapper.toResponseDTO(token));
+		return ResponseEntity.ok(tokenDTOMapper.toDTO(token));
 	}
 
 	@PostMapping(

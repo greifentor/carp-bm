@@ -8,7 +8,6 @@ public class SecurityCheckerImpl implements SecurityChecker {
 
 	@Override
 	public void throwExceptionIfAccessTokenInvalid(String accessToken) {
-		// TODO Auto-generated method stub
-
+		System.out.println("access token checked: " + accessToken);
 	}
 }

@@ -11,6 +11,7 @@ import de.ollie.carp.bm.persistence.entity.TokenDBO;
 import de.ollie.carp.bm.persistence.factory.TokenDBOFactory;
 import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.TokenDBORepository;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,23 @@ public class TokenJPAPersistenceAdapterTest {
 			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token);
 			// Run
 			Token returned = unitUnderTest.createTokenWithName(NAME);
+			// Check
+			assertSame(token, returned);
+		}
+	}
+
+	@Nested
+	class TestsOfTheMethod_findAll {
+
+		@Test
+		void returnsTokenData_returnedByTheRepositoryMethod() {
+			// Prepare
+			List<TokenDBO> tokenDBOs = List.of(tokenDBO);
+			List<Token> tokens = List.of(token);
+			when(tokenDBORepository.findAll()).thenReturn(tokenDBOs);
+			when(tokenDBOMapper.toModels(tokenDBOs)).thenReturn(tokens);
+			// Run
+			List<Token> returned = unitUnderTest.findAll();
 			// Check
 			assertSame(token, returned);
 		}

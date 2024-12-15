@@ -14,5 +14,6 @@ public class TestService {
 	@PostConstruct
 	void postConstruct() {
 		System.out.println(tokenClient.createTokenWithName("TEST-TOKEN"));
+		System.out.println(tokenClient.findAllTokens());
 	}
 }

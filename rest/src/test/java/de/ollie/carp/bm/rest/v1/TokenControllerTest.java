@@ -7,9 +7,9 @@ import static org.mockito.Mockito.when;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
-import de.ollie.carp.bm.rest.v1.dto.TokenRequestDTO;
-import de.ollie.carp.bm.rest.v1.dto.TokenResponseDTO;
+import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,10 +33,10 @@ public class TokenControllerTest {
 	private TokenDTOMapper tokenDTOMapper;
 
 	@Mock
-	private TokenRequestDTO tokenRequestDTO;
+	private TokenDTO tokenRequestDTO;
 
 	@Mock
-	private TokenResponseDTO tokenResponseDTO;
+	private TokenDTO tokenResponseDTO;
 
 	@Mock
 	private TokenService tokenService;
@@ -51,12 +51,30 @@ public class TokenControllerTest {
 		void happyRun() {
 			// Prepare
 			Token token = mock(Token.class);
-			ResponseEntity<TokenResponseDTO> expected = ResponseEntity.ok(tokenResponseDTO);
+			ResponseEntity<TokenDTO> expected = ResponseEntity.ok(tokenResponseDTO);
 			when(tokenRequestDTO.getName()).thenReturn(NAME);
 			when(tokenService.createTokenWithName(NAME)).thenReturn(token);
-			when(tokenDTOMapper.toResponseDTO(token)).thenReturn(tokenResponseDTO);
+			when(tokenDTOMapper.toDTO(token)).thenReturn(tokenResponseDTO);
 			// Run
-			ResponseEntity<TokenResponseDTO> returned = unitUnderTest.createTokenWithName(tokenRequestDTO);
+			ResponseEntity<TokenDTO> returned = unitUnderTest.createTokenWithName(ACCESS_TOKEN, tokenRequestDTO);
+			// Check
+			assertEquals(expected, returned);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findAllTokens {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			Token token = mock(Token.class);
+			List<TokenDTO> responseList = List.of(tokenResponseDTO);
+			ResponseEntity<List<TokenDTO>> expected = ResponseEntity.ok(responseList);
+			when(tokenService.findAll()).thenReturn(List.of(token));
+			when(tokenDTOMapper.toDTOList(List.of(token))).thenReturn(responseList);
+			// Run
+			ResponseEntity<List<TokenDTO>> returned = unitUnderTest.findAllTokens(ACCESS_TOKEN);
 			// Check
 			assertEquals(expected, returned);
 		}
