@@ -63,6 +63,7 @@
 		<module>rest</module>
 		<module>rest-server</module>
 		<module>service</module>
+		<module>shell</module>
 		<module>swing-gui</module>
 	</modules>
 	<dependencies>
