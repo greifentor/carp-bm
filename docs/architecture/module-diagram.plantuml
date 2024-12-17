@@ -1,0 +1,24 @@
+@startuml
+
+'!theme mono
+'COMMENT - skinparam linetype ortho
+
+component client
+component rest
+component restserver as "rest-server"
+component service
+component shell
+component swing
+
+client --> service
+client --> rest
+
+rest --> service
+
+restserver --> rest
+
+shell --> client
+
+swing --> client
+
+@enduml
