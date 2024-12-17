@@ -1,9 +1,12 @@
 package de.ollie.carp.bm.client.rest.v1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.client.rest.v1.mapper.TokenDTOClientMapper;
+import de.ollie.carp.bm.core.exception.ServiceException;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.rest.v1.TokenController;
+import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import jakarta.inject.Named;
 import java.util.List;
@@ -22,6 +25,7 @@ public class TokenRESTClientImpl implements TokenClient {
 	private final TokenDTOClientMapper tokenMapper;
 
 	private RestClient restClient = RestClient.create();
+	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
 	public Token createTokenWithName(String name) {
@@ -32,6 +36,21 @@ public class TokenRESTClientImpl implements TokenClient {
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(new TokenDTO().setName(name))
 			.retrieve()
+			.onStatus(
+				status -> status.value() == 400,
+				(request, resp) -> {
+					System.out.println("GOTCHA FUCK!");
+					String s = new String(resp.getBody().readAllBytes());
+					System.out.println("---- " + s);
+					ErrorMessageDTO errorDTO = new ErrorMessageDTO();
+					throw new ServiceException(
+						errorDTO.getMessage(),
+						null,
+						errorDTO.getMessageId(),
+						errorDTO.getMessageDataToStringArray()
+					);
+				}
+			)
 			.toEntity(TokenDTO.class);
 		return tokenMapper.toModel(response.getBody());
 	}
@@ -43,6 +62,12 @@ public class TokenRESTClientImpl implements TokenClient {
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + TokenController.URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.retrieve()
+			.onStatus(
+				status -> status.value() == 404,
+				(request, response) -> {
+					System.out.println(response);
+				}
+			)
 			.body(new ParameterizedTypeReference<List<TokenDTO>>() {});
 		return tokenMapper.toModels(dtos);
 	}
