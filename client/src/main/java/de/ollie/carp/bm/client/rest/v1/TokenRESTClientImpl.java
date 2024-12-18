@@ -9,12 +9,14 @@ import de.ollie.carp.bm.rest.v1.TokenController;
 import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import jakarta.inject.Named;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClient;
 
 @Named
@@ -38,21 +40,25 @@ public class TokenRESTClientImpl implements TokenClient {
 			.retrieve()
 			.onStatus(
 				status -> status.value() == 400,
-				(request, resp) -> {
-					System.out.println("GOTCHA FUCK!");
-					String s = new String(resp.getBody().readAllBytes());
-					System.out.println("---- " + s);
-					ErrorMessageDTO errorDTO = new ErrorMessageDTO();
-					throw new ServiceException(
-						errorDTO.getMessage(),
-						null,
-						errorDTO.getMessageId(),
-						errorDTO.getMessageDataToStringArray()
-					);
+				(req, resp) -> {
+					throwServiceExceptionFromErrorResponse(resp);
 				}
 			)
 			.toEntity(TokenDTO.class);
 		return tokenMapper.toModel(response.getBody());
+	}
+
+	private void throwServiceExceptionFromErrorResponse(ClientHttpResponse response) throws IOException {
+		ErrorMessageDTO errorDTO = objectMapper.readValue(
+			new String(response.getBody().readAllBytes()),
+			ErrorMessageDTO.class
+		);
+		throw new ServiceException(
+			errorDTO.getMessage(),
+			null,
+			errorDTO.getMessageId(),
+			errorDTO.getMessageDataToStringArray()
+		);
 	}
 
 	@Override
@@ -64,8 +70,8 @@ public class TokenRESTClientImpl implements TokenClient {
 			.retrieve()
 			.onStatus(
 				status -> status.value() == 404,
-				(request, response) -> {
-					System.out.println(response);
+				(req, resp) -> {
+					throwServiceExceptionFromErrorResponse(resp);
 				}
 			)
 			.body(new ParameterizedTypeReference<List<TokenDTO>>() {});
