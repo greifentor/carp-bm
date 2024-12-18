@@ -1,6 +1,6 @@
 package de.ollie.carp.bm;
 
-public class CarpBmServiceStarter {
+public class CarpBmServiceInterfaceStarter {
 
 	public static void main(String[] args) {}
 }

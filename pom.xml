@@ -60,6 +60,7 @@
 	</build>
 	<modules>
 		<module>client</module>
+		<module>jpa-persistence</module>
 		<module>rest</module>
 		<module>rest-server</module>
 		<module>service</module>

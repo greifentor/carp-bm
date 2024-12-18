@@ -4,18 +4,21 @@
 'COMMENT - skinparam linetype ortho
 
 component client
+component jpaservice as "jpa-service"
 component rest
 component restserver as "rest-server"
 component service
 component shell
-component swing
+component swing as "swing-gui"
 
-client --> service
 client --> rest
+
+jpaservice --> service
 
 rest --> service
 
 restserver --> rest
+restserver --> jpaservice
 
 shell --> client
 

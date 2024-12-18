@@ -10,11 +10,11 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>carp-bm-rest</artifactId>
+	<artifactId>carp-bm-jpa-persistence</artifactId>
 	<packaging>jar</packaging>
 
-	<name>CARP-BM (REST)</name>
-	<description>The rest module of the application.</description>
+	<name>CARP-BM (JPA-Persistence)</name>
+	<description>The JPA persistence module of the application.</description>
 
 	<properties>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
@@ -24,10 +24,10 @@
 		<!-- carp-bm -->
 		<dependency>
 			<groupId>de.ollie</groupId>
-			<artifactId>carp-bm-service-interface</artifactId>
+			<artifactId>carp-bm-service</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		<!-- java -->
+		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -42,7 +42,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<!-- Testing -->
 		<dependency>
@@ -100,13 +100,6 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<skipTests>false</skipTests>
 				</configuration>
 			</plugin>
 			<plugin>
