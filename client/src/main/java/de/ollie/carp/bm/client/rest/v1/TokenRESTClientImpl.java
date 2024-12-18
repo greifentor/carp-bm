@@ -5,7 +5,7 @@ import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.client.rest.v1.mapper.TokenDTOClientMapper;
 import de.ollie.carp.bm.core.exception.ServiceException;
 import de.ollie.carp.bm.core.model.Token;
-import de.ollie.carp.bm.rest.v1.TokenController;
+import de.ollie.carp.bm.rest.v1.RestBase;
 import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import jakarta.inject.Named;
@@ -33,7 +33,7 @@ public class TokenRESTClientImpl implements TokenClient {
 	public Token createTokenWithName(String name) {
 		ResponseEntity<TokenDTO> response = restClient
 			.post()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + TokenController.URL)
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(new TokenDTO().setName(name))
@@ -65,7 +65,7 @@ public class TokenRESTClientImpl implements TokenClient {
 	public List<Token> findAllTokens() {
 		List<TokenDTO> dtos = restClient
 			.get()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + TokenController.URL)
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.retrieve()
 			.onStatus(

@@ -26,11 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(TokenController.URL)
+@RequestMapping(RestBase.TOKEN_URL)
 @RequiredArgsConstructor
 public class TokenController {
-
-	public static final String URL = RestBase.URL + "/token";
 
 	private final SpielrundeService spielrundeService;
 	private final TokenDTOMapper tokenDTOMapper;
