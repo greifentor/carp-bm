@@ -9,6 +9,8 @@ import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.TokenDBORepository;
 import jakarta.inject.Named;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -29,7 +31,22 @@ public class TokenJPAPersistenceAdapter implements TokenPersistencePort {
 	}
 
 	@Override
+	public void deleteById(UUID uuid) {
+		repository.deleteById(uuid);
+	}
+
+	@Override
 	public List<Token> findAll() {
 		return mapper.toModels(repository.findAll());
+	}
+
+	@Override
+	public Optional<Token> findById(UUID uuid) {
+		return repository.findById(uuid).map(mapper::toModel);
+	}
+
+	@Override
+	public Optional<Token> findByName(String name) {
+		return repository.findByName(name).map(mapper::toModel);
 	}
 }

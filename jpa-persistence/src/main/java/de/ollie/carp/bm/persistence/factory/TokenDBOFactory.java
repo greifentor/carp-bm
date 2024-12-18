@@ -1,5 +1,6 @@
 package de.ollie.carp.bm.persistence.factory;
 
+import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.persistence.entity.TokenDBO;
 import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;

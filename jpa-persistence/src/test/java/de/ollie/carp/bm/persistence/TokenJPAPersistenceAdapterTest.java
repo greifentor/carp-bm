@@ -2,6 +2,8 @@ package de.ollie.carp.bm.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -13,6 +15,7 @@ import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.TokenDBORepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class TokenJPAPersistenceAdapterTest {
 
 	private static final String NAME = "name";
+	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
 	private Token token;
@@ -70,7 +74,17 @@ public class TokenJPAPersistenceAdapterTest {
 	}
 
 	@Nested
-	class TestsOfTheMethod_findAll {
+	class TestsOfMethod_deleteById_UUID {
+
+		@Test
+		void callsRepositoryMethodCorrectly() {
+			unitUnderTest.deleteById(UID);
+			verify(tokenDBORepository, times(1)).deleteById(UID);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findAll {
 
 		@Test
 		void returnsTokenData_returnedByTheRepositoryMethod() {
@@ -82,7 +96,7 @@ public class TokenJPAPersistenceAdapterTest {
 			// Run
 			List<Token> returned = unitUnderTest.findAll();
 			// Check
-			assertSame(token, returned);
+			assertSame(tokens, returned);
 		}
 	}
 }

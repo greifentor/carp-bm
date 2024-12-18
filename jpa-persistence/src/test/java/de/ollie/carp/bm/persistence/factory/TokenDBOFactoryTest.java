@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.persistence.entity.TokenDBO;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;

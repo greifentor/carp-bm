@@ -10,9 +10,12 @@ import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Spielrunde;
 import de.ollie.carp.bm.core.model.SpielrundeToken;
 import de.ollie.carp.bm.core.model.Token;
+import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,9 +27,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class TokenServiceImplTest {
 
 	private static final String NAME = "name";
+	private static final String STRING = "string";
+	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
 	private Coordinates coordinates;
+
+	@Mock
+	private UUIDFactory uuidFactory;
 
 	@Mock
 	private Spielrunde sitzung;
@@ -76,6 +84,33 @@ class TokenServiceImplTest {
 	}
 
 	@Nested
+	class TestsOfMethod_delete_String {
+
+		@Test
+		void callsTheTokenPersistencePortMethodCorrectly_passingAnUUID() {
+			// Prepare
+			when(uuidFactory.createFromString(STRING)).thenReturn(UID);
+			when(tokenPersistencePort.findByName(STRING)).thenReturn(Optional.empty());
+			// Run
+			unitUnderTest.delete(STRING);
+			// Check
+			verify(tokenPersistencePort, times(1)).deleteById(UID);
+		}
+
+		@Test
+		void callsTheTokenPersistencePortMethodCorrectly_passingAName() {
+			// Prepare
+			Optional<Token> foundByName = Optional.of(token);
+			when(token.getId()).thenReturn(UID);
+			when(tokenPersistencePort.findByName(STRING)).thenReturn(foundByName);
+			// Run
+			unitUnderTest.delete(STRING);
+			// Check
+			verify(tokenPersistencePort, times(1)).deleteById(UID);
+		}
+	}
+
+	@Nested
 	class TestsOfMethod_findAll {
 
 		@Test
@@ -89,6 +124,21 @@ class TokenServiceImplTest {
 			assertSame(persistencePortReturn, returned);
 			verify(tokenPersistencePort, times(1)).findAll();
 			verifyNoMoreInteractions(tokenPersistencePort);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findByName_String {
+
+		@Test
+		void callsTheTokenPersistencePortMethodCorrectly() {
+			// Prepare
+			Optional<Token> expected = Optional.of(token);
+			when(tokenPersistencePort.findByName(NAME)).thenReturn(expected);
+			// Run
+			Optional<Token> returned = unitUnderTest.findByName(NAME);
+			// Check
+			assertSame(expected, returned);
 		}
 	}
 }

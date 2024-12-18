@@ -31,4 +31,13 @@ public class TokenCommands {
 	public String list() {
 		return tokenClient.findAllTokens().stream().map(Token::toString).reduce((t0, t1) -> t0 + "\n" + t1).orElse("");
 	}
+
+	@ShellMethod(value = "Deletes the token by UUID or name.", key = { "delete-token", "dt" })
+	public String delete(@ShellOption(help = "UUID or name of the token.", value = "uuidOrName") String uuidOrName) {
+		try {
+			return "token deleted with id: " + tokenClient.delete(uuidOrName).toString();
+		} catch (Exception e) {
+			return exceptionMapper.map(e);
+		}
+	}
 }

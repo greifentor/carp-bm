@@ -12,7 +12,11 @@ public interface TokenService {
 
 	Token createTokenWithName(String name);
 
+	Token delete(String uuidOrName);
+
 	List<Token> findAll();
 
 	Optional<Token> findById(UUID tokenId);
+
+	Optional<Token> findByName(String name);
 }

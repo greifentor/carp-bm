@@ -11,6 +11,7 @@ import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import jakarta.inject.Named;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -76,5 +77,23 @@ public class TokenRESTClientImpl implements TokenClient {
 			)
 			.body(new ParameterizedTypeReference<List<TokenDTO>>() {});
 		return tokenMapper.toModels(dtos);
+	}
+
+	@Override
+	public UUID delete(String uuidToName) {
+		return restClient
+			.delete()
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + uuidToName)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.retrieve()
+			.onStatus(
+				status -> status.value() == 404,
+				(req, resp) -> {
+					throwServiceExceptionFromErrorResponse(resp);
+				}
+			)
+			.toEntity(TokenDTO.class)
+			.getBody()
+			.getId();
 	}
 }

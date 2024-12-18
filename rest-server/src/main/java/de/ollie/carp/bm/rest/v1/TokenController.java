@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,10 +63,18 @@ public class TokenController {
 		@PathVariable int x,
 		@PathVariable int y
 	) {
-		System.out.println("\n\nGOTCHA!!!\n\n");
 		Spielrunde spielrunde = spielrundeService.findById(spielrundeId).orElseThrow(NoSuchElementException::new);
 		Token token = tokenService.findById(tokenId).orElseThrow(NoSuchElementException::new);
 		tokenService.addTokenToMapOfSitzung(spielrunde, token, new Coordinates().setX(x).setY(y));
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
+	}
+
+	@DeleteMapping("/{tokenIdOrName}")
+	public ResponseEntity<Token> delete(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String tokenIdOrName
+	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		return ResponseEntity.ok(tokenService.delete(tokenIdOrName));
 	}
 }
