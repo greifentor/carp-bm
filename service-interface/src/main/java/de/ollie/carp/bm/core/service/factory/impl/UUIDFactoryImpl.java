@@ -14,7 +14,6 @@ public class UUIDFactoryImpl implements UUIDFactory {
 
 	@Override
 	public UUID createFromString(String uuid) {
-		// TODO Auto-generated method stub
-		return null;
+		return UUID.fromString(uuid);
 	}
 }

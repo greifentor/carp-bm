@@ -99,4 +99,34 @@ public class TokenJPAPersistenceAdapterTest {
 			assertSame(tokens, returned);
 		}
 	}
+
+	@Nested
+	class TestsOfMethod_findById_UUID {
+
+		@Test
+		void returnsTokenData_returnedByTheRepositoryMethod() {
+			// Prepare
+			when(tokenDBORepository.findById(UID)).thenReturn(Optional.of(tokenDBO));
+			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token);
+			// Run
+			Optional<Token> returned = unitUnderTest.findById(UID);
+			// Check
+			assertSame(token, returned.get());
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findByName_String {
+
+		@Test
+		void returnsTokenData_returnedByTheRepositoryMethod() {
+			// Prepare
+			when(tokenDBORepository.findByName(NAME)).thenReturn(Optional.of(tokenDBO));
+			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token);
+			// Run
+			Optional<Token> returned = unitUnderTest.findByName(NAME);
+			// Check
+			assertSame(token, returned.get());
+		}
+	}
 }
