@@ -45,10 +45,10 @@ public class TokenController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TokenDTO> createTokenWithName(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
-		@RequestBody TokenDTO tokenIncomming
+		@RequestBody TokenDTO tokenRequestDTO
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		Token token = tokenService.createTokenWithName(tokenIncomming.getName());
+		Token token = tokenService.create(tokenDTOMapper.toModel(tokenRequestDTO));
 		return ResponseEntity.ok(tokenDTOMapper.toDTO(token));
 	}
 

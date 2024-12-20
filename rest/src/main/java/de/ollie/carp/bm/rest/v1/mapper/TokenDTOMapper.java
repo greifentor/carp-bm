@@ -9,5 +9,7 @@ import org.mapstruct.Mapper;
 public interface TokenDTOMapper {
 	TokenDTO toDTO(Token model);
 
+	Token toModel(TokenDTO dto);
+
 	List<TokenDTO> toDTOList(List<Token> models);
 }

@@ -43,7 +43,10 @@ class TokenServiceImplTest {
 	private SpielrundeToken sitzungToken;
 
 	@Mock
-	private Token token;
+	private Token token0;
+
+	@Mock
+	private Token token1;
 
 	@Mock
 	private SpielrundeTokenPersistencePort sitzungTokenPersistencePort;
@@ -60,25 +63,27 @@ class TokenServiceImplTest {
 		@Test
 		void delegatesToSitzungTokenPersistencePortMethodCorrectly() {
 			// Run
-			unitUnderTest.addTokenToMapOfSitzung(sitzung, token, coordinates);
+			unitUnderTest.addTokenToMapOfSitzung(sitzung, token0, coordinates);
 			// Check
-			verify(sitzungTokenPersistencePort, times(1)).addTokenToMapOfSpielrunde(sitzung, token, coordinates);
+			verify(sitzungTokenPersistencePort, times(1)).addTokenToMapOfSpielrunde(sitzung, token0, coordinates);
 			verifyNoMoreInteractions(sitzungTokenPersistencePort);
 		}
 	}
 
 	@Nested
-	class TestsOfMethod_createTokenWithName_String {
+	class TestsOfMethod_create_Token {
 
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
 			// Prepare
-			when(tokenPersistencePort.createTokenWithName(NAME)).thenReturn(token);
+			when(tokenPersistencePort.create(token0)).thenReturn(token1);
+			when(uuidFactory.create()).thenReturn(UID);
 			// Run
-			Token returned = unitUnderTest.createTokenWithName(NAME);
+			Token returned = unitUnderTest.create(token0);
 			// Check
-			assertSame(token, returned);
-			verify(tokenPersistencePort, times(1)).createTokenWithName(NAME);
+			assertSame(token1, returned);
+			verify(token0, times(1)).setId(UID);
+			verify(tokenPersistencePort, times(1)).create(token0);
 			verifyNoMoreInteractions(tokenPersistencePort);
 		}
 	}
@@ -100,8 +105,8 @@ class TokenServiceImplTest {
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly_passingAName() {
 			// Prepare
-			Optional<Token> foundByName = Optional.of(token);
-			when(token.getId()).thenReturn(UID);
+			Optional<Token> foundByName = Optional.of(token0);
+			when(token0.getId()).thenReturn(UID);
 			when(tokenPersistencePort.findByName(STRING)).thenReturn(foundByName);
 			// Run
 			unitUnderTest.delete(STRING);
@@ -116,7 +121,7 @@ class TokenServiceImplTest {
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
 			// Prepare
-			List<Token> persistencePortReturn = List.of(token);
+			List<Token> persistencePortReturn = List.of(token0);
 			when(tokenPersistencePort.findAll()).thenReturn(persistencePortReturn);
 			// Run
 			List<Token> returned = unitUnderTest.findAll();
@@ -133,7 +138,7 @@ class TokenServiceImplTest {
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly() {
 			// Prepare
-			Optional<Token> expected = Optional.of(token);
+			Optional<Token> expected = Optional.of(token0);
 			when(tokenPersistencePort.findByName(NAME)).thenReturn(expected);
 			// Run
 			Optional<Token> returned = unitUnderTest.findByName(NAME);

@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import de.ollie.carp.bm.core.exception.UniqueConstraintViolationException;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.persistence.entity.TokenDBO;
-import de.ollie.carp.bm.persistence.factory.TokenDBOFactory;
 import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.TokenDBORepository;
 import java.util.List;
@@ -30,13 +29,13 @@ public class TokenJPAPersistenceAdapterTest {
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private Token token;
+	private Token token0;
+
+	@Mock
+	private Token token1;
 
 	@Mock
 	private TokenDBO tokenDBO;
-
-	@Mock
-	private TokenDBOFactory tokenDBOFactory;
 
 	@Mock
 	private TokenDBOMapper tokenDBOMapper;
@@ -48,28 +47,30 @@ public class TokenJPAPersistenceAdapterTest {
 	private TokenJPAPersistenceAdapter unitUnderTest;
 
 	@Nested
-	class TestsOfTheMethod_createTokenWithName_String {
+	class TestsOfTheMethod_create_Token {
 
 		@Test
 		void throwsAnException_passingAnAlreadyExistingName() {
 			// Prepare
+			when(token0.getName()).thenReturn(NAME);
 			when(tokenDBORepository.findByName(NAME)).thenReturn(Optional.of(tokenDBO));
 			// Run & Check
-			assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.createTokenWithName(NAME));
-			verifyNoMoreInteractions(tokenDBOFactory, tokenDBOMapper, tokenDBORepository);
+			assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.create(token0));
+			verifyNoMoreInteractions(tokenDBOMapper, tokenDBORepository);
 		}
 
 		@Test
 		void returnsANewTokenWithPassedNameAndSetUUID() {
 			// Prepare
+			when(token0.getName()).thenReturn(NAME);
 			when(tokenDBORepository.findByName(NAME)).thenReturn(Optional.empty());
-			when(tokenDBOFactory.createWithName(NAME)).thenReturn(tokenDBO);
 			when(tokenDBORepository.save(tokenDBO)).thenReturn(tokenDBO);
-			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token);
+			when(tokenDBOMapper.toDBO(token0)).thenReturn(tokenDBO);
+			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token1);
 			// Run
-			Token returned = unitUnderTest.createTokenWithName(NAME);
+			Token returned = unitUnderTest.create(token0);
 			// Check
-			assertSame(token, returned);
+			assertSame(token1, returned);
 		}
 	}
 
@@ -90,7 +91,7 @@ public class TokenJPAPersistenceAdapterTest {
 		void returnsTokenData_returnedByTheRepositoryMethod() {
 			// Prepare
 			List<TokenDBO> tokenDBOs = List.of(tokenDBO);
-			List<Token> tokens = List.of(token);
+			List<Token> tokens = List.of(token0);
 			when(tokenDBORepository.findAll()).thenReturn(tokenDBOs);
 			when(tokenDBOMapper.toModels(tokenDBOs)).thenReturn(tokens);
 			// Run
@@ -107,11 +108,11 @@ public class TokenJPAPersistenceAdapterTest {
 		void returnsTokenData_returnedByTheRepositoryMethod() {
 			// Prepare
 			when(tokenDBORepository.findById(UID)).thenReturn(Optional.of(tokenDBO));
-			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token);
+			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token0);
 			// Run
 			Optional<Token> returned = unitUnderTest.findById(UID);
 			// Check
-			assertSame(token, returned.get());
+			assertSame(token0, returned.get());
 		}
 	}
 
@@ -122,11 +123,11 @@ public class TokenJPAPersistenceAdapterTest {
 		void returnsTokenData_returnedByTheRepositoryMethod() {
 			// Prepare
 			when(tokenDBORepository.findByName(NAME)).thenReturn(Optional.of(tokenDBO));
-			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token);
+			when(tokenDBOMapper.toModel(tokenDBO)).thenReturn(token0);
 			// Run
 			Optional<Token> returned = unitUnderTest.findByName(NAME);
 			// Check
-			assertSame(token, returned.get());
+			assertSame(token0, returned.get());
 		}
 	}
 }

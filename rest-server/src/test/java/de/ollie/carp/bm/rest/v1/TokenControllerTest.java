@@ -50,11 +50,12 @@ public class TokenControllerTest {
 		@Test
 		void happyRun() {
 			// Prepare
-			Token token = mock(Token.class);
+			Token token0 = mock(Token.class);
+			Token token1 = mock(Token.class);
 			ResponseEntity<TokenDTO> expected = ResponseEntity.ok(tokenResponseDTO);
-			when(tokenRequestDTO.getName()).thenReturn(NAME);
-			when(tokenService.createTokenWithName(NAME)).thenReturn(token);
-			when(tokenDTOMapper.toDTO(token)).thenReturn(tokenResponseDTO);
+			when(tokenService.create(token0)).thenReturn(token1);
+			when(tokenDTOMapper.toModel(tokenRequestDTO)).thenReturn(token0);
+			when(tokenDTOMapper.toDTO(token1)).thenReturn(tokenResponseDTO);
 			// Run
 			ResponseEntity<TokenDTO> returned = unitUnderTest.createTokenWithName(ACCESS_TOKEN, tokenRequestDTO);
 			// Check

@@ -28,8 +28,9 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	@Override
-	public Token createTokenWithName(String name) {
-		return tokenPersistencePort.createTokenWithName(name);
+	public Token create(Token token) {
+		token.setId(uuidFactory.create());
+		return tokenPersistencePort.create(token);
 	}
 
 	@Override
@@ -37,11 +38,9 @@ public class TokenServiceImpl implements TokenService {
 		UUID id = tokenPersistencePort
 			.findByName(uuidOrName)
 			.map(Token::getId)
-			.orElse(uuidFactory.createFromString(uuidOrName));
-		System.out.println("trying to delete token with id: " + id);
+			.orElseGet(() -> uuidFactory.createFromString(uuidOrName));
 		Token deletedToken = tokenPersistencePort.findById(id).orElse(null);
 		tokenPersistencePort.deleteById(id);
-		System.out.println("returning token: " + deletedToken);
 		return deletedToken;
 	}
 

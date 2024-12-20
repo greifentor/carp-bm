@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface TokenService {
 	void addTokenToMapOfSitzung(Spielrunde sitzung, Token token, Coordinates coordinates);
 
-	Token createTokenWithName(String name);
+	Token create(Token token);
 
 	Token delete(String uuidOrName);
 

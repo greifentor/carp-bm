@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TokenPersistencePort {
-	Token createTokenWithName(String name);
+	Token create(Token token);
 
 	void deleteById(UUID uuid);
 
