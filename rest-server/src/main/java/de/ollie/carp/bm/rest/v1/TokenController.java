@@ -32,24 +32,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
 	private final SpielrundeService spielrundeService;
-	private final TokenDTOMapper tokenDTOMapper;
-	private final TokenService tokenService;
+	private final TokenDTOMapper mapper;
+	private final TokenService service;
 	private final SecurityChecker securityChecker;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TokenDTO>> findAllTokens(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		return ResponseEntity.ok(tokenDTOMapper.toDTOList(tokenService.findAll()));
+		return ResponseEntity.ok(mapper.toDTOList(service.findAll()));
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TokenDTO> createTokenWithName(
+	public ResponseEntity<TokenDTO> createToken(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
-		@RequestBody TokenDTO tokenRequestDTO
+		@RequestBody TokenDTO requestDTO
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		Token token = tokenService.create(tokenDTOMapper.toModel(tokenRequestDTO));
-		return ResponseEntity.ok(tokenDTOMapper.toDTO(token));
+		Token token = service.create(mapper.toModel(requestDTO));
+		return ResponseEntity.ok(mapper.toDTO(token));
 	}
 
 	@PostMapping(
@@ -64,17 +64,17 @@ public class TokenController {
 		@PathVariable int y
 	) {
 		Spielrunde spielrunde = spielrundeService.findById(spielrundeId).orElseThrow(NoSuchElementException::new);
-		Token token = tokenService.findById(tokenId).orElseThrow(NoSuchElementException::new);
-		tokenService.addTokenToMapOfSitzung(spielrunde, token, new Coordinates().setX(x).setY(y));
+		Token token = service.findById(tokenId).orElseThrow(NoSuchElementException::new);
+		service.addTokenToMapOfSitzung(spielrunde, token, new Coordinates().setX(x).setY(y));
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 
-	@DeleteMapping("/{tokenIdOrName}")
+	@DeleteMapping("/{idOrName}")
 	public ResponseEntity<Token> delete(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
-		@PathVariable String tokenIdOrName
+		@PathVariable String idOrName
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		return ResponseEntity.ok(tokenService.delete(tokenIdOrName));
+		return ResponseEntity.ok(service.delete(idOrName));
 	}
 }

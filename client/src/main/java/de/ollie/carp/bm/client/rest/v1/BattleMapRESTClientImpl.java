@@ -1,13 +1,13 @@
 package de.ollie.carp.bm.client.rest.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.ollie.carp.bm.client.BattleMapClient;
-import de.ollie.carp.bm.client.rest.v1.mapper.BattleMapDTOClientMapper;
+import de.ollie.carp.bm.client.TokenClient;
+import de.ollie.carp.bm.client.rest.v1.mapper.TokenDTOClientMapper;
 import de.ollie.carp.bm.core.exception.ServiceException;
-import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.rest.v1.RestBase;
-import de.ollie.carp.bm.rest.v1.dto.BattleMapDTO;
 import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
+import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import jakarta.inject.Named;
 import java.io.IOException;
 import java.util.List;
@@ -22,22 +22,22 @@ import org.springframework.web.client.RestClient;
 
 @Named
 @RequiredArgsConstructor
-public class TokenRESTClientImpl implements BattleMapClient {
+public class BattleMapRESTClientImpl implements TokenClient {
 
 	private final RestClientConfiguration clientConfiguration;
-	private final BattleMapDTOClientMapper mapper;
+	private final TokenDTOClientMapper mapper;
 
 	private RestClient restClient = RestClient.create();
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public BattleMap createBattleMapWithName(String name) {
-		ResponseEntity<BattleMapDTO> response = restClient
+	public Token createTokenWithName(String name) {
+		ResponseEntity<TokenDTO> response = restClient
 			.post()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.BATTLE_MAP_URL)
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(new BattleMapDTO().setName(name))
+			.body(new TokenDTO().setName(name))
 			.retrieve()
 			.onStatus(
 				status -> status.value() == 400,
@@ -45,7 +45,7 @@ public class TokenRESTClientImpl implements BattleMapClient {
 					throwServiceExceptionFromErrorResponse(resp);
 				}
 			)
-			.toEntity(BattleMapDTO.class);
+			.toEntity(TokenDTO.class);
 		return mapper.toModel(response.getBody());
 	}
 
@@ -63,10 +63,10 @@ public class TokenRESTClientImpl implements BattleMapClient {
 	}
 
 	@Override
-	public List<BattleMap> findAllBattleMaps() {
-		List<BattleMapDTO> dtos = restClient
+	public List<Token> findAllTokens() {
+		List<TokenDTO> dtos = restClient
 			.get()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.BATTLE_MAP_URL)
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.retrieve()
 			.onStatus(
@@ -75,7 +75,7 @@ public class TokenRESTClientImpl implements BattleMapClient {
 					throwServiceExceptionFromErrorResponse(resp);
 				}
 			)
-			.body(new ParameterizedTypeReference<List<BattleMapDTO>>() {});
+			.body(new ParameterizedTypeReference<List<TokenDTO>>() {});
 		return mapper.toModels(dtos);
 	}
 
@@ -83,7 +83,7 @@ public class TokenRESTClientImpl implements BattleMapClient {
 	public UUID delete(String uuidToName) {
 		return restClient
 			.delete()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.BATTLE_MAP_URL + "/" + uuidToName)
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + uuidToName)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.retrieve()
 			.onStatus(
@@ -92,7 +92,7 @@ public class TokenRESTClientImpl implements BattleMapClient {
 					throwServiceExceptionFromErrorResponse(resp);
 				}
 			)
-			.toEntity(BattleMapDTO.class)
+			.toEntity(TokenDTO.class)
 			.getBody()
 			.getId();
 	}

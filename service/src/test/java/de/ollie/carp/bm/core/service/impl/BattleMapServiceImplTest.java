@@ -6,13 +6,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.Spielrunde;
-import de.ollie.carp.bm.core.model.SpielrundeToken;
-import de.ollie.carp.bm.core.model.Token;
+import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
-import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
-import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.BattleMapPersistencePort;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,66 +20,41 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class TokenServiceImplTest {
+public class BattleMapServiceImplTest {
 
 	private static final String NAME = "name";
 	private static final String STRING = "string";
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private Coordinates coordinates;
-
-	@Mock
 	private UUIDFactory uuidFactory;
 
 	@Mock
-	private Spielrunde sitzung;
+	private BattleMap battleMap0;
 
 	@Mock
-	private SpielrundeToken sitzungToken;
+	private BattleMap battleMap1;
 
 	@Mock
-	private Token token0;
-
-	@Mock
-	private Token token1;
-
-	@Mock
-	private SpielrundeTokenPersistencePort sitzungTokenPersistencePort;
-
-	@Mock
-	private TokenPersistencePort persistencePort;
+	private BattleMapPersistencePort persistencePort;
 
 	@InjectMocks
-	private TokenServiceImpl unitUnderTest;
+	private BattleMapServiceImpl unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_addTokenToMapOfSitzung_Sitzung_Token_Coordinates {
-
-		@Test
-		void delegatesToSitzungTokenPersistencePortMethodCorrectly() {
-			// Run
-			unitUnderTest.addTokenToMapOfSitzung(sitzung, token0, coordinates);
-			// Check
-			verify(sitzungTokenPersistencePort, times(1)).addTokenToMapOfSpielrunde(sitzung, token0, coordinates);
-			verifyNoMoreInteractions(sitzungTokenPersistencePort);
-		}
-	}
-
-	@Nested
-	class TestsOfMethod_create_Token {
+	class TestsOfMethod_create_BattleMap {
 
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
 			// Prepare
-			when(persistencePort.create(token0)).thenReturn(token1);
+			when(persistencePort.create(battleMap0)).thenReturn(battleMap1);
 			when(uuidFactory.create()).thenReturn(UID);
 			// Run
-			Token returned = unitUnderTest.create(token0);
+			BattleMap returned = unitUnderTest.create(battleMap0);
 			// Check
-			assertSame(token1, returned);
-			verify(token0, times(1)).setId(UID);
-			verify(persistencePort, times(1)).create(token0);
+			assertSame(battleMap1, returned);
+			verify(battleMap0, times(1)).setId(UID);
+			verify(persistencePort, times(1)).create(battleMap0);
 			verifyNoMoreInteractions(persistencePort);
 		}
 	}
@@ -105,8 +76,8 @@ class TokenServiceImplTest {
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly_passingAName() {
 			// Prepare
-			Optional<Token> foundByName = Optional.of(token0);
-			when(token0.getId()).thenReturn(UID);
+			Optional<BattleMap> foundByName = Optional.of(battleMap0);
+			when(battleMap0.getId()).thenReturn(UID);
 			when(persistencePort.findByName(STRING)).thenReturn(foundByName);
 			// Run
 			unitUnderTest.delete(STRING);
@@ -121,10 +92,10 @@ class TokenServiceImplTest {
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
 			// Prepare
-			List<Token> persistencePortReturn = List.of(token0);
+			List<BattleMap> persistencePortReturn = List.of(battleMap0);
 			when(persistencePort.findAll()).thenReturn(persistencePortReturn);
 			// Run
-			List<Token> returned = unitUnderTest.findAll();
+			List<BattleMap> returned = unitUnderTest.findAll();
 			// Check
 			assertSame(persistencePortReturn, returned);
 			verify(persistencePort, times(1)).findAll();
@@ -138,10 +109,10 @@ class TokenServiceImplTest {
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly() {
 			// Prepare
-			Optional<Token> expected = Optional.of(token0);
+			Optional<BattleMap> expected = Optional.of(battleMap0);
 			when(persistencePort.findByName(NAME)).thenReturn(expected);
 			// Run
-			Optional<Token> returned = unitUnderTest.findByName(NAME);
+			Optional<BattleMap> returned = unitUnderTest.findByName(NAME);
 			// Check
 			assertSame(expected, returned);
 		}

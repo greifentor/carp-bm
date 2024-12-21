@@ -8,10 +8,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import de.ollie.carp.bm.core.exception.UniqueConstraintViolationException;
-import de.ollie.carp.bm.core.model.Token;
-import de.ollie.carp.bm.persistence.entity.TokenDBO;
-import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
-import de.ollie.carp.bm.persistence.repository.TokenDBORepository;
+import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.persistence.entity.BattleMapDBO;
+import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
+import de.ollie.carp.bm.persistence.repository.BattleMapDBORepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,28 +23,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class TokenJPAPersistenceAdapterTest {
+public class BattleMapJPAPersistenceAdapterTest {
 
 	private static final String NAME = "name";
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private Token model0;
+	private BattleMap model0;
 
 	@Mock
-	private Token model1;
+	private BattleMap model1;
 
 	@Mock
-	private TokenDBO dbo;
+	private BattleMapDBO dbo;
 
 	@Mock
-	private TokenDBOMapper mapper;
+	private BattleMapDBOMapper mapper;
 
 	@Mock
-	private TokenDBORepository repository;
+	private BattleMapDBORepository repository;
 
 	@InjectMocks
-	private TokenJPAPersistenceAdapter unitUnderTest;
+	private BattleMapJPAPersistenceAdapter unitUnderTest;
 
 	@Nested
 	class TestsOfTheMethod_create_Token {
@@ -68,7 +68,7 @@ public class TokenJPAPersistenceAdapterTest {
 			when(mapper.toDBO(model0)).thenReturn(dbo);
 			when(mapper.toModel(dbo)).thenReturn(model1);
 			// Run
-			Token returned = unitUnderTest.create(model0);
+			BattleMap returned = unitUnderTest.create(model0);
 			// Check
 			assertSame(model1, returned);
 		}
@@ -90,12 +90,12 @@ public class TokenJPAPersistenceAdapterTest {
 		@Test
 		void returnsTokenData_returnedByTheRepositoryMethod() {
 			// Prepare
-			List<TokenDBO> tokenDBOs = List.of(dbo);
-			List<Token> tokens = List.of(model0);
+			List<BattleMapDBO> tokenDBOs = List.of(dbo);
+			List<BattleMap> tokens = List.of(model0);
 			when(repository.findAll()).thenReturn(tokenDBOs);
 			when(mapper.toModels(tokenDBOs)).thenReturn(tokens);
 			// Run
-			List<Token> returned = unitUnderTest.findAll();
+			List<BattleMap> returned = unitUnderTest.findAll();
 			// Check
 			assertSame(tokens, returned);
 		}
@@ -110,7 +110,7 @@ public class TokenJPAPersistenceAdapterTest {
 			when(repository.findById(UID)).thenReturn(Optional.of(dbo));
 			when(mapper.toModel(dbo)).thenReturn(model0);
 			// Run
-			Optional<Token> returned = unitUnderTest.findById(UID);
+			Optional<BattleMap> returned = unitUnderTest.findById(UID);
 			// Check
 			assertSame(model0, returned.get());
 		}
@@ -125,7 +125,7 @@ public class TokenJPAPersistenceAdapterTest {
 			when(repository.findByName(NAME)).thenReturn(Optional.of(dbo));
 			when(mapper.toModel(dbo)).thenReturn(model0);
 			// Run
-			Optional<Token> returned = unitUnderTest.findByName(NAME);
+			Optional<BattleMap> returned = unitUnderTest.findByName(NAME);
 			// Check
 			assertSame(model0, returned.get());
 		}
