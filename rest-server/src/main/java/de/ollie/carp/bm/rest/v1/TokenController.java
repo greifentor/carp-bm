@@ -1,15 +1,11 @@
 package de.ollie.carp.bm.rest.v1;
 
-import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.Spielrunde;
 import de.ollie.carp.bm.core.model.Token;
-import de.ollie.carp.bm.core.service.SpielrundeService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TokenController {
 
-	private final SpielrundeService spielrundeService;
 	private final TokenDTOMapper mapper;
 	private final TokenService service;
 	private final SecurityChecker securityChecker;
@@ -63,9 +58,9 @@ public class TokenController {
 		@PathVariable int x,
 		@PathVariable int y
 	) {
-		Spielrunde spielrunde = spielrundeService.findById(spielrundeId).orElseThrow(NoSuchElementException::new);
-		Token token = service.findById(tokenId).orElseThrow(NoSuchElementException::new);
-		service.addTokenToMapOfSitzung(spielrunde, token, new Coordinates().setX(x).setY(y));
+		//		Spielrunde spielrunde = spielrundeService.findById(spielrundeId).orElseThrow(NoSuchElementException::new);
+		//		Token token = service.findById(tokenId).orElseThrow(NoSuchElementException::new);
+		//		service.addTokenToMapOfSitzung(spielrunde, token, new Coordinates().setX(x).setY(y));
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 

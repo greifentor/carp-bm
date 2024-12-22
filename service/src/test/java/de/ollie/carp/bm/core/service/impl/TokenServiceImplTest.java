@@ -6,12 +6,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.Spielrunde;
-import de.ollie.carp.bm.core.model.SpielrundeToken;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
-import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.BattleMapTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
 import java.util.List;
 import java.util.Optional;
@@ -31,16 +31,16 @@ class TokenServiceImplTest {
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
+	private BattleMap battleMap;
+
+	@Mock
+	private BattleMapToken battleMapToken;
+
+	@Mock
 	private Coordinates coordinates;
 
 	@Mock
 	private UUIDFactory uuidFactory;
-
-	@Mock
-	private Spielrunde sitzung;
-
-	@Mock
-	private SpielrundeToken sitzungToken;
 
 	@Mock
 	private Token token0;
@@ -49,7 +49,7 @@ class TokenServiceImplTest {
 	private Token token1;
 
 	@Mock
-	private SpielrundeTokenPersistencePort sitzungTokenPersistencePort;
+	private BattleMapTokenPersistencePort battleMapTokenPersistencePort;
 
 	@Mock
 	private TokenPersistencePort persistencePort;
@@ -63,10 +63,10 @@ class TokenServiceImplTest {
 		@Test
 		void delegatesToSitzungTokenPersistencePortMethodCorrectly() {
 			// Run
-			unitUnderTest.addTokenToMapOfSitzung(sitzung, token0, coordinates);
+			unitUnderTest.addTokenToBattleMap(token0, battleMap, coordinates);
 			// Check
-			verify(sitzungTokenPersistencePort, times(1)).addTokenToMapOfSpielrunde(sitzung, token0, coordinates);
-			verifyNoMoreInteractions(sitzungTokenPersistencePort);
+			verify(battleMapTokenPersistencePort, times(1)).addTokenToBattleMap(token0, battleMap, coordinates);
+			verifyNoMoreInteractions(battleMapTokenPersistencePort);
 		}
 	}
 

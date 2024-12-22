@@ -15,19 +15,25 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "SpielrundeToken")
-@Table(name = "SPIELRUNDE_TOKEN")
-public class SpielrundeTokenDBO {
+@Entity(name = "BattleMapToken")
+@Table(name = "BATTLE_MAP_TOKEN")
+public class BattleMapTokenDBO {
 
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
+	@JoinColumn(name = "BATTLE_MAP", nullable = false, referencedColumnName = "ID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	private BattleMapDBO battleMap;
+
 	@JoinColumn(name = "TOKEN", nullable = false, referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TokenDBO token;
 
-	@JoinColumn(name = "SPIELRUNDE", nullable = false, referencedColumnName = "ID")
-	@ManyToOne(fetch = FetchType.EAGER)
-	private SpielrundeDBO spielrunde;
+	@Column(name = "POSITION_X", nullable = false)
+	private int positionX;
+
+	@Column(name = "POSITION_Y", nullable = false)
+	private int positionY;
 }

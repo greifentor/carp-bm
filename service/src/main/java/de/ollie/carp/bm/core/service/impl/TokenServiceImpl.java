@@ -1,11 +1,11 @@
 package de.ollie.carp.bm.core.service.impl;
 
+import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.Spielrunde;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
-import de.ollie.carp.bm.core.service.port.persistence.SpielrundeTokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.BattleMapTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
@@ -17,14 +17,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-	private final SpielrundeTokenPersistencePort sitzungTokenPersistencePort;
+	private final BattleMapTokenPersistencePort battleMapTokenPersistencePort;
 	private final TokenPersistencePort tokenPersistencePort;
 
 	private final UUIDFactory uuidFactory;
 
 	@Override
-	public void addTokenToMapOfSitzung(Spielrunde sitzung, Token token, Coordinates coordinates) {
-		sitzungTokenPersistencePort.addTokenToMapOfSpielrunde(sitzung, token, coordinates);
+	public void addTokenToBattleMap(Token token, BattleMap battleMap, Coordinates coordinates) {
+		battleMapTokenPersistencePort.addTokenToBattleMap(token, battleMap, coordinates);
 	}
 
 	@Override
