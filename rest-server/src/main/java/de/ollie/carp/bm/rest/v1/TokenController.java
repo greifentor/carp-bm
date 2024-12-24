@@ -1,12 +1,15 @@
 package de.ollie.carp.bm.rest.v1;
 
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
+import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.Token;
+import de.ollie.carp.bm.core.service.BattleMapService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
 import de.ollie.carp.bm.rest.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
+import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.List;
 import java.util.Optional;
@@ -29,15 +32,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TokenController {
 
+	private final BattleMapService battleMapService;
+	private final CoordinatesDTOMapper coordinatesMapper;
 	private final SecurityChecker securityChecker;
 	private final TokenDTOMapper mapper;
-	private final TokenService service;
+	private final TokenService tokenService;
 	private final UUIDFactory uuidFactory;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TokenDTO>> findAllTokens(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		return ResponseEntity.ok(mapper.toDTOList(service.findAll()));
+		return ResponseEntity.ok(mapper.toDTOList(tokenService.findAll()));
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,7 +51,7 @@ public class TokenController {
 		@RequestBody TokenDTO requestDTO
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		Token token = service.create(mapper.toModel(requestDTO));
+		Token token = tokenService.create(mapper.toModel(requestDTO));
 		return ResponseEntity.ok(mapper.toDTO(token));
 	}
 
@@ -61,10 +66,13 @@ public class TokenController {
 		@PathVariable String battleMapId,
 		@RequestBody CoordinatesDTO coordinatesDTO
 	) {
-		Token token = service
+		BattleMap battleMap = battleMapService
+			.findById(uuidFactory.createFromString(battleMapId))
+			.orElseThrow(() -> new NoSuchRecordException(battleMapId, "BattleMap", "id"));
+		Token token = tokenService
 			.findById(uuidFactory.createFromString(tokenId))
 			.orElseThrow(() -> new NoSuchRecordException(tokenId, "Token", "id"));
-		service.addTokenToBattleMap(null, null, null);
+		tokenService.addTokenToBattleMap(token, battleMap, coordinatesMapper.toModel(coordinatesDTO));
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 
@@ -74,6 +82,6 @@ public class TokenController {
 		@PathVariable String idOrName
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		return ResponseEntity.ok(service.delete(idOrName));
+		return ResponseEntity.ok(tokenService.delete(idOrName));
 	}
 }

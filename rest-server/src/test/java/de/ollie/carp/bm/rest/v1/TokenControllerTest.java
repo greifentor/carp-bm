@@ -6,12 +6,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
+import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
+import de.ollie.carp.bm.core.service.BattleMapService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
 import de.ollie.carp.bm.rest.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
+import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,13 +38,28 @@ public class TokenControllerTest {
 	private static final String NAME = "name";
 
 	@Mock
+	private BattleMap battleMap;
+
+	@Mock
+	private BattleMapService battleMapService;
+
+	@Mock
+	private Coordinates coordinates;
+
+	@Mock
 	private CoordinatesDTO coordinatesDTO;
+
+	@Mock
+	private CoordinatesDTOMapper coordinatesMapper;
 
 	@Mock
 	private SecurityChecker securityChecker;
 
 	@Mock
 	private TokenDTOMapper mapper;
+
+	@Mock
+	private Token token;
 
 	@Mock
 	private TokenDTO requestDTO;
@@ -99,7 +119,27 @@ public class TokenControllerTest {
 		@Test
 		void throwsAnException_passingAnIdOfAnUnknownBattleMap() {
 			// Prepare
+			when(uuidFactory.createFromString(BATTLE_MAP_ID.toString())).thenReturn(BATTLE_MAP_ID);
+			when(battleMapService.findById(BATTLE_MAP_ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(
+				NoSuchRecordException.class,
+				() ->
+					unitUnderTest.setTokenToBattleMapOfSpielrunde(
+						ACCESS_TOKEN,
+						TOKEN_ID.toString(),
+						BATTLE_MAP_ID.toString(),
+						coordinatesDTO
+					)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingAnIdOfAnUnknownToken() {
+			// Prepare
+			when(uuidFactory.createFromString(BATTLE_MAP_ID.toString())).thenReturn(BATTLE_MAP_ID);
 			when(uuidFactory.createFromString(TOKEN_ID.toString())).thenReturn(TOKEN_ID);
+			when(battleMapService.findById(BATTLE_MAP_ID)).thenReturn(Optional.of(battleMap));
 			when(service.findById(TOKEN_ID)).thenReturn(Optional.empty());
 			// Run & Check
 			assertThrows(
@@ -112,6 +152,26 @@ public class TokenControllerTest {
 						coordinatesDTO
 					)
 			);
+		}
+
+		@Test
+		void callsTheServiceMethodToSetTheTokenOnTheBattleMap() {
+			// Prepare
+			ResponseEntity<HttpStatus> expected = ResponseEntity.of(Optional.of(HttpStatus.OK));
+			when(uuidFactory.createFromString(BATTLE_MAP_ID.toString())).thenReturn(BATTLE_MAP_ID);
+			when(uuidFactory.createFromString(TOKEN_ID.toString())).thenReturn(TOKEN_ID);
+			when(battleMapService.findById(BATTLE_MAP_ID)).thenReturn(Optional.of(battleMap));
+			when(service.findById(TOKEN_ID)).thenReturn(Optional.of(token));
+			when(coordinatesMapper.toModel(coordinatesDTO)).thenReturn(coordinates);
+			// Run
+			ResponseEntity<HttpStatus> returned = unitUnderTest.setTokenToBattleMapOfSpielrunde(
+				ACCESS_TOKEN,
+				TOKEN_ID.toString(),
+				BATTLE_MAP_ID.toString(),
+				coordinatesDTO
+			);
+			// Check
+			assertEquals(expected, returned);
 		}
 	}
 }
