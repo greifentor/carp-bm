@@ -14,6 +14,7 @@ import de.ollie.carp.bm.persistence.mapper.BattleMapTokenDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.BattleMapTokenDBORepository;
 import jakarta.inject.Named;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
@@ -39,14 +40,19 @@ class BattleMapTokenJPAPersistenceAdapter implements BattleMapTokenPersistencePo
 	}
 
 	@Override
-	public BattleMapToken save(BattleMapToken battleMapToken) {
-		ensure(battleMapToken != null, "battle map token cannot be null!");
-		return mapper.toModel(repository.save(mapper.toDBO(battleMapToken)));
-	}
-
-	@Override
 	public BattleMapToken deleteById(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<BattleMapToken> findAll() {
+		return mapper.toModels(repository.findAll());
+	}
+
+	@Override
+	public BattleMapToken save(BattleMapToken battleMapToken) {
+		ensure(battleMapToken != null, "battle map token cannot be null!");
+		return mapper.toModel(repository.save(mapper.toDBO(battleMapToken)));
 	}
 }

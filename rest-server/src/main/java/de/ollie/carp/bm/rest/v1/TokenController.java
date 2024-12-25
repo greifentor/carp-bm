@@ -66,6 +66,7 @@ public class TokenController {
 		@PathVariable String battleMapId,
 		@RequestBody CoordinatesDTO coordinatesDTO
 	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		BattleMap battleMap = battleMapService
 			.findById(uuidFactory.createFromString(battleMapId))
 			.orElseThrow(() -> new NoSuchRecordException(battleMapId, "BattleMap", "id"));

@@ -19,12 +19,12 @@ public class TokenServiceImpl implements TokenService {
 
 	private final BattleMapTokenPersistencePort battleMapTokenPersistencePort;
 	private final TokenPersistencePort tokenPersistencePort;
-
 	private final UUIDFactory uuidFactory;
 
 	@Override
 	public void addTokenToBattleMap(Token token, BattleMap battleMap, Coordinates coordinates) {
 		battleMapTokenPersistencePort.addTokenToBattleMap(token, battleMap, coordinates);
+		System.out.println();
 	}
 
 	@Override
