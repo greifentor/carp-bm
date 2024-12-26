@@ -23,6 +23,7 @@ public class ErrorMessageDTO {
 		messageData
 			.entrySet()
 			.stream()
+			.sorted((e0, e1) -> e0.getKey().compareTo(e1.getKey()))
 			.forEach(e -> {
 				l.add(e.getKey());
 				l.add(e.getValue());
