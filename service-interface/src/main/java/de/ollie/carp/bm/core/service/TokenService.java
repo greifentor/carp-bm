@@ -1,6 +1,7 @@
 package de.ollie.carp.bm.core.service;
 
 import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import java.util.List;
@@ -15,5 +16,7 @@ public interface TokenService {
 
 	List<Token> findAll();
 
-	Optional<Token> findByIdOrName(String tokenId);
+	List<BattleMapToken> findAllByBattleMap(BattleMap battleMap);
+
+	Optional<Token> findByIdOrName(String tokenIdOrName);
 }

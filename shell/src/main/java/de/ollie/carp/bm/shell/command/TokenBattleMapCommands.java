@@ -41,7 +41,7 @@ public class TokenBattleMapCommands {
 
 	@ShellMethod(value = "Lists all stored battle maps for the .", key = { "list-battle-maps", "lbm" })
 	public String list() {
-		// return
+		//		return
 		// client.findAllBattleMaps().stream().map(BattleMap::toString).reduce((t0, t1)
 		// -> t0 + "\n" + t1).orElse("");
 		return "not implemented!";

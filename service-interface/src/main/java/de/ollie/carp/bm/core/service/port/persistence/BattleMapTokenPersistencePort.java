@@ -12,7 +12,7 @@ public interface BattleMapTokenPersistencePort {
 
 	BattleMapToken deleteById(UUID id);
 
-	List<BattleMapToken> findAll();
+	List<BattleMapToken> findAllByBattleMap(BattleMap battleMap);
 
 	BattleMapToken save(BattleMapToken battleMapToken);
 }

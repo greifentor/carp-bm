@@ -2,6 +2,7 @@ package de.ollie.carp.bm.core.service.impl;
 
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.TokenService;
@@ -44,6 +45,11 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public List<Token> findAll() {
 		return tokenPersistencePort.findAll();
+	}
+
+	@Override
+	public List<BattleMapToken> findAllByBattleMap(BattleMap battleMap) {
+		return null;
 	}
 
 	@Override

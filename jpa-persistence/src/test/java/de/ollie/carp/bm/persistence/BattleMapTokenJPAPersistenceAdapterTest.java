@@ -19,6 +19,7 @@ import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.BattleMapTokenDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.BattleMapTokenDBORepository;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -142,6 +143,24 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 			unitUnderTest.addTokenToBattleMap(token, battleMap, coordinates);
 			// Check
 			verify(battleMapTokenDBO0, times(1)).setPositionY(Y);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findAllByBattleMap_BattleMap {
+
+		@Test
+		void returnsTheMappedObjectReturnedByThePersistencePort() {
+			// Prepare
+			List<BattleMapToken> expected = List.of(battleMapToken0);
+			List<BattleMapTokenDBO> dbos = List.of(battleMapTokenDBO0);
+			when(battleMapMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
+			when(mapper.toModels(dbos)).thenReturn(expected);
+			when(repository.findAllByBattleMap(battleMapDBO)).thenReturn(dbos);
+			// Run
+			List<BattleMapToken> returned = unitUnderTest.findAllByBattleMap(battleMap);
+			// Check
+			assertSame(expected, returned);
 		}
 	}
 

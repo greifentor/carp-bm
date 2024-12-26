@@ -5,10 +5,11 @@ import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.BattleMapService;
 import de.ollie.carp.bm.core.service.TokenService;
-import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
+import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDTO;
 import de.ollie.carp.bm.rest.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
+import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.List;
@@ -33,11 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
 	private final BattleMapService battleMapService;
+	private final BattleMapTokenDTOMapper battleMapTokenMapper;
 	private final CoordinatesDTOMapper coordinatesMapper;
 	private final SecurityChecker securityChecker;
 	private final TokenDTOMapper mapper;
 	private final TokenService tokenService;
-	private final UUIDFactory uuidFactory;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TokenDTO>> findAllTokens(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
@@ -55,6 +56,18 @@ public class TokenController {
 		return ResponseEntity.ok(mapper.toDTO(token));
 	}
 
+	@GetMapping(value = "/battlemaps/{battleMapId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<BattleMapTokenDTO>> findAllTokenByBattleMap(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String battleMapIdOrName
+	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		BattleMap battleMap = battleMapService
+			.findByIdOrName(battleMapIdOrName)
+			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
+		return ResponseEntity.ok(battleMapTokenMapper.toDTOList(tokenService.findAllByBattleMap(battleMap)));
+	}
+
 	@PostMapping(
 		value = "/{tokenId}/battlemaps/{battleMapId}",
 		consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -68,7 +81,7 @@ public class TokenController {
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		BattleMap battleMap = battleMapService
-			.findById(uuidFactory.createFromString(battleMapIdOrName))
+			.findByIdOrName(battleMapIdOrName)
 			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
 		Token token = tokenService
 			.findByIdOrName(tokenIdOrName)
