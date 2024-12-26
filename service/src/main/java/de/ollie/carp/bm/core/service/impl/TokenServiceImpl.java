@@ -1,5 +1,6 @@
 package de.ollie.carp.bm.core.service.impl;
 
+import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
@@ -10,7 +11,6 @@ import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -35,12 +35,9 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public Token delete(String uuidOrName) {
-		UUID id = tokenPersistencePort
-			.findByName(uuidOrName)
-			.map(Token::getId)
-			.orElseGet(() -> uuidFactory.createFromString(uuidOrName));
-		Token deletedToken = tokenPersistencePort.findById(id).orElse(null);
-		tokenPersistencePort.deleteById(id);
+		Token deletedToken = findByIdOrName(uuidOrName)
+			.orElseThrow(() -> new NoSuchRecordException(uuidOrName, "Token", "id"));
+		tokenPersistencePort.deleteById(deletedToken.getId());
 		return deletedToken;
 	}
 
@@ -50,12 +47,9 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	@Override
-	public Optional<Token> findById(UUID tokenId) {
-		return tokenPersistencePort.findById(tokenId);
-	}
-
-	@Override
-	public Optional<Token> findByName(String name) {
-		return tokenPersistencePort.findByName(name);
+	public Optional<Token> findByIdOrName(String tokenIdOrName) {
+		return tokenPersistencePort
+			.findByName(tokenIdOrName)
+			.or(() -> tokenPersistencePort.findById(uuidFactory.createFromString(tokenIdOrName)));
 	}
 }

@@ -5,7 +5,6 @@ import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface TokenService {
 	void addTokenToBattleMap(Token token, BattleMap battleMap, Coordinates coordinates);
@@ -16,7 +15,5 @@ public interface TokenService {
 
 	List<Token> findAll();
 
-	Optional<Token> findById(UUID tokenId);
-
-	Optional<Token> findByName(String name);
+	Optional<Token> findByIdOrName(String tokenId);
 }

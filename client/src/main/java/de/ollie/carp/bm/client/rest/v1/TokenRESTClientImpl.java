@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.client.rest.v1.mapper.TokenDTOClientMapper;
 import de.ollie.carp.bm.core.exception.ServiceException;
-import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.rest.v1.RestBase;
@@ -87,21 +86,26 @@ public class TokenRESTClientImpl implements TokenClient {
 	}
 
 	@Override
-	public void setTokenToBattleMapOfSpielrunde(Token token, BattleMap battleMap, Coordinates coordinates) {
+	public String setTokenToBattleMapOfSpielrunde(
+		String tokenIdOrName,
+		String battleMapIdOrName,
+		Coordinates coordinates
+	) {
 		restClient
 			.post()
 			.uri(
 				clientConfiguration.getServerSchemaHostAndPort() +
 				RestBase.TOKEN_URL +
 				"/" +
-				token.getId().toString() +
+				tokenIdOrName +
 				"/battlemaps/" +
-				battleMap.getId().toString()
+				battleMapIdOrName
 			)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(coordinatesMapper.toDTO(coordinates))
 			.retrieve()
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
+		return "set token to battlemap.";
 	}
 }

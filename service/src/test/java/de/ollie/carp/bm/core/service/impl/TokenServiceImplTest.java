@@ -94,11 +94,15 @@ class TokenServiceImplTest {
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly_passingAnUUID() {
 			// Prepare
+			Optional<Token> foundById = Optional.of(token0);
+			when(token0.getId()).thenReturn(UID);
 			when(uuidFactory.createFromString(STRING)).thenReturn(UID);
 			when(persistencePort.findByName(STRING)).thenReturn(Optional.empty());
+			when(persistencePort.findById(UID)).thenReturn(foundById);
 			// Run
-			unitUnderTest.delete(STRING);
+			Token returned = unitUnderTest.delete(STRING);
 			// Check
+			assertSame(token0, returned);
 			verify(persistencePort, times(1)).deleteById(UID);
 		}
 
@@ -133,7 +137,7 @@ class TokenServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findByName_String {
+	class TestsOfMethod_findByIdOrName_String {
 
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly() {
@@ -141,7 +145,7 @@ class TokenServiceImplTest {
 			Optional<Token> expected = Optional.of(token0);
 			when(persistencePort.findByName(NAME)).thenReturn(expected);
 			// Run
-			Optional<Token> returned = unitUnderTest.findByName(NAME);
+			Optional<Token> returned = unitUnderTest.findByIdOrName(NAME);
 			// Check
 			assertSame(expected, returned);
 		}

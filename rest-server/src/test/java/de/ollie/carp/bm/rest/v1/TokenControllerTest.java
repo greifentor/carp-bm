@@ -138,9 +138,8 @@ public class TokenControllerTest {
 		void throwsAnException_passingAnIdOfAnUnknownToken() {
 			// Prepare
 			when(uuidFactory.createFromString(BATTLE_MAP_ID.toString())).thenReturn(BATTLE_MAP_ID);
-			when(uuidFactory.createFromString(TOKEN_ID.toString())).thenReturn(TOKEN_ID);
 			when(battleMapService.findById(BATTLE_MAP_ID)).thenReturn(Optional.of(battleMap));
-			when(service.findById(TOKEN_ID)).thenReturn(Optional.empty());
+			when(service.findByIdOrName(TOKEN_ID.toString())).thenReturn(Optional.empty());
 			// Run & Check
 			assertThrows(
 				NoSuchRecordException.class,
@@ -159,9 +158,8 @@ public class TokenControllerTest {
 			// Prepare
 			ResponseEntity<HttpStatus> expected = ResponseEntity.of(Optional.of(HttpStatus.OK));
 			when(uuidFactory.createFromString(BATTLE_MAP_ID.toString())).thenReturn(BATTLE_MAP_ID);
-			when(uuidFactory.createFromString(TOKEN_ID.toString())).thenReturn(TOKEN_ID);
 			when(battleMapService.findById(BATTLE_MAP_ID)).thenReturn(Optional.of(battleMap));
-			when(service.findById(TOKEN_ID)).thenReturn(Optional.of(token));
+			when(service.findByIdOrName(TOKEN_ID.toString())).thenReturn(Optional.of(token));
 			when(coordinatesMapper.toModel(coordinatesDTO)).thenReturn(coordinates);
 			// Run
 			ResponseEntity<HttpStatus> returned = unitUnderTest.setTokenToBattleMapOfSpielrunde(

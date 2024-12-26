@@ -62,17 +62,17 @@ public class TokenController {
 	)
 	public ResponseEntity<HttpStatus> setTokenToBattleMapOfSpielrunde(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
-		@PathVariable String tokenId,
-		@PathVariable String battleMapId,
+		@PathVariable String tokenIdOrName,
+		@PathVariable String battleMapIdOrName,
 		@RequestBody CoordinatesDTO coordinatesDTO
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		BattleMap battleMap = battleMapService
-			.findById(uuidFactory.createFromString(battleMapId))
-			.orElseThrow(() -> new NoSuchRecordException(battleMapId, "BattleMap", "id"));
+			.findById(uuidFactory.createFromString(battleMapIdOrName))
+			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
 		Token token = tokenService
-			.findById(uuidFactory.createFromString(tokenId))
-			.orElseThrow(() -> new NoSuchRecordException(tokenId, "Token", "id"));
+			.findByIdOrName(tokenIdOrName)
+			.orElseThrow(() -> new NoSuchRecordException(tokenIdOrName, "Token", "id"));
 		tokenService.addTokenToBattleMap(token, battleMap, coordinatesMapper.toModel(coordinatesDTO));
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
