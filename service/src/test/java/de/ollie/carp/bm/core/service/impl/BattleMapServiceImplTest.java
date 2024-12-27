@@ -65,11 +65,15 @@ public class BattleMapServiceImplTest {
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly_passingAnUUID() {
 			// Prepare
+			Optional<BattleMap> foundById = Optional.of(battleMap0);
+			when(battleMap0.getId()).thenReturn(UID);
 			when(uuidFactory.createFromString(STRING)).thenReturn(UID);
 			when(persistencePort.findByName(STRING)).thenReturn(Optional.empty());
+			when(persistencePort.findById(UID)).thenReturn(foundById);
 			// Run
-			unitUnderTest.delete(STRING);
+			BattleMap returned = unitUnderTest.delete(STRING);
 			// Check
+			assertSame(battleMap0, returned);
 			verify(persistencePort, times(1)).deleteById(UID);
 		}
 
@@ -104,7 +108,7 @@ public class BattleMapServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findByName_String {
+	class TestsOfMethod_findByIdOrName_String {
 
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly() {
@@ -112,7 +116,7 @@ public class BattleMapServiceImplTest {
 			Optional<BattleMap> expected = Optional.of(battleMap0);
 			when(persistencePort.findByName(NAME)).thenReturn(expected);
 			// Run
-			Optional<BattleMap> returned = unitUnderTest.findByName(NAME);
+			Optional<BattleMap> returned = unitUnderTest.findByIdOrName(NAME);
 			// Check
 			assertSame(expected, returned);
 		}

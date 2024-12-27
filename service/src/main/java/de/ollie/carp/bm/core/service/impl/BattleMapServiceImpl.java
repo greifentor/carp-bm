@@ -7,7 +7,6 @@ import de.ollie.carp.bm.core.service.port.persistence.BattleMapPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -26,12 +25,8 @@ public class BattleMapServiceImpl implements BattleMapService {
 
 	@Override
 	public BattleMap delete(String uuidOrName) {
-		UUID id = battleMapPersistencePort
-			.findByName(uuidOrName)
-			.map(BattleMap::getId)
-			.orElseGet(() -> uuidFactory.createFromString(uuidOrName));
-		BattleMap deletedBattleMap = battleMapPersistencePort.findById(id).orElse(null);
-		battleMapPersistencePort.deleteById(id);
+		BattleMap deletedBattleMap = findByIdOrName(uuidOrName).orElse(null);
+		battleMapPersistencePort.deleteById(deletedBattleMap.getId());
 		return deletedBattleMap;
 	}
 
@@ -41,12 +36,9 @@ public class BattleMapServiceImpl implements BattleMapService {
 	}
 
 	@Override
-	public Optional<BattleMap> findById(UUID battleMapId) {
-		return battleMapPersistencePort.findById(battleMapId);
-	}
-
-	@Override
-	public Optional<BattleMap> findByName(String name) {
-		return battleMapPersistencePort.findByName(name);
+	public Optional<BattleMap> findByIdOrName(String battleMapIdOrName) {
+		return battleMapPersistencePort
+			.findByName(battleMapIdOrName)
+			.or(() -> battleMapPersistencePort.findById(uuidFactory.createFromString(battleMapIdOrName)));
 	}
 }
