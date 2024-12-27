@@ -1,6 +1,7 @@
 package de.ollie.carp.bm.shell.command;
 
 import de.ollie.carp.bm.client.TokenClient;
+import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.shell.standard.ShellOption;
  */
 @ShellComponent
 @RequiredArgsConstructor
-public class TokenBattleMapCommands {
+public class BattleMapTokenCommands {
 
 	private final ExceptionToStringMapper exceptionMapper;
 	private final TokenClient client;
@@ -40,11 +41,22 @@ public class TokenBattleMapCommands {
 	}
 
 	@ShellMethod(value = "Lists all stored battle maps for the .", key = { "list-battle-maps", "lbm" })
-	public String list() {
-		//		return
-		// client.findAllBattleMaps().stream().map(BattleMap::toString).reduce((t0, t1)
-		// -> t0 + "\n" + t1).orElse("");
-		return "not implemented!";
+	public String list(
+		@ShellOption(
+			help = "Id or name of the battle map whose token should be listed.",
+			value = "battleMapIdOrName"
+		) String battleMapIdOrName
+	) {
+		try {
+			return client
+				.findAllByBattleMap(battleMapIdOrName)
+				.stream()
+				.map(BattleMapToken::toString)
+				.reduce((s0, s1) -> s0 + "\n" + s1)
+				.orElse("no battle map tokens found for: " + battleMapIdOrName);
+		} catch (Exception e) {
+			return exceptionMapper.map(e);
+		}
 	}
 
 	@ShellMethod(value = "Deletes the battle map by UUID or name.", key = { "delete-battle-map", "dbm" })

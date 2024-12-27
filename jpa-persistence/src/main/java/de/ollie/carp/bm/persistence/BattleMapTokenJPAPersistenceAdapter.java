@@ -36,7 +36,9 @@ class BattleMapTokenJPAPersistenceAdapter implements BattleMapTokenPersistencePo
 		BattleMapTokenDBO dbo = factory.create(battleMapMapper.toDBO(battleMap), tokenMapper.toDBO(token));
 		dbo.setPositionX(coordinates.getX());
 		dbo.setPositionY(coordinates.getY());
-		return mapper.toModel(repository.save(dbo));
+		BattleMapToken bmt = mapper.toModel(repository.save(dbo));
+		repository.findAll().forEach(System.out::println);
+		return bmt;
 	}
 
 	@Override

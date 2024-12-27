@@ -25,7 +25,7 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public void addTokenToBattleMap(Token token, BattleMap battleMap, Coordinates coordinates) {
 		battleMapTokenPersistencePort.addTokenToBattleMap(token, battleMap, coordinates);
-		System.out.println();
+		System.out.println("GOTCHA!");
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public List<BattleMapToken> findAllByBattleMap(BattleMap battleMap) {
-		return null;
+		return battleMapTokenPersistencePort.findAllByBattleMap(battleMap);
 	}
 
 	@Override

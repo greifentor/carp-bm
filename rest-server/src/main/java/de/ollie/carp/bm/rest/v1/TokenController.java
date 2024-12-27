@@ -56,7 +56,7 @@ public class TokenController {
 		return ResponseEntity.ok(mapper.toDTO(token));
 	}
 
-	@GetMapping(value = "/battlemaps/{battleMapId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/battlemaps/{battleMapIdOrName}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<BattleMapTokenDTO>> findAllTokenByBattleMap(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@PathVariable String battleMapIdOrName
@@ -69,7 +69,7 @@ public class TokenController {
 	}
 
 	@PostMapping(
-		value = "/{tokenId}/battlemaps/{battleMapId}",
+		value = "/{tokenIdOrName}/battlemaps/{battleMapIdOrName}",
 		consumes = MediaType.APPLICATION_JSON_VALUE,
 		produces = MediaType.APPLICATION_JSON_VALUE
 	)
