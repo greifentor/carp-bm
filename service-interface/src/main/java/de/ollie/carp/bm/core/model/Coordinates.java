@@ -9,6 +9,6 @@ import lombok.experimental.Accessors;
 @Generated
 public class Coordinates {
 
-	private int x;
-	private int y;
+	private int positionX;
+	private int positionY;
 }

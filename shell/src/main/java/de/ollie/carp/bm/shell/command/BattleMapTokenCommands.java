@@ -33,7 +33,7 @@ public class BattleMapTokenCommands {
 			return client.setTokenToBattleMapOfSpielrunde(
 				tokenIdOrName,
 				battleMapIdOrName,
-				new Coordinates().setX(x).setY(y)
+				new Coordinates().setPositionX(x).setPositionY(y)
 			);
 		} catch (Exception e) {
 			return exceptionMapper.map(e);

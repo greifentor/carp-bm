@@ -96,14 +96,6 @@ public class TokenRESTClientImpl implements TokenClient {
 		String battleMapIdOrName,
 		Coordinates coordinates
 	) {
-		System.out.println(
-			clientConfiguration.getServerSchemaHostAndPort() +
-			RestBase.TOKEN_URL +
-			"/" +
-			tokenIdOrName +
-			"/dbattlemaps/" +
-			battleMapIdOrName
-		);
 		restClient
 			.post()
 			.uri(
@@ -111,7 +103,7 @@ public class TokenRESTClientImpl implements TokenClient {
 				RestBase.TOKEN_URL +
 				"/" +
 				tokenIdOrName +
-				"/dbattlemaps/" +
+				"/battlemaps/" +
 				battleMapIdOrName
 			)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
