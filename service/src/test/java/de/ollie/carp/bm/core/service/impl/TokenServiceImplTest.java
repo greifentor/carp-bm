@@ -1,11 +1,13 @@
 package de.ollie.carp.bm.core.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
@@ -117,6 +119,16 @@ class TokenServiceImplTest {
 			// Check
 			verify(persistencePort, times(1)).deleteById(UID);
 		}
+
+		@Test
+		void throwsAnException_whenFoundNeitherByNameNorById() {
+			// Prepare
+			when(uuidFactory.createFromString(STRING)).thenReturn(UID);
+			when(persistencePort.findById(UID)).thenReturn(Optional.empty());
+			when(persistencePort.findByName(STRING)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(NoSuchRecordException.class, () -> unitUnderTest.delete(STRING));
+		}
 	}
 
 	@Nested
@@ -133,6 +145,21 @@ class TokenServiceImplTest {
 			assertSame(persistencePortReturn, returned);
 			verify(persistencePort, times(1)).findAll();
 			verifyNoMoreInteractions(persistencePort);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findAllByBattleMap_BattleMap {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			List<BattleMapToken> expected = List.of(battleMapToken);
+			when(battleMapTokenPersistencePort.findAllByBattleMap(battleMap)).thenReturn(expected);
+			// Run
+			List<BattleMapToken> returned = unitUnderTest.findAllByBattleMap(battleMap);
+			// Check
+			assertSame(expected, returned);
 		}
 	}
 
