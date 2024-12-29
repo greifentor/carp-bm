@@ -108,6 +108,24 @@ public class TokenControllerTest {
 	}
 
 	@Nested
+	class TestsOfMethod_delete_String_String {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			Token token = mock(Token.class);
+			TokenDTO tokenDTO = mock(TokenDTO.class);
+			ResponseEntity<TokenDTO> expected = ResponseEntity.ok(tokenDTO);
+			when(service.delete(BATTLE_MAP_ID.toString())).thenReturn(token);
+			when(mapper.toDTO(token)).thenReturn(tokenDTO);
+			// Run
+			ResponseEntity<TokenDTO> returned = unitUnderTest.delete(ACCESS_TOKEN, BATTLE_MAP_ID.toString());
+			// Check
+			assertEquals(expected, returned);
+		}
+	}
+
+	@Nested
 	class TestsOfMethod_findAllTokens {
 
 		@Test
@@ -141,6 +159,17 @@ public class TokenControllerTest {
 			ResponseEntity<List<BattleMapTokenDTO>> returned = unitUnderTest.findAllTokenByBattleMap(ACCESS_TOKEN, NAME);
 			// Check
 			assertEquals(expected, returned);
+		}
+
+		@Test
+		void throwsAnException_whenBattleMapNotFound() {
+			// Prepare
+			List<BattleMapToken> battleMapTokens = List.of(battleMapToken);
+			List<BattleMapTokenDTO> responseList = List.of(battleMapTokenDTO);
+			ResponseEntity<List<BattleMapTokenDTO>> expected = ResponseEntity.ok(responseList);
+			when(battleMapService.findByIdOrName(NAME)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(NoSuchRecordException.class, () -> unitUnderTest.findAllTokenByBattleMap(ACCESS_TOKEN, NAME));
 		}
 	}
 

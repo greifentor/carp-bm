@@ -91,11 +91,11 @@ public class TokenController {
 	}
 
 	@DeleteMapping("/{idOrName}")
-	public ResponseEntity<Token> delete(
+	public ResponseEntity<TokenDTO> delete(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@PathVariable String idOrName
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		return ResponseEntity.ok(tokenService.delete(idOrName));
+		return ResponseEntity.ok(mapper.toDTO(tokenService.delete(idOrName)));
 	}
 }

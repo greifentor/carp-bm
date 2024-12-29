@@ -64,6 +64,24 @@ public class BattleMapControllerTest {
 	}
 
 	@Nested
+	class TestsOfMethod_delete_String_String {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			BattleMap battleMap = mock(BattleMap.class);
+			BattleMapDTO battleMapDTO = mock(BattleMapDTO.class);
+			ResponseEntity<BattleMapDTO> expected = ResponseEntity.ok(battleMapDTO);
+			when(service.delete(ID.toString())).thenReturn(battleMap);
+			when(mapper.toDTO(battleMap)).thenReturn(battleMapDTO);
+			// Run
+			ResponseEntity<BattleMapDTO> returned = unitUnderTest.delete(ACCESS_TOKEN, ID.toString());
+			// Check
+			assertEquals(expected, returned);
+		}
+	}
+
+	@Nested
 	class TestsOfMethod_findAllTokens {
 
 		@Test
@@ -80,7 +98,4 @@ public class BattleMapControllerTest {
 			assertEquals(expected, returned);
 		}
 	}
-
-	@Nested
-	class TestsOfMethod_setTokenToMapOfSitzung_UUID_UUID_int_int {}
 }

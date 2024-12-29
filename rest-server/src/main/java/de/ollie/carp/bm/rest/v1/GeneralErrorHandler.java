@@ -13,12 +13,19 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GeneralErrorHandler extends ResponseEntityExceptionHandler {
 
+	static final String DEFAULT_MESSAGE_NO_SUCH_RECORD_FOUND = "No such record found!";
+	static final String DEFAULT_MESSAGE_ID_NO_SUCH_RECORD_FOUND = "exceptions.no-such-record.text";
+	static final String DEFAULT_MESSAGE_UNIQUE_CONSTRAINT_VIOLATION = "Unique constraint violation!";
+	static final String DEFAULT_MESSAGE_ID_UNIQUE_CONSTRAINT_VIOLATION = "exceptions.unique-constraint-violation.text";
+
 	@ExceptionHandler({ NoSuchRecordException.class })
 	public ResponseEntity<Object> handleNoSuchRecordException(NoSuchRecordException ex, WebRequest request) {
 		System.out.println("ERROR: " + ex.getMessage());
 		return handleExceptionInternal(
 			ex,
-			new ErrorMessageDTO().setMessage("message").setMessageId("message-id"),
+			new ErrorMessageDTO()
+				.setMessage(DEFAULT_MESSAGE_NO_SUCH_RECORD_FOUND)
+				.setMessageId(DEFAULT_MESSAGE_ID_NO_SUCH_RECORD_FOUND),
 			null,
 			HttpStatus.NOT_FOUND,
 			request
@@ -33,7 +40,9 @@ public class GeneralErrorHandler extends ResponseEntityExceptionHandler {
 		System.out.println("ERROR: " + ex.getMessage());
 		return handleExceptionInternal(
 			ex,
-			new ErrorMessageDTO().setMessage("message").setMessageId("message-id"),
+			new ErrorMessageDTO()
+				.setMessage(DEFAULT_MESSAGE_UNIQUE_CONSTRAINT_VIOLATION)
+				.setMessageId(DEFAULT_MESSAGE_ID_UNIQUE_CONSTRAINT_VIOLATION),
 			null,
 			HttpStatus.BAD_REQUEST,
 			request
