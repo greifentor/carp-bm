@@ -11,5 +11,6 @@ import lombok.experimental.Accessors;
 public class TokenDTO {
 
 	private UUID id;
+	private byte[] image;
 	private String name;
 }

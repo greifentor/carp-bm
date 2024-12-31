@@ -3,6 +3,7 @@ package de.ollie.carp.bm.shell.command;
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
+import java.io.FileInputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,9 +20,13 @@ public class TokenCommands {
 	private final TokenClient tokenClient;
 
 	@ShellMethod(value = "Adds a new token.", key = { "add-token", "at" })
-	public String add(@ShellOption(help = "Name of the token.", value = "name") String name) {
-		try {
-			return tokenClient.createTokenWithName(name).toString();
+	public String add(
+		@ShellOption(help = "Name of the token.", value = "name") String name,
+		@ShellOption(help = "Name of the file which contains the image", value = "imageFileName") String imageFileName
+	) {
+		try (FileInputStream fis = new FileInputStream(imageFileName)) {
+			byte[] imageContent = fis.readAllBytes();
+			return tokenClient.createToken(name, imageContent).toString();
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
 		}

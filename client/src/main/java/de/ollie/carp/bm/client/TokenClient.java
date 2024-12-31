@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TokenClient {
-	Token createTokenWithName(String name);
+	Token createToken(String name, byte[] image);
 
 	UUID delete(String tokenIdOrName);
 

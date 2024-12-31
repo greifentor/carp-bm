@@ -38,13 +38,13 @@ public class TokenRESTClientImpl implements TokenClient {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public Token createTokenWithName(String name) {
+	public Token createToken(String name, byte[] image) {
 		ResponseEntity<TokenDTO> response = restClient
 			.post()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(new TokenDTO().setName(name))
+			.body(new TokenDTO().setImage(image).setName(name))
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class);
