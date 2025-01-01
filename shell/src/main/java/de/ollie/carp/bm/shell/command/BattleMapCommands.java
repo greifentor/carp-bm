@@ -3,6 +3,7 @@ package de.ollie.carp.bm.shell.command;
 import de.ollie.carp.bm.client.BattleMapClient;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
+import java.io.FileInputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,9 +20,13 @@ public class BattleMapCommands {
 	private final BattleMapClient client;
 
 	@ShellMethod(value = "Adds a new battle map.", key = { "add-battle-map", "abm" })
-	public String add(@ShellOption(help = "Name of the battle map.", value = "name") String name) {
-		try {
-			return client.createBattleMapWithName(name).toString();
+	public String add(
+		@ShellOption(help = "Name of the battle map.", value = "name") String name,
+		@ShellOption(help = "Name of the file which contains the image", value = "imageFileName") String imageFileName
+	) {
+		try (FileInputStream fis = new FileInputStream(imageFileName)) {
+			byte[] imageContent = fis.readAllBytes();
+			return client.createBattleMap(name, imageContent).toString();
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
 		}

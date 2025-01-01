@@ -20,6 +20,9 @@ public class BattleMapDBO {
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
+	@Column(name = "IMAGE", columnDefinition = "BLOB")
+	private byte[] image;
+
 	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
 }

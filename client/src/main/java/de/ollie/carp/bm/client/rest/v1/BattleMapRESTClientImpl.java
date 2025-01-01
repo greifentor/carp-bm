@@ -31,13 +31,13 @@ public class BattleMapRESTClientImpl implements BattleMapClient {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public BattleMap createBattleMapWithName(String name) {
+	public BattleMap createBattleMap(String name, byte[] imageContent) {
 		ResponseEntity<BattleMapDTO> response = restClient
 			.post()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.BATTLE_MAP_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(new BattleMapDTO().setName(name))
+			.body(new BattleMapDTO().setImage(imageContent).setName(name))
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(BattleMapDTO.class);
