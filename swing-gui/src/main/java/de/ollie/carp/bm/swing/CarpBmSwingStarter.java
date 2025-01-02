@@ -1,8 +1,9 @@
 package de.ollie.carp.bm.swing;
 
+import java.awt.EventQueue;
 import lombok.Generated;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 
 @Generated
@@ -11,6 +12,10 @@ import org.springframework.context.annotation.ComponentScan;
 public class CarpBmSwingStarter {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CarpBmSwingStarter.class, args);
+		var ctx = new SpringApplicationBuilder(CarpBmSwingStarter.class).headless(false).run(args);
+		EventQueue.invokeLater(() -> {
+			var af = ctx.getBean(ApplicationFrame.class);
+			af.setVisible(true);
+		});
 	}
 }
