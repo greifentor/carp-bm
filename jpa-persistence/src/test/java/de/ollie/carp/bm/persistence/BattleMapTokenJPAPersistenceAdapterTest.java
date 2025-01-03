@@ -30,8 +30,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class BattleMapTokenJPAPersistenceAdapterTest {
 
-	private static final int X = 42;
-	private static final int Y = 1701;
+	private static final double X = 42;
+	private static final double Y = 1701;
 
 	@Mock
 	private BattleMap battleMap;

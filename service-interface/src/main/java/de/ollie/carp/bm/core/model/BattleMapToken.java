@@ -13,6 +13,6 @@ public class BattleMapToken {
 	private UUID id;
 	private BattleMap battleMap;
 	private Token token;
-	private int positionX;
-	private int positionY;
+	private double positionX;
+	private double positionY;
 }

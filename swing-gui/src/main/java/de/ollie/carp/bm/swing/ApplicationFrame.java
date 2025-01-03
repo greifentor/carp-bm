@@ -56,7 +56,6 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 		Image img = new BufferedImage(bmImage.getIconWidth(), bmImage.getIconHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D) img.getGraphics();
 		g.drawImage(bmImage.getImage(), 0, 0, null);
-
 		tokenClient
 			.findAllByBattleMap(battleMap.getName())
 			.forEach(bmt ->
@@ -72,9 +71,11 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 			);
 		tokenClient
 			.findAllByBattleMap(battleMap.getName())
-			.forEach(bmt ->
-				g.drawImage(new ImageIcon(bmt.getToken().getImage()).getImage(), bmt.getPositionX(), bmt.getPositionY(), null)
-			);
+			.forEach(bmt -> {
+				int x = (int) (50.0 * bmt.getPositionX()) + 12;
+				int y = (int) (50.0 * bmt.getPositionY()) + 12;
+				g.drawImage(new ImageIcon(bmt.getToken().getImage()).getImage(), x, y, null);
+			});
 		ImageIcon imageIcon = new ImageIcon(img);
 		return new JLabel(imageIcon);
 	}

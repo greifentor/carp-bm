@@ -32,8 +32,8 @@ public class BattleMapTokenDBO {
 	private TokenDBO token;
 
 	@Column(name = "POSITION_X", nullable = false)
-	private int positionX;
+	private double positionX;
 
 	@Column(name = "POSITION_Y", nullable = false)
-	private int positionY;
+	private double positionY;
 }
