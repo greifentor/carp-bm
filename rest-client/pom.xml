@@ -10,10 +10,10 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>carp-bm-client</artifactId>
+	<artifactId>carp-bm-rest-client</artifactId>
 	<packaging>jar</packaging>
 
-	<name>CARP-BM (Client)</name>
+	<name>CARP-BM (REST-Client)</name>
 	<description>The rest client module of the application.</description>
 
 	<properties>
@@ -24,7 +24,17 @@
 		<!-- carp-bm -->
 		<dependency>
 			<groupId>de.ollie</groupId>
-			<artifactId>carp-bm-service-interface</artifactId>
+			<artifactId>carp-bm-client</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>carp-bm-rest</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>carp-bm-server</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<!-- java -->

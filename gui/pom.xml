@@ -10,23 +10,17 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>carp-bm-client</artifactId>
+	<artifactId>carp-bm-gui</artifactId>
 	<packaging>jar</packaging>
 
-	<name>CARP-BM (Client)</name>
-	<description>The rest client module of the application.</description>
+	<name>CARP-BM (GUI)</name>
+	<description>The GUI logic module of the application.</description>
 
 	<properties>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
 	</properties>
 
 	<dependencies>
-		<!-- carp-bm -->
-		<dependency>
-			<groupId>de.ollie</groupId>
-			<artifactId>carp-bm-service-interface</artifactId>
-			<version>0.0.1</version>
-		</dependency>
 		<!-- java -->
 		<dependency>
 			<groupId>org.springframework</groupId>

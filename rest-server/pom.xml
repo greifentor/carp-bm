@@ -29,6 +29,16 @@
 		</dependency>
 		<dependency>
 			<groupId>de.ollie</groupId>
+			<artifactId>carp-bm-server</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>carp-bm-service</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
 			<artifactId>carp-bm-rest</artifactId>
 			<version>0.0.1</version>
 		</dependency>
@@ -44,6 +54,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<!-- Testing -->
 		<dependency>

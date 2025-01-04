@@ -41,6 +41,22 @@ TBD
 
 ## Building Block View
 
+### Module Diagram Level 0
+
+![module diagram (level 0)](./module-diagram-level-0.png)
+
+**client** Logic for accessing the server component.
+**jpa-service** The JPA persistence layer implementation.
+**gui** Logic for different GUI's.
+**service** A service implementation.
+**service-interface** Interfaces and classes of the service logic.
+**rest** The base classes used by the REST server and it's clients.
+**rest-client** An implementation of the REST client.
+**rest-server** An implementation of the REST server.
+**server** General base classes for servers.
+**shell** A shell to connect with the server.
+**swing-gui** A swing GUI for the GM's side.
+
 ### Component Diagram Level 1
 
 ![component diagram (level 1)](./component-diagram-level-1.png)
