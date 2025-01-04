@@ -20,8 +20,8 @@ public class BattleMapDBO {
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
-	@Column(name = "FIELD_SIZE", nullable = false)
-	private int fieldSize;
+	@Column(name = "FIELD_SIZE_IN_PIXELS", nullable = false)
+	private int fieldSizeInPixels;
 
 	@Column(name = "IMAGE", columnDefinition = "BLOB")
 	private byte[] image;

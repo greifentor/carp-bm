@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 public class BattleMapDTO {
 
 	private UUID id;
-	private int fieldSize;
+	private int fieldSizeInPixels;
 	private byte[] image;
 	private String name;
 }
