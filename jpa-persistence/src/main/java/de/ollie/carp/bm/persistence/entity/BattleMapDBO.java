@@ -28,4 +28,7 @@ public class BattleMapDBO {
 
 	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
+
+	@Column(name = "OFFSET_IN_PIXELS", nullable = false)
+	private int offsetInPixels;
 }

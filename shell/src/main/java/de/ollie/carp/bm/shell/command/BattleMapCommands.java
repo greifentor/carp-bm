@@ -27,11 +27,16 @@ public class BattleMapCommands {
 			help = "Size of the fields of the battle map in pixels",
 			value = "fieldSizeInPixels",
 			defaultValue = "50"
-		) int fieldSizeInPixels
+		) int fieldSizeInPixels,
+		@ShellOption(
+			help = "Offset of the fields of the battle map in pixels",
+			value = "offsetInPixels",
+			defaultValue = "12"
+		) int offsetInPixels
 	) {
 		try (FileInputStream fis = new FileInputStream(imageFileName)) {
 			byte[] imageContent = fis.readAllBytes();
-			return client.createBattleMap(name, imageContent, fieldSizeInPixels).toString();
+			return client.createBattleMap(name, imageContent, fieldSizeInPixels, offsetInPixels).toString();
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
 		}

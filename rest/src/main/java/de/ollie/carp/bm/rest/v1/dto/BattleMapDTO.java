@@ -14,4 +14,5 @@ public class BattleMapDTO {
 	private int fieldSizeInPixels;
 	private byte[] image;
 	private String name;
+	private int offsetInPixels;
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BattleMapClient {
-	BattleMap createBattleMap(String name, byte[] imageContent, int fieldSize);
+	BattleMap createBattleMap(String name, byte[] imageContent, int fieldSizeInPixels, int offsetInPixels);
 
 	UUID delete(String uuidOrName);
 

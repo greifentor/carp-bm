@@ -16,4 +16,5 @@ public class BattleMap {
 	private int fieldSizeInPixels;
 	private byte[] image;
 	private String name;
+	private int offsetInPixels;
 }
