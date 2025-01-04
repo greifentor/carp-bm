@@ -17,14 +17,17 @@ component swing as "swing-gui"
 
 client --> serviceinterface
 
+gui --> serviceinterface
+
 jpaservice --> service
 
 restclient --> client
+restclient --> server
 restclient --> rest
 
+restserver --> jpaservice
 restserver --> rest
-restserver --> server
-restserver --> service
+restserver --> serverS
 
 server --> serviceinterface
 

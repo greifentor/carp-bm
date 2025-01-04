@@ -3,6 +3,7 @@ package de.ollie.carp.bm.swing;
 import de.ollie.carp.bm.client.BattleMapClient;
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -24,6 +25,9 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 
 	private static final int HGAP = 3;
 	private static final int VGAP = 3;
+
+	@Inject
+	private ImageIconFactory imageIconFactory;
 
 	@Inject
 	private BattleMapClient battleMapClient;
