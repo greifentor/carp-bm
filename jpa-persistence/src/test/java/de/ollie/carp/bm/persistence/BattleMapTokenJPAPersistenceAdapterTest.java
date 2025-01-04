@@ -116,8 +116,8 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 		@Test
 		void returnsANewBattleMapToken_withXCoordinateSet() {
 			// Prepare
-			when(coordinates.getPositionX()).thenReturn(X);
-			when(coordinates.getPositionY()).thenReturn(Y);
+			when(coordinates.getFieldX()).thenReturn(X);
+			when(coordinates.getFieldY()).thenReturn(Y);
 			when(battleMapMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
 			when(tokenMapper.toDBO(token)).thenReturn(tokenDBO);
 			when(factory.create(battleMapDBO, tokenDBO)).thenReturn(battleMapTokenDBO0);
@@ -126,14 +126,14 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 			// Run
 			unitUnderTest.addTokenToBattleMap(token, battleMap, coordinates);
 			// Check
-			verify(battleMapTokenDBO0, times(1)).setPositionX(X);
+			verify(battleMapTokenDBO0, times(1)).setFieldX(X);
 		}
 
 		@Test
 		void returnsANewBattleMapToken_withYCoordinateSet() {
 			// Prepare
-			when(coordinates.getPositionX()).thenReturn(X);
-			when(coordinates.getPositionY()).thenReturn(Y);
+			when(coordinates.getFieldX()).thenReturn(X);
+			when(coordinates.getFieldY()).thenReturn(Y);
 			when(battleMapMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
 			when(tokenMapper.toDBO(token)).thenReturn(tokenDBO);
 			when(factory.create(battleMapDBO, tokenDBO)).thenReturn(battleMapTokenDBO0);
@@ -142,7 +142,7 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 			// Run
 			unitUnderTest.addTokenToBattleMap(token, battleMap, coordinates);
 			// Check
-			verify(battleMapTokenDBO0, times(1)).setPositionY(Y);
+			verify(battleMapTokenDBO0, times(1)).setFieldY(Y);
 		}
 	}
 

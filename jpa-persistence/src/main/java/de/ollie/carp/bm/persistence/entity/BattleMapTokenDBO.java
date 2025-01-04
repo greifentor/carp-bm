@@ -31,9 +31,9 @@ public class BattleMapTokenDBO {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private TokenDBO token;
 
-	@Column(name = "POSITION_X", nullable = false)
-	private double positionX;
+	@Column(name = "FIELD_X", nullable = false)
+	private double fieldX;
 
-	@Column(name = "POSITION_Y", nullable = false)
-	private double positionY;
+	@Column(name = "FIELD_Y", nullable = false)
+	private double fieldY;
 }

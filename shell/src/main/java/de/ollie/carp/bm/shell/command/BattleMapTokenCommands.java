@@ -26,14 +26,14 @@ public class BattleMapTokenCommands {
 			value = "tokenIdOrName"
 		) String tokenIdOrName,
 		@ShellOption(help = "Id or name of the battle map.", value = "battleMapIdOrName") String battleMapIdOrName,
-		@ShellOption(help = "X coordinate where the token is to place.", value = "x") double x,
-		@ShellOption(help = "Y coordinate where the token is to place.", value = "y") double y
+		@ShellOption(help = "X field coordinate where the token is to place.", value = "x") double x,
+		@ShellOption(help = "Y field coordinate where the token is to place.", value = "y") double y
 	) {
 		try {
 			return client.setTokenToBattleMapOfSpielrunde(
 				tokenIdOrName,
 				battleMapIdOrName,
-				new Coordinates().setPositionX(x).setPositionY(y)
+				new Coordinates().setFieldX(x).setFieldY(y)
 			);
 		} catch (Exception e) {
 			return exceptionMapper.map(e);

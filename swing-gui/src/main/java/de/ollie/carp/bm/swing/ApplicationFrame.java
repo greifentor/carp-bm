@@ -64,16 +64,16 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 					" " +
 					bmt.getToken().getImage().length +
 					" " +
-					bmt.getPositionX() +
+					bmt.getFieldX() +
 					" " +
-					bmt.getPositionY()
+					bmt.getFieldY()
 				)
 			);
 		tokenClient
 			.findAllByBattleMap(battleMap.getName())
 			.forEach(bmt -> {
-				int x = (int) (50.0 * bmt.getPositionX()) + 12;
-				int y = (int) (50.0 * bmt.getPositionY()) + 12;
+				int x = (int) (50.0 * bmt.getFieldX()) + 12;
+				int y = (int) (50.0 * bmt.getFieldY()) + 12;
 				g.drawImage(new ImageIcon(bmt.getToken().getImage()).getImage(), x, y, null);
 			});
 		ImageIcon imageIcon = new ImageIcon(img);
