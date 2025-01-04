@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 public class BattleMap {
 
 	private UUID id;
+	private int fieldSize;
 	private byte[] image;
 	private String name;
 }

@@ -72,8 +72,9 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 		tokenClient
 			.findAllByBattleMap(battleMap.getName())
 			.forEach(bmt -> {
-				int x = (int) (50.0 * bmt.getFieldX()) + 12;
-				int y = (int) (50.0 * bmt.getFieldY()) + 12;
+				int fs = bmt.getBattleMap().getFieldSize();
+				int x = (int) (fs * bmt.getFieldX()) + 12;
+				int y = (int) (fs * bmt.getFieldY()) + 12;
 				g.drawImage(new ImageIcon(bmt.getToken().getImage()).getImage(), x, y, null);
 			});
 		ImageIcon imageIcon = new ImageIcon(img);
