@@ -21,8 +21,8 @@ public class TokenSetterServiceImpl implements TokenSetterService {
 		ensure(graphics != null, "graphics cannot be null!");
 		int fs = battleMapToken.getBattleMap().getFieldSizeInPixels();
 		int offs = battleMapToken.getBattleMap().getOffsetInPixels();
-		int x = (int) (fs * battleMapToken.getFieldX()) + offs;
-		int y = (int) (fs * battleMapToken.getFieldY()) + offs;
+		int x = (int) (fs * battleMapToken.getFieldX().doubleValue()) + offs;
+		int y = (int) (fs * battleMapToken.getFieldY().doubleValue()) + offs;
 		graphics.drawImage(imageIconFactory.create(battleMapToken.getToken().getImage()).getImage(), x, y, null);
 	}
 }

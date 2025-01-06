@@ -19,6 +19,7 @@ import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.BattleMapTokenDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.BattleMapTokenDBORepository;
+import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,8 +31,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class BattleMapTokenJPAPersistenceAdapterTest {
 
-	private static final double X = 42;
-	private static final double Y = 1701;
+	private static final BigDecimal X = new BigDecimal(42);
+	private static final BigDecimal Y = new BigDecimal(1701);
 
 	@Mock
 	private BattleMap battleMap;

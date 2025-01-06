@@ -11,6 +11,7 @@ import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.math.BigDecimal;
 import javax.swing.ImageIcon;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class TokenSetterServiceImplTest {
 
 	private static final int FIELD_SIZE_IN_PIXELS = 50;
-	private static final double FIELD_X = 1.0;
-	private static final double FIELD_Y = 2.5;
+	private static final BigDecimal FIELD_X = new BigDecimal(1.0);
+	private static final BigDecimal FIELD_Y = new BigDecimal(2.5);
 	private static final int OFFSET_IN_PIXELS = 12;
 	private static final int X = 62;
 	private static final int Y = 137;

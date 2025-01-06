@@ -1,5 +1,6 @@
 package de.ollie.carp.bm.core.model;
 
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
@@ -9,6 +10,6 @@ import lombok.experimental.Accessors;
 @Generated
 public class Coordinates {
 
-	private double fieldX;
-	private double fieldY;
+	private BigDecimal fieldX;
+	private BigDecimal fieldY;
 }

@@ -4,6 +4,7 @@ import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -26,8 +27,8 @@ public class BattleMapTokenCommands {
 			value = "tokenIdOrName"
 		) String tokenIdOrName,
 		@ShellOption(help = "Id or name of the battle map.", value = "battleMapIdOrName") String battleMapIdOrName,
-		@ShellOption(help = "X field coordinate where the token is to place.", value = "x") double x,
-		@ShellOption(help = "Y field coordinate where the token is to place.", value = "y") double y
+		@ShellOption(help = "X field coordinate where the token is to place.", value = "x") BigDecimal x,
+		@ShellOption(help = "Y field coordinate where the token is to place.", value = "y") BigDecimal y
 	) {
 		try {
 			return client.setTokenToBattleMapOfSpielrunde(

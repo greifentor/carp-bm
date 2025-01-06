@@ -65,8 +65,8 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 			.forEach(bmt -> {
 				int fs = bmt.getBattleMap().getFieldSizeInPixels();
 				int offs = bmt.getBattleMap().getOffsetInPixels();
-				int x = (int) (fs * bmt.getFieldX()) + offs;
-				int y = (int) (fs * bmt.getFieldY()) + offs;
+				int x = (int) (fs * bmt.getFieldX().doubleValue()) + offs;
+				int y = (int) (fs * bmt.getFieldY().doubleValue()) + offs;
 				g.drawImage(new ImageIcon(bmt.getToken().getImage()).getImage(), x, y, null);
 			});
 		ImageIcon imageIcon = new ImageIcon(img);

@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -32,8 +33,8 @@ public class BattleMapTokenDBO {
 	private TokenDBO token;
 
 	@Column(name = "FIELD_X", nullable = false)
-	private double fieldX;
+	private BigDecimal fieldX;
 
 	@Column(name = "FIELD_Y", nullable = false)
-	private double fieldY;
+	private BigDecimal fieldY;
 }
