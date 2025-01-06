@@ -3,6 +3,7 @@ package de.ollie.carp.bm.swing;
 import de.ollie.carp.bm.client.BattleMapClient;
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.gui.TokenSetterService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
@@ -35,6 +36,9 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 	@Inject
 	private TokenClient tokenClient;
 
+	@Inject
+	private TokenSetterService tokenSetterService;
+
 	public ApplicationFrame() {
 		super(";op");
 	}
@@ -63,11 +67,7 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 		tokenClient
 			.findAllByBattleMap(battleMap.getName())
 			.forEach(bmt -> {
-				int fs = bmt.getBattleMap().getFieldSizeInPixels();
-				int offs = bmt.getBattleMap().getOffsetInPixels();
-				int x = (int) (fs * bmt.getFieldX().doubleValue()) + offs;
-				int y = (int) (fs * bmt.getFieldY().doubleValue()) + offs;
-				g.drawImage(new ImageIcon(bmt.getToken().getImage()).getImage(), x, y, null);
+				tokenSetterService.setTokenToBattleMap(bmt, g);
 			});
 		ImageIcon imageIcon = new ImageIcon(img);
 		return new JLabel(imageIcon);
