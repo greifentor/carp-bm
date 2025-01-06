@@ -24,7 +24,7 @@
 		<!-- carp-bm -->
 		<dependency>
 			<groupId>de.ollie</groupId>
-			<artifactId>carp-bm-service</artifactId>
+			<artifactId>carp-bm-service-interface</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<!-- Spring -->

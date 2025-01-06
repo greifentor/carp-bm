@@ -1,0 +1,16 @@
+@startuml
+
+'!theme mono
+'COMMENT - skinparam linetype ortho
+
+actor gamemaster as "Game Master"
+actor player as "Player"
+
+node carpbm as "CARP-BM"
+
+gamemaster -RIGHT-> carpbm : "Managing Battle Maps & Tokens"
+gamemaster -RIGHT-> carpbm : "Lead Game Sessions"
+
+player --> carpbm : "Viewing Battle Maps"
+
+@enduml

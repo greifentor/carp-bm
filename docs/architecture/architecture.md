@@ -15,7 +15,7 @@ This document contains architecture descriptions and documentation.
 
 * SOLID
 * TDD
-* Minimal code.
+* Minimal amount of code.
 
 
 ### Relevant Stakeholders
@@ -41,10 +41,20 @@ TBD
 
 ## Building Block View
 
+### Context Diagram
+
+![context diagram](./context-diagram.png)
+
+
 ### Module Diagram Level 0
 
 ![module diagram (level 0)](./module-diagram.png)
 
+Legend
+* Stereotype "application" means, that the module contains a runnable application.
+* Dashed lines are runtime scoped dependencies.
+
+Modules
 * **client** Logic for accessing the server component.
 * **jpa-service** The JPA persistence layer implementation.
 * **gui** Logic for different GUI's.
@@ -59,12 +69,7 @@ TBD
 
 ### Component Diagram Level 1
 
-![component diagram (level 1)](./component-diagram-level-1.png)
-
-Arrows pointing in direction of access.
-
-* **carp-bm** The service and core module with the logic. This is these application.
-* **carp-bm-shell** A shell application for testings, which is able to do any possible action by shell commands.
+TBD
 
 
 ## Runtime View

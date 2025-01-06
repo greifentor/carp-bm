@@ -8,34 +8,34 @@ component gui
 component jpaservice as "jpa-service"
 component rest
 component restclient as "rest-client"
-component restserver as "rest-server"
+component restserver << application >> as "rest-server" #gold
 component server
 component service
 component serviceinterface as "service-interface"
-component shell
-component swing as "swing-gui"
+component shell << application >> #gold
+component swing << application >> as "swing-gui" #gold
 
 client --> serviceinterface
 
 gui --> serviceinterface
 
-jpaservice --> service
+jpaservice --> serviceinterface
 
-restclient --> client
-restclient --> server
 restclient --> rest
+restclient --> server
 
-restserver --> jpaservice
+restserver ..> jpaservice
 restserver --> rest
-restserver --> serverS
+restserver --> server
+restserver --> service
 
 server --> serviceinterface
 
 service --> serviceinterface
 
-shell --> client
+shell --> restclient
 
-swing --> client
+swing --> restclient
 swing --> gui
 
 @enduml

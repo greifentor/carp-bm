@@ -26,6 +26,12 @@
 			<groupId>de.ollie</groupId>
 			<artifactId>carp-bm-jpa-persistence</artifactId>
 			<version>0.0.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>carp-bm-rest</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>de.ollie</groupId>
@@ -34,7 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.ollie</groupId>
-			<artifactId>carp-bm-rest</artifactId>
+			<artifactId>carp-bm-service</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<!-- java -->
