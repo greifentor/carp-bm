@@ -12,7 +12,6 @@ import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.math.BigDecimal;
-import javax.swing.ImageIcon;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,9 +47,6 @@ public class TokenSetterServiceImplTest {
 	private Image image;
 
 	@Mock
-	private ImageIcon imageIcon;
-
-	@Mock
 	private Token token;
 
 	@InjectMocks
@@ -78,8 +74,7 @@ public class TokenSetterServiceImplTest {
 			when(battleMapToken.getFieldY()).thenReturn(FIELD_Y);
 			when(battleMap.getFieldSizeInPixels()).thenReturn(FIELD_SIZE_IN_PIXELS);
 			when(battleMap.getOffsetInPixels()).thenReturn(OFFSET_IN_PIXELS);
-			when(imageIconFactory.create(imageContent)).thenReturn(imageIcon);
-			when(imageIcon.getImage()).thenReturn(image);
+			when(imageIconFactory.create(imageContent)).thenReturn(image);
 			when(token.getImage()).thenReturn(imageContent);
 			// Run
 			unitUnderTest.setTokenToBattleMap(battleMapToken, graphics);

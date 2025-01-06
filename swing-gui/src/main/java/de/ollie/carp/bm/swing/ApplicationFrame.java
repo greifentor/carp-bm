@@ -5,19 +5,15 @@ import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.gui.TokenSetterService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
+import de.ollie.carp.bm.swing.component.BattleMapImage;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -58,19 +54,9 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 		return p;
 	}
 
-	private JLabel createImage() {
+	private BattleMapImage createImage() {
 		BattleMap battleMap = battleMapClient.findAllBattleMaps().get(0);
-		ImageIcon bmImage = new ImageIcon(battleMap.getImage());
-		Image img = new BufferedImage(bmImage.getIconWidth(), bmImage.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = (Graphics2D) img.getGraphics();
-		g.drawImage(bmImage.getImage(), 0, 0, null);
-		tokenClient
-			.findAllByBattleMap(battleMap.getName())
-			.forEach(bmt -> {
-				tokenSetterService.setTokenToBattleMap(bmt, g);
-			});
-		ImageIcon imageIcon = new ImageIcon(img);
-		return new JLabel(imageIcon);
+		return new BattleMapImage(battleMap, tokenClient.findAllByBattleMap(battleMap.getName()), tokenSetterService);
 	}
 
 	@Override

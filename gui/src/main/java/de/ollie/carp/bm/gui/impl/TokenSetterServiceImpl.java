@@ -23,6 +23,6 @@ public class TokenSetterServiceImpl implements TokenSetterService {
 		int offs = battleMapToken.getBattleMap().getOffsetInPixels();
 		int x = (int) (fs * battleMapToken.getFieldX().doubleValue()) + offs;
 		int y = (int) (fs * battleMapToken.getFieldY().doubleValue()) + offs;
-		graphics.drawImage(imageIconFactory.create(battleMapToken.getToken().getImage()).getImage(), x, y, null);
+		graphics.drawImage(imageIconFactory.create(battleMapToken.getToken().getImage()), x, y, null);
 	}
 }

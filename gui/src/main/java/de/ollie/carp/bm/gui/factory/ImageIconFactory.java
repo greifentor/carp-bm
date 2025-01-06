@@ -1,12 +1,7 @@
 package de.ollie.carp.bm.gui.factory;
 
-import jakarta.inject.Named;
-import javax.swing.ImageIcon;
+import java.awt.Image;
 
-@Named
-public class ImageIconFactory {
-
-	public ImageIcon create(byte[] imageContent) {
-		return new ImageIcon(imageContent);
-	}
+public interface ImageIconFactory {
+	Image create(byte[] imageContent);
 }
