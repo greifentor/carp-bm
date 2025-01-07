@@ -56,7 +56,12 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 
 	private BattleMapImage createImage() {
 		BattleMap battleMap = battleMapClient.findAllBattleMaps().get(0);
-		return new BattleMapImage(battleMap, tokenClient.findAllByBattleMap(battleMap.getName()), tokenSetterService);
+		return new BattleMapImage(
+			battleMap,
+			tokenClient.findAllByBattleMap(battleMap.getName()),
+			tokenSetterService,
+			imageIconFactory
+		);
 	}
 
 	@Override

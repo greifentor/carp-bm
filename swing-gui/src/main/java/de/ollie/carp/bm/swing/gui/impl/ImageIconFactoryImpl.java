@@ -2,7 +2,7 @@ package de.ollie.carp.bm.swing.gui.impl;
 
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import jakarta.inject.Named;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 public class ImageIconFactoryImpl implements ImageIconFactory {
 
 	@Override
-	public Image create(byte[] imageContent) {
+	public BufferedImage create(byte[] imageContent) {
 		try (InputStream inputStream = new ByteArrayInputStream(imageContent)) {
 			return ImageIO.read(inputStream);
 		} catch (IOException e) {

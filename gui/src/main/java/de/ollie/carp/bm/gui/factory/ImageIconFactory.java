@@ -1,7 +1,7 @@
 package de.ollie.carp.bm.gui.factory;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public interface ImageIconFactory {
-	Image create(byte[] imageContent);
+	BufferedImage create(byte[] imageContent);
 }
