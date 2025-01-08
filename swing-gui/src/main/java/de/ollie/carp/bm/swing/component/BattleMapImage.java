@@ -78,6 +78,6 @@ public class BattleMapImage extends JLabel {
 	}
 
 	private boolean transparent(BufferedImage image, int x, int y) {
-		return image.getRGB(x, y) != 0;
+		return image.getRGB(x, y) == 0;
 	}
 }
