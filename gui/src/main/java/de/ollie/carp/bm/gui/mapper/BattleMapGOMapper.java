@@ -1,0 +1,18 @@
+package de.ollie.carp.bm.gui.mapper;
+
+import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.gui.factory.ImageIconFactory;
+import de.ollie.carp.bm.gui.go.BattleMapGO;
+import jakarta.inject.Inject;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(componentModel = "spring")
+public abstract class BattleMapGOMapper {
+
+	@Inject
+	protected ImageIconFactory imageIconFactory;
+
+	@Mapping(target = "image", expression = "java(imageIconFactory.create(model.getImage()))")
+	public abstract BattleMapGO toGO(BattleMap model);
+}

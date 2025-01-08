@@ -2,9 +2,11 @@ package de.ollie.carp.bm.swing;
 
 import de.ollie.carp.bm.client.BattleMapClient;
 import de.ollie.carp.bm.client.TokenClient;
-import de.ollie.carp.bm.core.model.BattleMap;
-import de.ollie.carp.bm.gui.TokenSetterService;
+import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
+import de.ollie.carp.bm.gui.go.BattleMapGO;
+import de.ollie.carp.bm.gui.mapper.BattleMapGOMapper;
+import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import de.ollie.carp.bm.swing.component.BattleMapImage;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
@@ -27,13 +29,19 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 	private ImageIconFactory imageIconFactory;
 
 	@Inject
+	private BattleMapGOMapper battleMapGOMapper;
+
+	@Inject
+	private BattleMapTokenGOMapper battleMapTokenGOMapper;
+
+	@Inject
 	private BattleMapClient battleMapClient;
 
 	@Inject
 	private TokenClient tokenClient;
 
 	@Inject
-	private TokenSetterService tokenSetterService;
+	private TokenGUIService tokenSetterService;
 
 	public ApplicationFrame() {
 		super(";op");
@@ -55,10 +63,15 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 	}
 
 	private BattleMapImage createImage() {
-		BattleMap battleMap = battleMapClient.findAllBattleMaps().get(0);
+		BattleMapGO battleMap = battleMapClient
+			.findAllBattleMaps()
+			.stream()
+			.map(battleMapGOMapper::toGO)
+			.findFirst()
+			.orElse(null);
 		return new BattleMapImage(
 			battleMap,
-			tokenClient.findAllByBattleMap(battleMap.getName()),
+			tokenClient.findAllByBattleMap(battleMap.getName()).stream().map(battleMapTokenGOMapper::toGO).toList(),
 			tokenSetterService,
 			imageIconFactory
 		);
