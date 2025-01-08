@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
@@ -14,6 +15,7 @@ import lombok.experimental.Accessors;
 @Generated
 @Entity(name = "Token")
 @Table(name = "TOKEN")
+@ToString(exclude = "image")
 public class TokenDBO {
 
 	@Id
