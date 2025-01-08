@@ -10,7 +10,7 @@ import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ public class TokenSetterServiceImplTest {
 	private Graphics2D graphics;
 
 	@Mock
-	private Image image;
+	private BufferedImage image;
 
 	@Mock
 	private Token token;
