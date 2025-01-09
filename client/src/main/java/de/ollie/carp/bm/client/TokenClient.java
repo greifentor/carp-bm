@@ -15,5 +15,7 @@ public interface TokenClient {
 
 	List<BattleMapToken> findAllByBattleMap(String battleMapIdOrName);
 
+	String moveBattleMapToken(String battleMapTokenId, Coordinates coordinates);
+
 	String setTokenToBattleMapOfSpielrunde(String tokenIdOrName, String battleMapIdOrName, Coordinates coordinates);
 }

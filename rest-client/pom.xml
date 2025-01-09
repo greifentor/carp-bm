@@ -24,6 +24,11 @@
 		<!-- carp-bm -->
 		<dependency>
 			<groupId>de.ollie</groupId>
+			<artifactId>carp-bm-client</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
 			<artifactId>carp-bm-rest</artifactId>
 			<version>0.0.1</version>
 		</dependency>

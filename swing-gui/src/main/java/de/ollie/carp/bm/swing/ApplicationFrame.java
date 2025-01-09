@@ -2,9 +2,12 @@ package de.ollie.carp.bm.swing;
 
 import de.ollie.carp.bm.client.BattleMapClient;
 import de.ollie.carp.bm.client.TokenClient;
+import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
+import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.HitsGO;
 import de.ollie.carp.bm.gui.mapper.BattleMapGOMapper;
 import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import de.ollie.carp.bm.swing.component.BattleMapImage;
@@ -15,12 +18,13 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.math.BigDecimal;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 @Named
-public class ApplicationFrame extends JFrame implements WindowListener {
+public class ApplicationFrame extends JFrame implements WindowListener, BattleMapImage.Listener {
 
 	private static final int HGAP = 3;
 	private static final int VGAP = 3;
@@ -69,12 +73,14 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 			.map(battleMapGOMapper::toGO)
 			.findFirst()
 			.orElse(null);
-		return new BattleMapImage(
+		BattleMapImage bmi = new BattleMapImage(
 			battleMap,
 			tokenClient.findAllByBattleMap(battleMap.getName()).stream().map(battleMapTokenGOMapper::toGO).toList(),
-			tokenSetterService,
-			imageIconFactory
+			tokenSetterService
 		);
+		bmi.addListener(this);
+		bmi.update();
+		return bmi;
 	}
 
 	@Override
@@ -111,5 +117,19 @@ public class ApplicationFrame extends JFrame implements WindowListener {
 	@Override
 	public void windowOpened(WindowEvent e) {
 		// NOP
+	}
+
+	private Coordinates selectedField;
+	private BattleMapTokenGO selectedToken;
+
+	@Override
+	public void hitsDetected(HitsGO hits) {
+		System.out.println("selected field was:    " + selectedField);
+		selectedField =
+			new Coordinates().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
+		if ((selectedToken != null) && hits.getBattleMapTokens().isEmpty()) {
+			tokenClient.moveBattleMapToken(selectedToken.getId().toString(), selectedField);
+		}
+		System.out.println("selected field is now: " + selectedField);
 	}
 }

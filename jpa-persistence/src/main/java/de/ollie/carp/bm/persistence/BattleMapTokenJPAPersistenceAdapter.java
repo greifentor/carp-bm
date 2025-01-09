@@ -15,6 +15,7 @@ import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.BattleMapTokenDBORepository;
 import jakarta.inject.Named;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
@@ -50,6 +51,11 @@ class BattleMapTokenJPAPersistenceAdapter implements BattleMapTokenPersistencePo
 	@Override
 	public List<BattleMapToken> findAllByBattleMap(BattleMap battleMap) {
 		return mapper.toModels(repository.findAllByBattleMap(battleMapMapper.toDBO(battleMap)));
+	}
+
+	@Override
+	public Optional<BattleMapToken> findById(UUID id) {
+		return repository.findById(id).map(mapper::toModel);
 	}
 
 	@Override

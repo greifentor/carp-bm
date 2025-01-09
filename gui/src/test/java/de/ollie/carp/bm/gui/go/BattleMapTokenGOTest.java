@@ -30,7 +30,7 @@ class BattleMapTokenGOTest {
 	private BattleMapTokenGO unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_getTokenLeftUpperCorner {
+	class getTokenLeftUpperCorner {
 
 		@Test
 		void returnsTheCorrectValue() {

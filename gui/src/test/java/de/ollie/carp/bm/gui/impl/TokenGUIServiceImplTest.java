@@ -1,5 +1,6 @@
 package de.ollie.carp.bm.gui.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,6 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,36 +71,19 @@ public class TokenGUIServiceImplTest {
 	@InjectMocks
 	private TokenGUIServiceImpl unitUnderTest;
 
-	@Nested
-	class TestsOfMethod_setTokenToBattleMap_BattleMapToken_Graphics2D {
-
-		@Test
-		void throwsAnException_passingBattleMapTokenAsNullValue() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.setTokenToBattleMap(null, graphics));
-		}
-
-		@Test
-		void throwsAnException_passingGraphicsAsNullValue() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.setTokenToBattleMap(battleMapToken, null));
-		}
-
-		@Test
-		void setsTheCoordinatesCorrectly() {
-			// Prepare
-			when(battleMapToken.getTokenLeftUpperCorner()).thenReturn(coordinates);
-			when(battleMapToken.getToken()).thenReturn(token);
-			when(coordinates.getX()).thenReturn(X);
-			when(coordinates.getY()).thenReturn(Y);
-			when(token.getImage()).thenReturn(image);
-			// Run
-			unitUnderTest.setTokenToBattleMap(battleMapToken, graphics);
-			// Check
-			verify(graphics, times(1)).drawImage(image, X, Y, null);
-		}
+	private void trainBattleMapToken_forAHit() {
+		when(battleMapToken.getToken()).thenReturn(token);
+		when(battleMapToken.getTokenLeftUpperCorner()).thenReturn(coordinates);
+		when(coordinates.getX()).thenReturn(X);
+		when(coordinates.getY()).thenReturn(Y);
+		when(image.getRGB(MOUSE_X - X, MOUSE_Y - Y)).thenReturn(TokenGUIServiceImpl.TRANSPARENT + 1);
+		when(shape.contains(MOUSE_X, MOUSE_Y)).thenReturn(true);
+		when(shapeFactory.create(coordinates, image)).thenReturn(shape);
+		when(token.getImage()).thenReturn(image);
 	}
 
 	@Nested
-	class TestsOfMethod_isHit_BattleMapToken_int_int {
+	class isHit_BattleMapToken_int_int {
 
 		@Test
 		void throwsAnException_passingANullValueAsBattleMapToken() {
@@ -108,14 +93,7 @@ public class TokenGUIServiceImplTest {
 		@Test
 		void returnsTrue_passingABattleMapTokenWhichIsHit_andHitPixelIsNotTransparent() {
 			// Prepare
-			when(battleMapToken.getToken()).thenReturn(token);
-			when(battleMapToken.getTokenLeftUpperCorner()).thenReturn(coordinates);
-			when(coordinates.getX()).thenReturn(X);
-			when(coordinates.getY()).thenReturn(Y);
-			when(image.getRGB(MOUSE_X - X, MOUSE_Y - Y)).thenReturn(TokenGUIServiceImpl.TRANSPARENT + 1);
-			when(shape.contains(MOUSE_X, MOUSE_Y)).thenReturn(true);
-			when(shapeFactory.create(coordinates, image)).thenReturn(shape);
-			when(token.getImage()).thenReturn(image);
+			trainBattleMapToken_forAHit();
 			// Run & Check
 			assertTrue(unitUnderTest.isHit(battleMapToken, MOUSE_X, MOUSE_Y));
 		}
@@ -145,6 +123,65 @@ public class TokenGUIServiceImplTest {
 			when(token.getImage()).thenReturn(image);
 			// Run & Check
 			assertFalse(unitUnderTest.isHit(battleMapToken, MOUSE_X, MOUSE_Y));
+		}
+	}
+
+	@Nested
+	class reduceToHitTokens_ListBattleMapTokenGO_int_int {
+
+		@Test
+		void returnsAnEmptyList_passingAnEmptyList() {
+			assertEquals(List.of(), unitUnderTest.reduceToHitTokens(List.of(), MOUSE_Y, MOUSE_X));
+		}
+
+		@Test
+		void returnsAnEmptyList_passingAListWithNoHits() {
+			// Prepare
+			List<BattleMapTokenGO> bmts = List.of(battleMapToken);
+			when(battleMapToken.getToken()).thenReturn(token);
+			when(battleMapToken.getTokenLeftUpperCorner()).thenReturn(coordinates);
+			when(shape.contains(MOUSE_X, MOUSE_Y)).thenReturn(false);
+			when(shapeFactory.create(coordinates, image)).thenReturn(shape);
+			when(token.getImage()).thenReturn(image);
+			// Run & Check
+			assertEquals(List.of(), unitUnderTest.reduceToHitTokens(bmts, MOUSE_X, MOUSE_Y));
+		}
+
+		@Test
+		void returnsAListWithMatchingBattleMapTokens_passingAListWithAHit() {
+			// Prepare
+			List<BattleMapTokenGO> bmts = List.of(battleMapToken);
+			trainBattleMapToken_forAHit();
+			// Run & Check
+			assertEquals(List.of(battleMapToken), unitUnderTest.reduceToHitTokens(bmts, MOUSE_X, MOUSE_Y));
+		}
+	}
+
+	@Nested
+	class setTokenToBattleMap_BattleMapToken_Graphics2D {
+
+		@Test
+		void throwsAnException_passingBattleMapTokenAsNullValue() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.setTokenToBattleMap(null, graphics));
+		}
+
+		@Test
+		void throwsAnException_passingGraphicsAsNullValue() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.setTokenToBattleMap(battleMapToken, null));
+		}
+
+		@Test
+		void setsTheCoordinatesCorrectly() {
+			// Prepare
+			when(battleMapToken.getTokenLeftUpperCorner()).thenReturn(coordinates);
+			when(battleMapToken.getToken()).thenReturn(token);
+			when(coordinates.getX()).thenReturn(X);
+			when(coordinates.getY()).thenReturn(Y);
+			when(token.getImage()).thenReturn(image);
+			// Run
+			unitUnderTest.setTokenToBattleMap(battleMapToken, graphics);
+			// Check
+			verify(graphics, times(1)).drawImage(image, X, Y, null);
 		}
 	}
 }

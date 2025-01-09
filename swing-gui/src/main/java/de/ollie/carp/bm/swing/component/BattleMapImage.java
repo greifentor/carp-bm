@@ -1,68 +1,92 @@
 package de.ollie.carp.bm.swing.component;
 
+import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.gui.TokenGUIService;
-import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.HitsGO;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class BattleMapImage extends JLabel {
+@RequiredArgsConstructor
+public class BattleMapImage extends JLabel implements MouseListener {
 
-	public BattleMapImage(
-		BattleMapGO battleMap,
-		List<BattleMapTokenGO> battleMapTokens,
-		TokenGUIService tokenGUIService,
-		ImageIconFactory imageIconFactory
-	) {
+	public interface Listener {
+		void hitsDetected(HitsGO hits);
+	}
+
+	private final Logger log = LogManager.getLogger(BattleMapImage.class);
+	private final BattleMapGO battleMap;
+	private final List<BattleMapTokenGO> battleMapTokens;
+	private final TokenGUIService tokenGUIService;
+	private final List<Listener> listeners = new ArrayList<>();
+
+	public void update() {
 		ImageIcon bmImage = new ImageIcon(battleMap.getImage());
 		Image img = new BufferedImage(bmImage.getIconWidth(), bmImage.getIconHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D) img.getGraphics();
 		g.drawImage(bmImage.getImage(), 0, 0, null);
 		battleMapTokens.forEach(bmt -> tokenGUIService.setTokenToBattleMap(bmt, g));
 		setIcon(new ImageIcon(img));
-		addMouseListener(
-			new MouseListener() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					// TODO Auto-generated method stub
-					System.out.println("Mouse clicked at " + e.getX() + "/" + e.getY());
-					battleMapTokens
-						.stream()
-						.filter(bmt -> tokenGUIService.isHit(bmt, e.getX(), e.getY()))
-						.forEach(System.out::println);
-				}
+		addMouseListener(this);
+	}
 
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
+	public void addListener(Listener l) {
+		listeners.add(l);
+	}
 
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-
-				}
+	void fireEvent(int fieldX, int fieldY, List<BattleMapTokenGO> battleMapTokens) {
+		HitsGO hits = new HitsGO().setBattleMapTokens(battleMapTokens).setFieldX(fieldX).setFieldY(fieldY);
+		for (Listener l : listeners) {
+			try {
+				l.hitsDetected(hits);
+			} catch (Exception e) {
+				log.error("error while calling listener!", e);
 			}
+		}
+	}
+
+	public void removeListener(Listener l) {
+		listeners.remove(l);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Coordinates coordinates = battleMap.getFieldCoordinates(e.getX(), e.getY());
+		fireEvent(
+			coordinates.getFieldX().intValue(),
+			coordinates.getFieldY().intValue(),
+			tokenGUIService.reduceToHitTokens(battleMapTokens, e.getX(), e.getY())
 		);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// NOP
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// NOP
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// NOP
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// NOP
 	}
 }

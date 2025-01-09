@@ -2,8 +2,10 @@ package de.ollie.carp.bm.rest.v1;
 
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.BattleMapService;
+import de.ollie.carp.bm.core.service.BattleMapTokenService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
 import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDTO;
@@ -14,6 +16,7 @@ import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
 	private final BattleMapService battleMapService;
+	private final BattleMapTokenService battleMapTokenService;
 	private final BattleMapTokenDTOMapper battleMapTokenMapper;
 	private final CoordinatesDTOMapper coordinatesMapper;
 	private final SecurityChecker securityChecker;
@@ -66,6 +70,25 @@ public class TokenController {
 			.findByIdOrName(battleMapIdOrName)
 			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
 		return ResponseEntity.ok(battleMapTokenMapper.toDTOList(tokenService.findAllByBattleMap(battleMap)));
+	}
+
+	@PostMapping(
+		value = "/{battleMapTokenId}/move",
+		consumes = MediaType.APPLICATION_JSON_VALUE,
+		produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<HttpStatus> moveBattleMapToken(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String battleMapTokenId,
+		@RequestBody CoordinatesDTO coordinatesDTO
+	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		BattleMapToken battleMapToken = battleMapTokenService
+			.findById(UUID.fromString(battleMapTokenId))
+			.orElseThrow(() -> new NoSuchRecordException(battleMapTokenId, "BattleMapToken", "id"));
+		battleMapToken.setFieldX(coordinatesDTO.getFieldX()).setFieldY(coordinatesDTO.getFieldY());
+		battleMapTokenService.save(battleMapToken);
+		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 
 	@PostMapping(

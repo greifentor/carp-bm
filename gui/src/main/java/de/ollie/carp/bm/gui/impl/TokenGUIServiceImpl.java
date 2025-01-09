@@ -9,6 +9,7 @@ import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
 import jakarta.inject.Named;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -37,6 +38,11 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 			battleMapToken.getToken().getImage().getRGB(mouseX - leftUpperCorner.getX(), mouseY - leftUpperCorner.getY()) ==
 			TRANSPARENT
 		);
+	}
+
+	@Override
+	public List<BattleMapTokenGO> reduceToHitTokens(List<BattleMapTokenGO> battleMapTokens, int mouseX, int mouseY) {
+		return battleMapTokens.stream().filter(bmt -> isHit(bmt, mouseX, mouseY)).toList();
 	}
 
 	@Override

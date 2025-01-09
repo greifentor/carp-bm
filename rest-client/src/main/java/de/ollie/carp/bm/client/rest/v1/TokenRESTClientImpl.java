@@ -125,4 +125,17 @@ public class TokenRESTClientImpl implements TokenClient {
 			.body(new ParameterizedTypeReference<List<BattleMapTokenDTO>>() {});
 		return battleMapTokenMapper.toModels(dtos);
 	}
+
+	@Override
+	public String moveBattleMapToken(String battleMapTokenId, Coordinates coordinates) {
+		restClient
+			.post()
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + battleMapTokenId + "/move")
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(coordinatesMapper.toDTO(coordinates))
+			.retrieve()
+			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
+		return "moved token to " + coordinates.getFieldX() + "/" + coordinates.getFieldY() + ".";
+	}
 }
