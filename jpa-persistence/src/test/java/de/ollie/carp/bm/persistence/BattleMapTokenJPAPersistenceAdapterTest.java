@@ -80,7 +80,7 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 	private BattleMapTokenJPAPersistenceAdapter unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_addTokenToBattleMap_Token_BattleMap_Coordinates {
+	class addTokenToBattleMap_Token_BattleMap_Coordinates {
 
 		@Test
 		void throwsAnException_passingBattleMapAsNullValue() {
@@ -148,7 +148,7 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAllByBattleMap_BattleMap {
+	class findAllByBattleMap_BattleMap {
 
 		@Test
 		void returnsTheMappedObjectReturnedByThePersistencePort() {
@@ -166,7 +166,7 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 	}
 
 	@Nested
-	class TestsOfMethod_save_BattleMapToken {
+	class save_BattleMapToken {
 
 		@Test
 		void throwsAnException_passingANullValueAsBattleMapToken() {

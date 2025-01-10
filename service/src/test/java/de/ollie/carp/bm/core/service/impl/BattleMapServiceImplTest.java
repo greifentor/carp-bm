@@ -42,7 +42,7 @@ public class BattleMapServiceImplTest {
 	private BattleMapServiceImpl unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_create_BattleMap {
+	class create_BattleMap {
 
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
@@ -60,7 +60,7 @@ public class BattleMapServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_delete_String {
+	class delete_String {
 
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly_passingAnUUID() {
@@ -91,7 +91,7 @@ public class BattleMapServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAll {
+	class findAll {
 
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
@@ -108,7 +108,7 @@ public class BattleMapServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findByIdOrName_String {
+	class findByIdOrName_String {
 
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly() {

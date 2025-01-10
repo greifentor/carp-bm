@@ -60,7 +60,7 @@ class TokenServiceImplTest {
 	private TokenServiceImpl unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_addTokenToMapOfSitzung_Sitzung_Token_Coordinates {
+	class addTokenToMapOfSitzung_Sitzung_Token_Coordinates {
 
 		@Test
 		void delegatesToSitzungTokenPersistencePortMethodCorrectly() {
@@ -73,7 +73,7 @@ class TokenServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_create_Token {
+	class create_Token {
 
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
@@ -91,7 +91,7 @@ class TokenServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_delete_String {
+	class delete_String {
 
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly_passingAnUUID() {
@@ -132,7 +132,7 @@ class TokenServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAll {
+	class findAll {
 
 		@Test
 		void delegatesToTokenPersistencePortMethodCorrectly() {
@@ -149,7 +149,7 @@ class TokenServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAllByBattleMap_BattleMap {
+	class findAllByBattleMap_BattleMap {
 
 		@Test
 		void happyRun() {
@@ -164,7 +164,7 @@ class TokenServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findByIdOrName_String {
+	class findByIdOrName_String {
 
 		@Test
 		void callsTheTokenPersistencePortMethodCorrectly() {

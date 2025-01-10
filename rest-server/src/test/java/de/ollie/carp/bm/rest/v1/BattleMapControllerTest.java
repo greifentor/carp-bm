@@ -45,7 +45,7 @@ public class BattleMapControllerTest {
 	private BattleMapController unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_createToken_String {
+	class createToken_String {
 
 		@Test
 		void happyRun() {
@@ -64,7 +64,7 @@ public class BattleMapControllerTest {
 	}
 
 	@Nested
-	class TestsOfMethod_delete_String_String {
+	class delete_String_String {
 
 		@Test
 		void happyRun() {
@@ -82,7 +82,7 @@ public class BattleMapControllerTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAllTokens {
+	class findAllTokens {
 
 		@Test
 		void happyRun() {

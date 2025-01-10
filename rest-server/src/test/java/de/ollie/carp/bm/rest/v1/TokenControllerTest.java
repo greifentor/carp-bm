@@ -89,7 +89,7 @@ public class TokenControllerTest {
 	private TokenController unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_createToken_String {
+	class createToken_String {
 
 		@Test
 		void happyRun() {
@@ -108,7 +108,7 @@ public class TokenControllerTest {
 	}
 
 	@Nested
-	class TestsOfMethod_delete_String_String {
+	class delete_String_String {
 
 		@Test
 		void happyRun() {
@@ -126,7 +126,7 @@ public class TokenControllerTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAllTokens {
+	class findAllTokens {
 
 		@Test
 		void happyRun() {
@@ -144,7 +144,7 @@ public class TokenControllerTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAllByBattleMap_String_String {
+	class findAllByBattleMap_String_String {
 
 		@Test
 		void happyRun() {
@@ -174,7 +174,7 @@ public class TokenControllerTest {
 	}
 
 	@Nested
-	class TestsOfMethod_setTokenToMapOfSitzung_String_String_String_CoordinatesDTO {
+	class setTokenToMapOfSitzung_String_String_String_CoordinatesDTO {
 
 		@Test
 		void throwsAnException_passingAnIdOfAnUnknownBattleMap() {

@@ -602,7 +602,7 @@ class ImageIconFactoryImplTest {
 	private ImageIconFactoryImpl unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_create {
+	class create {
 
 		@Test
 		void returnsANewImageIcon() {

@@ -18,7 +18,7 @@ public class RestClientConfigurationTest {
 	private RestClientConfiguration unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_getServerHostAndPort {
+	class getServerHostAndPort {
 
 		@Test
 		void returnsCorrectString_whenSchemaAndHostSetOnly() {

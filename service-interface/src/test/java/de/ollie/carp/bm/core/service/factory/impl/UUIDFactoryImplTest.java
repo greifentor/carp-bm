@@ -20,7 +20,7 @@ class UUIDFactoryImplTest {
 	private UUIDFactoryImpl unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_create {
+	class create {
 
 		@Test
 		void returnsAnUUID() {
@@ -34,7 +34,7 @@ class UUIDFactoryImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_createFromString_String {
+	class createFromString_String {
 
 		@Test
 		void returnsAnUUID_withThePassedString() {

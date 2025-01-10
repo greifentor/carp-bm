@@ -47,7 +47,7 @@ public class TokenJPAPersistenceAdapterTest {
 	private TokenJPAPersistenceAdapter unitUnderTest;
 
 	@Nested
-	class TestsOfTheMethod_create_Token {
+	class create_Token {
 
 		@Test
 		void throwsAnException_passingAnAlreadyExistingName() {
@@ -75,7 +75,7 @@ public class TokenJPAPersistenceAdapterTest {
 	}
 
 	@Nested
-	class TestsOfMethod_deleteById_UUID {
+	class deleteById_UUID {
 
 		@Test
 		void callsRepositoryMethodCorrectly() {
@@ -85,7 +85,7 @@ public class TokenJPAPersistenceAdapterTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findAll {
+	class findAll {
 
 		@Test
 		void returnsTokenData_returnedByTheRepositoryMethod() {
@@ -102,7 +102,7 @@ public class TokenJPAPersistenceAdapterTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findById_UUID {
+	class findById_UUID {
 
 		@Test
 		void returnsTokenData_returnedByTheRepositoryMethod() {
@@ -117,7 +117,7 @@ public class TokenJPAPersistenceAdapterTest {
 	}
 
 	@Nested
-	class TestsOfMethod_findByName_String {
+	class findByName_String {
 
 		@Test
 		void returnsTokenData_returnedByTheRepositoryMethod() {

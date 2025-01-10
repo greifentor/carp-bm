@@ -20,7 +20,7 @@ class ResourceFileAdapterConfigurationTest {
 	private ResourceFileAdapterConfiguration unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_getResourceFileName_Localization {
+	class getResourceFileName_Localization {
 
 		@Test
 		void returnsTheFileNamePattern_withNoLocalization_passingNoLocalization() {

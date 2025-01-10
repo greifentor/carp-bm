@@ -39,7 +39,7 @@ class ResourceFileAdapterTest {
 	private ResourceFileAdapter unitUnderTest;
 
 	@Nested
-	class TestsOfMethodPostConstruct {
+	class postConstruct {
 
 		@Test
 		void throwsAnException_whenFileIsNotFound_specifiedByClassPath() {

@@ -28,7 +28,7 @@ class GeneralErrorHandlerTest {
 	private GeneralErrorHandler unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_handleNoSuchRecordException_NoSuchRecordException_WebRequest {
+	class handleNoSuchRecordException_NoSuchRecordException_WebRequest {
 
 		@Test
 		void returnsAHttpServletResponse_withExceptionInTheBody() {
@@ -54,7 +54,7 @@ class GeneralErrorHandlerTest {
 	}
 
 	@Nested
-	class TestsOfMethod_handleNoSuchRecordException_UniqueConstraintViolationException_WebRequest {
+	class handleNoSuchRecordException_UniqueConstraintViolationException_WebRequest {
 
 		@Test
 		void returnsAHttpServletResponse_withExceptionInTheBody() {

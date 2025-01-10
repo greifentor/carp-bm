@@ -34,7 +34,7 @@ class ShapeFactoryImplTest {
 	private ShapeFactoryImpl unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_create_CoordinatesXY_BufferedImage {
+	class create_CoordinatesXY_BufferedImage {
 
 		@Test
 		void throwsAnException_passingANullValueAsCoordinatesXY() {

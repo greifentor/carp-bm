@@ -23,7 +23,7 @@ class ErrorMessageDTOTest {
 	private ErrorMessageDTO unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_getMessageDataToStringArray {
+	class getMessageDataToStringArray {
 
 		@Test
 		void returnsAnEmptyArray_whenNoMessageDataAreStored() {
