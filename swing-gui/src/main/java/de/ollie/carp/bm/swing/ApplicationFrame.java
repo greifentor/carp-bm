@@ -47,6 +47,8 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	@Inject
 	private TokenGUIService tokenSetterService;
 
+	private BattleMapImage bmi;
+
 	public ApplicationFrame() {
 		super(";op");
 	}
@@ -73,11 +75,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 			.map(battleMapGOMapper::toGO)
 			.findFirst()
 			.orElse(null);
-		BattleMapImage bmi = new BattleMapImage(
-			battleMap,
-			tokenClient.findAllByBattleMap(battleMap.getName()).stream().map(battleMapTokenGOMapper::toGO).toList(),
-			tokenSetterService
-		);
+		bmi = new BattleMapImage(battleMap, tokenClient, tokenSetterService, battleMapTokenGOMapper);
 		bmi.addListener(this);
 		bmi.update();
 		return bmi;
@@ -125,11 +123,19 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	@Override
 	public void hitsDetected(HitsGO hits) {
 		System.out.println("selected field was:    " + selectedField);
+		System.out.println("selected token:        " + selectedToken);
 		selectedField =
 			new Coordinates().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
 		if ((selectedToken != null) && hits.getBattleMapTokens().isEmpty()) {
 			tokenClient.moveBattleMapToken(selectedToken.getId().toString(), selectedField);
+			bmi.update();
+			System.out.println("repainted");
+			selectedToken = null;
+		} else if ((selectedToken == null) && !hits.getBattleMapTokens().isEmpty()) {
+			selectedToken = hits.getBattleMapTokens().get(0);
 		}
 		System.out.println("selected field is now: " + selectedField);
+		System.out.println("selected token:        " + selectedToken);
+		System.out.println();
 	}
 }

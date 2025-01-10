@@ -1,10 +1,12 @@
 package de.ollie.carp.bm.swing.component;
 
+import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.HitsGO;
+import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -12,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +30,9 @@ public class BattleMapImage extends JLabel implements MouseListener {
 
 	private final Logger log = LogManager.getLogger(BattleMapImage.class);
 	private final BattleMapGO battleMap;
-	private final List<BattleMapTokenGO> battleMapTokens;
+	private final TokenClient tokenClient;
 	private final TokenGUIService tokenGUIService;
+	private final BattleMapTokenGOMapper battleMapTokenGOMapper;
 	private final List<Listener> listeners = new ArrayList<>();
 
 	public void update() {
@@ -36,9 +40,14 @@ public class BattleMapImage extends JLabel implements MouseListener {
 		Image img = new BufferedImage(bmImage.getIconWidth(), bmImage.getIconHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D) img.getGraphics();
 		g.drawImage(bmImage.getImage(), 0, 0, null);
-		battleMapTokens.forEach(bmt -> tokenGUIService.setTokenToBattleMap(bmt, g));
+		getBattleMapTokenGOs().forEach(bmt -> tokenGUIService.setTokenToBattleMap(bmt, g));
 		setIcon(new ImageIcon(img));
 		addMouseListener(this);
+		repaint();
+	}
+
+	private Stream<BattleMapTokenGO> getBattleMapTokenGOs() {
+		return tokenClient.findAllByBattleMap(battleMap.getName()).stream().map(battleMapTokenGOMapper::toGO);
 	}
 
 	public void addListener(Listener l) {
@@ -66,7 +75,7 @@ public class BattleMapImage extends JLabel implements MouseListener {
 		fireEvent(
 			coordinates.getFieldX().intValue(),
 			coordinates.getFieldY().intValue(),
-			tokenGUIService.reduceToHitTokens(battleMapTokens, e.getX(), e.getY())
+			tokenGUIService.reduceToHitTokens(getBattleMapTokenGOs().toList(), e.getX(), e.getY())
 		);
 	}
 
