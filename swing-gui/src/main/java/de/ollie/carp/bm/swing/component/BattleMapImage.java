@@ -3,6 +3,7 @@ package de.ollie.carp.bm.swing.component;
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.gui.TokenGUIService;
+import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.HitsGO;
@@ -29,14 +30,15 @@ public class BattleMapImage extends JLabel implements MouseListener {
 
 	private final Logger log = LogManager.getLogger(BattleMapImage.class);
 	private final BattleMapGO battleMap;
+	private final ImageIconFactory imageIconFactory;
 	private final TokenClient tokenClient;
 	private final TokenGUIService tokenGUIService;
 	private final BattleMapTokenGOMapper battleMapTokenGOMapper;
 	private final List<Listener> listeners = new ArrayList<>();
 
 	public void update() {
-		ImageIcon bmImage = new ImageIcon(battleMap.getImage());
-		Image img = new BufferedImage(bmImage.getIconWidth(), bmImage.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+		ImageIcon bmImage = imageIconFactory.create(battleMap.getImage());
+		Image img = imageIconFactory.create(bmImage.getIconWidth(), bmImage.getIconHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D) img.getGraphics();
 		g.drawImage(bmImage.getImage(), 0, 0, null);
 		getBattleMapTokenGOs().forEach(bmt -> tokenGUIService.setTokenToBattleMap(bmt, g));

@@ -15,13 +15,17 @@ import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.gui.TokenGUIService;
+import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.HitsGO;
 import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.swing.ImageIcon;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -69,6 +73,9 @@ class BattleMapImageTest {
 
 	@Mock
 	private BattleMapTokenGOMapper battleMapTokenGOMapper;
+
+	@Mock
+	private ImageIconFactory imageIconFactory;
 
 	@Mock
 	private Logger log;
@@ -199,6 +206,31 @@ class BattleMapImageTest {
 		@Test
 		void doesNotThrowAnyException_passingANullValue() {
 			assertDoesNotThrow(() -> unitUnderTest.removeListener(null));
+		}
+	}
+
+	@Nested
+	class update {
+
+		@Test
+		void happyRun() {
+			// Prepare
+			int height = 42;
+			int width = 1701;
+			BufferedImage bufferedImage0 = mock(BufferedImage.class);
+			BufferedImage bufferedImage1 = mock(BufferedImage.class);
+			Graphics2D graphics = mock(Graphics2D.class);
+			ImageIcon imageIcon = mock(ImageIcon.class);
+			when(battleMap.getName()).thenReturn(NAME);
+			when(bufferedImage1.getGraphics()).thenReturn(graphics);
+			when(imageIcon.getIconHeight()).thenReturn(height);
+			when(imageIcon.getIconWidth()).thenReturn(width);
+			when(battleMap.getImage()).thenReturn(bufferedImage0);
+			when(imageIconFactory.create(bufferedImage0)).thenReturn(imageIcon);
+			when(imageIconFactory.create(width, height, BufferedImage.TYPE_INT_RGB)).thenReturn(bufferedImage1);
+			when(tokenClient.findAllByBattleMap(NAME)).thenReturn(List.of(battleMapToken));
+			// Run & Check
+			assertDoesNotThrow(() -> unitUnderTest.update());
 		}
 	}
 }

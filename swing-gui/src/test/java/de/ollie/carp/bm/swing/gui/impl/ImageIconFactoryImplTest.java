@@ -2,7 +2,9 @@ package de.ollie.carp.bm.swing.gui.impl;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -602,7 +604,7 @@ class ImageIconFactoryImplTest {
 	private ImageIconFactoryImpl unitUnderTest;
 
 	@Nested
-	class create {
+	class create_ByteArray {
 
 		@Test
 		void returnsANewImageIcon() {
@@ -612,6 +614,35 @@ class ImageIconFactoryImplTest {
 		@Test
 		void returnsANewImageIcon_onEachCall() {
 			assertNotSame(unitUnderTest.create(imageContent), unitUnderTest.create(imageContent));
+		}
+	}
+
+	@Nested
+	class create_BufferedImage {
+
+		@Test
+		void throwsAnException_passingANullValue() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.create((BufferedImage) null));
+		}
+
+		@Test
+		void returnsANewImageIcon_onEachCall() {
+			BufferedImage bufferedImage = unitUnderTest.create(imageContent);
+			assertNotSame(unitUnderTest.create(bufferedImage), unitUnderTest.create(bufferedImage));
+		}
+	}
+
+	@Nested
+	class create_int_int_int {
+
+		@Test
+		void returnsANewImageIcon_onEachCall() {
+			// Prepare
+			int width = 1701;
+			int height = 42;
+			int type = BufferedImage.TYPE_INT_RGB;
+			// Run & Check
+			assertNotSame(unitUnderTest.create(width, height, type), unitUnderTest.create(width, height, type));
 		}
 	}
 }

@@ -75,7 +75,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 			.map(battleMapGOMapper::toGO)
 			.findFirst()
 			.orElse(null);
-		bmi = new BattleMapImage(battleMap, tokenClient, tokenSetterService, battleMapTokenGOMapper);
+		bmi = new BattleMapImage(battleMap, imageIconFactory, tokenClient, tokenSetterService, battleMapTokenGOMapper);
 		bmi.addListener(this);
 		bmi.update();
 		return bmi;
