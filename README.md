@@ -23,6 +23,11 @@ An application for pen and paper role playing battle maps.
 **Maven** Maven 3.9.9
 
 
+### Start
+
+TBD
+
+
 ## Architecture
 
 For details look here: [architecture documentation](docs/architecture/architecture.md)
