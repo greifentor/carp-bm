@@ -1,5 +1,6 @@
 package de.ollie.carp.bm.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,6 +22,8 @@ import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.BattleMapTokenDBORepository;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class BattleMapTokenJPAPersistenceAdapterTest {
 
+	private static final UUID UID = UUID.randomUUID();
 	private static final BigDecimal X = new BigDecimal(42);
 	private static final BigDecimal Y = new BigDecimal(1701);
 
@@ -144,6 +148,25 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 			unitUnderTest.addTokenToBattleMap(token, battleMap, coordinates);
 			// Check
 			verify(battleMapTokenDBO0, times(1)).setFieldY(Y);
+		}
+	}
+
+	@Nested
+	class findById_UUID {
+
+		@Test
+		void throwsAnException_passingANullValueAsId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.findById(null));
+		}
+
+		@Test
+		void returnsTheCorrectlyMappedObjectReadFromRepository() {
+			// Prepare
+			Optional<BattleMapToken> expected = Optional.of(battleMapToken0);
+			when(mapper.toModel(battleMapTokenDBO0)).thenReturn(battleMapToken0);
+			when(repository.findById(UID)).thenReturn(Optional.of(battleMapTokenDBO0));
+			// Run & Check
+			assertEquals(expected, unitUnderTest.findById(UID));
 		}
 	}
 

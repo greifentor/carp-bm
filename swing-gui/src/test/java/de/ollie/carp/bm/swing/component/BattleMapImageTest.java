@@ -11,11 +11,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import de.ollie.carp.bm.client.TokenClient;
+import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.HitsGO;
+import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,11 +39,18 @@ class BattleMapImageTest {
 	private static final BigDecimal FIELD_X_BD = new BigDecimal(FIELD_X);
 	private static final int FIELD_Y = 2;
 	private static final BigDecimal FIELD_Y_BD = new BigDecimal(FIELD_Y);
+	private static final String NAME = "name";
 	private static final int X = 3;
 	private static final int Y = 4;
 
 	@Mock
 	private BattleMapGO battleMap;
+
+	@Mock
+	private BattleMapToken battleMapToken;
+
+	@Mock
+	private BattleMapTokenGO battleMapTokenGO;
 
 	@Mock
 	private List<BattleMapTokenGO> battleMapTokens;
@@ -58,7 +68,13 @@ class BattleMapImageTest {
 	private BattleMapImage.Listener listener1;
 
 	@Mock
+	private BattleMapTokenGOMapper battleMapTokenGOMapper;
+
+	@Mock
 	private Logger log;
+
+	@Mock
+	private TokenClient tokenClient;
 
 	@Mock
 	private TokenGUIService tokenGUIService;
@@ -150,10 +166,13 @@ class BattleMapImageTest {
 			HitsGO expected = new HitsGO().setBattleMapTokens(battleMapTokens).setFieldX(FIELD_X).setFieldY(FIELD_Y);
 			MouseEvent e = mock(MouseEvent.class);
 			when(battleMap.getFieldCoordinates(X, Y)).thenReturn(coordinates);
+			when(battleMap.getName()).thenReturn(NAME);
+			when(battleMapTokenGOMapper.toGOs(List.of(battleMapToken))).thenReturn(battleMapTokens);
 			when(coordinates.getFieldX()).thenReturn(FIELD_X_BD);
 			when(coordinates.getFieldY()).thenReturn(FIELD_Y_BD);
 			when(e.getX()).thenReturn(X);
 			when(e.getY()).thenReturn(Y);
+			when(tokenClient.findAllByBattleMap(NAME)).thenReturn(List.of(battleMapToken));
 			when(tokenGUIService.reduceToHitTokens(battleMapTokens, X, Y)).thenReturn(battleMapTokens);
 			unitUnderTest.addListener(listener0);
 			// Run

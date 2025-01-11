@@ -55,6 +55,7 @@ class BattleMapTokenJPAPersistenceAdapter implements BattleMapTokenPersistencePo
 
 	@Override
 	public Optional<BattleMapToken> findById(UUID id) {
+		ensure(id != null, "id cannot be null.");
 		return repository.findById(id).map(mapper::toModel);
 	}
 

@@ -14,7 +14,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +46,8 @@ public class BattleMapImage extends JLabel implements MouseListener {
 		repaint();
 	}
 
-	private Stream<BattleMapTokenGO> getBattleMapTokenGOs() {
-		return tokenClient.findAllByBattleMap(battleMap.getName()).stream().map(battleMapTokenGOMapper::toGO);
+	private List<BattleMapTokenGO> getBattleMapTokenGOs() {
+		return battleMapTokenGOMapper.toGOs(tokenClient.findAllByBattleMap(battleMap.getName()));
 	}
 
 	public void addListener(Listener l) {
@@ -76,7 +75,7 @@ public class BattleMapImage extends JLabel implements MouseListener {
 		fireEvent(
 			coordinates.getFieldX().intValue(),
 			coordinates.getFieldY().intValue(),
-			tokenGUIService.reduceToHitTokens(getBattleMapTokenGOs().toList(), e.getX(), e.getY())
+			tokenGUIService.reduceToHitTokens(getBattleMapTokenGOs(), e.getX(), e.getY())
 		);
 	}
 
