@@ -60,6 +60,19 @@ public class TokenController {
 		return ResponseEntity.ok(mapper.toDTO(token));
 	}
 
+	@GetMapping("/{idOrName}")
+	public ResponseEntity<TokenDTO> findById(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String idOrName
+	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		return ResponseEntity.ok(
+			mapper.toDTO(
+				tokenService.findByIdOrName(idOrName).orElseThrow(() -> new NoSuchRecordException(idOrName, "Token", "id"))
+			)
+		);
+	}
+
 	@GetMapping(value = "/battlemaps/{battleMapIdOrName}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<BattleMapTokenDTO>> findAllTokenByBattleMap(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,

@@ -13,6 +13,8 @@ public interface TokenClient {
 
 	List<Token> findAllTokens();
 
+	Token getByIdOrName(String idOrName);
+
 	List<BattleMapToken> findAllByBattleMap(String battleMapIdOrName);
 
 	String moveBattleMapToken(String battleMapTokenId, Coordinates coordinates);

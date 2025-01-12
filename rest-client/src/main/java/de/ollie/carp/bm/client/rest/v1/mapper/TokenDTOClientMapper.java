@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface TokenDTOClientMapper {
+	TokenDTO toDTO(Token model);
+
 	Token toModel(TokenDTO dto);
 
 	List<Token> toModels(List<TokenDTO> dto);

@@ -78,10 +78,10 @@ public class TokenRESTClientImpl implements TokenClient {
 	}
 
 	@Override
-	public UUID delete(String uuidToName) {
+	public UUID delete(String idOrName) {
 		TokenDTO dto = restClient
 			.delete()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + uuidToName)
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + idOrName)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.retrieve()
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
@@ -124,6 +124,19 @@ public class TokenRESTClientImpl implements TokenClient {
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.body(new ParameterizedTypeReference<List<BattleMapTokenDTO>>() {});
 		return battleMapTokenMapper.toModels(dtos);
+	}
+
+	@Override
+	public Token getByIdOrName(String idOrName) {
+		TokenDTO dto = restClient
+			.get()
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + idOrName)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.retrieve()
+			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
+			.toEntity(TokenDTO.class)
+			.getBody();
+		return mapper.toModel(dto);
 	}
 
 	@Override
