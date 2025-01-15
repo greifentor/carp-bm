@@ -12,7 +12,9 @@ import lombok.experimental.Accessors;
 @Data
 @Generated
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({ @Type(value = DnDTokenDataDTO.class, name = "dnd") })
+@JsonSubTypes(
+	{ @Type(value = DnDTokenDataDTO.class, name = "dnd"), @Type(value = TokenDataDTO.class, name = "simple") }
+)
 public class TokenDataDTO {
 
 	private UUID id;
