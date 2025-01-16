@@ -1,0 +1,76 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="dm-comp" id="ADD-CHANGE-SET-ID-HERE" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="DND_TOKEN_DATA">
+            <column name="RK" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TP_MAXIMUM" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="DND_TOKEN_DATA"/>
+        <createTable tableName="BATTLE_MAP_TOKEN">
+            <column name="FIELD_Y" type="NUMERIC(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BATTLE_MAP" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FIELD_X" type="NUMERIC(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TOKEN" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="BATTLE_MAP_TOKEN"/>
+        <createTable tableName="TOKEN_DATA">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TOKEN" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="TOKEN_DATA"/>
+        <createTable tableName="BATTLE_MAP">
+            <column name="IMAGE" type="BIGINT"/>
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="OFFSET_IN_PIXELS" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FIELD_SIZE_IN_PIXELS" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="BATTLE_MAP"/>
+        <createTable tableName="TOKEN">
+            <column name="IMAGE" type="BIGINT"/>
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="TOKEN"/>
+        <dropTable tableName="NewTable"/>
+        <addForeignKeyConstraint baseColumnNames="ID" baseTableName="DND_TOKEN_DATA" constraintName="FK_DND_TOKEN_DATA_ID_TO_TOKEN_DATA" referencedColumnNames="ID" referencedTableName="TOKEN_DATA"/>
+        <addForeignKeyConstraint baseColumnNames="BATTLE_MAP" baseTableName="BATTLE_MAP_TOKEN" constraintName="FK_BATTLE_MAP_TOKEN_BATTLE_MAP_TO_BATTLE_MAP" referencedColumnNames="ID" referencedTableName="BATTLE_MAP"/>
+        <addForeignKeyConstraint baseColumnNames="TOKEN" baseTableName="BATTLE_MAP_TOKEN" constraintName="FK_BATTLE_MAP_TOKEN_TOKEN_TO_TOKEN" referencedColumnNames="ID" referencedTableName="TOKEN"/>
+        <addForeignKeyConstraint baseColumnNames="TOKEN" baseTableName="TOKEN_DATA" constraintName="FK_TOKEN_DATA_TOKEN_TO_TOKEN" referencedColumnNames="ID" referencedTableName="TOKEN"/>
+    </changeSet>
+</databaseChangeLog>
+
