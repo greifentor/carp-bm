@@ -66,7 +66,6 @@
             </column>
         </createTable>
         <addPrimaryKey columnNames="ID" tableName="TOKEN"/>
-        <dropTable tableName="NewTable"/>
         <addForeignKeyConstraint baseColumnNames="ID" baseTableName="DND_TOKEN_DATA" constraintName="FK_DND_TOKEN_DATA_ID_TO_TOKEN_DATA" referencedColumnNames="ID" referencedTableName="TOKEN_DATA"/>
         <addForeignKeyConstraint baseColumnNames="BATTLE_MAP" baseTableName="BATTLE_MAP_TOKEN" constraintName="FK_BATTLE_MAP_TOKEN_BATTLE_MAP_TO_BATTLE_MAP" referencedColumnNames="ID" referencedTableName="BATTLE_MAP"/>
         <addForeignKeyConstraint baseColumnNames="TOKEN" baseTableName="BATTLE_MAP_TOKEN" constraintName="FK_BATTLE_MAP_TOKEN_TOKEN_TO_TOKEN" referencedColumnNames="ID" referencedTableName="TOKEN"/>
