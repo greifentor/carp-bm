@@ -3,6 +3,8 @@ package de.ollie.carp.bm.persistence.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.Data;
@@ -14,6 +16,7 @@ import lombok.experimental.Accessors;
 @Data
 @Generated
 @Entity(name = "Token")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "TOKEN")
 @ToString(exclude = "image")
 public class TokenDBO {

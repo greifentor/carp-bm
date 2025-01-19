@@ -19,14 +19,16 @@ public class TokenCommands {
 	private final ExceptionToStringMapper exceptionMapper;
 	private final TokenClient tokenClient;
 
-	@ShellMethod(value = "Adds a new token.", key = { "add-token", "at" })
+	@ShellMethod(value = "Adds a new D&D token.", key = { "add-dnd-token", "adt" })
 	public String add(
 		@ShellOption(help = "Name of the token.", value = "name") String name,
-		@ShellOption(help = "Name of the file which contains the image", value = "imageFileName") String imageFileName
+		@ShellOption(help = "Name of the file which contains the image", value = "imageFileName") String imageFileName,
+		@ShellOption(help = "The AC for the token", value = "rk") int rk,
+		@ShellOption(help = "The HP maximum for the token", value = "tpMaximum") int tpMaximum
 	) {
 		try (FileInputStream fis = new FileInputStream(imageFileName)) {
 			byte[] imageContent = fis.readAllBytes();
-			return tokenClient.createToken(name, imageContent).toString();
+			return tokenClient.createDnDToken(name, imageContent, rk, tpMaximum).toString();
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
 		}

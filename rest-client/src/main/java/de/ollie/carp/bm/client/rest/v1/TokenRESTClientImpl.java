@@ -10,6 +10,7 @@ import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.rest.v1.RestBase;
 import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDTO;
+import de.ollie.carp.bm.rest.v1.dto.DnDTokenDTO;
 import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
@@ -38,13 +39,13 @@ public class TokenRESTClientImpl implements TokenClient {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public Token createToken(String name, byte[] image) {
+	public Token createDnDToken(String name, byte[] image, int rk, int tpMaximum) {
 		ResponseEntity<TokenDTO> response = restClient
 			.post()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(new TokenDTO().setImage(image).setName(name))
+			.body(new DnDTokenDTO().setRk(rk).setTpMaximum(tpMaximum).setImage(image).setName(name))
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class);

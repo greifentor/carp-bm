@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TokenClient {
-	Token createToken(String name, byte[] image);
+	Token createDnDToken(String name, byte[] image, int rk, int tpMaximum);
 
 	UUID delete(String tokenIdOrName);
 
