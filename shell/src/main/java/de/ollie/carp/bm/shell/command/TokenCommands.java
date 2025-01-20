@@ -34,6 +34,19 @@ public class TokenCommands {
 		}
 	}
 
+	@ShellMethod(value = "Adds a new token.", key = { "add-token", "at" })
+	public String add(
+		@ShellOption(help = "Name of the token.", value = "name") String name,
+		@ShellOption(help = "Name of the file which contains the image", value = "imageFileName") String imageFileName
+	) {
+		try (FileInputStream fis = new FileInputStream(imageFileName)) {
+			byte[] imageContent = fis.readAllBytes();
+			return tokenClient.createToken(name, imageContent).toString();
+		} catch (Exception e) {
+			return exceptionMapper.map(e);
+		}
+	}
+
 	@ShellMethod(value = "Lists all stored tokens.", key = { "list-tokens", "lt" })
 	public String list() {
 		return tokenClient.findAllTokens().stream().map(Token::toString).reduce((t0, t1) -> t0 + "\n" + t1).orElse("");

@@ -39,6 +39,20 @@ public class TokenRESTClientImpl implements TokenClient {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
+	public Token createToken(String name, byte[] image) {
+		ResponseEntity<TokenDTO> response = restClient
+			.post()
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(new TokenDTO().setImage(image).setName(name))
+			.retrieve()
+			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
+			.toEntity(TokenDTO.class);
+		return mapper.toModel(response.getBody());
+	}
+
+	@Override
 	public Token createDnDToken(String name, byte[] image, int rk, int tpMaximum) {
 		ResponseEntity<TokenDTO> response = restClient
 			.post()
