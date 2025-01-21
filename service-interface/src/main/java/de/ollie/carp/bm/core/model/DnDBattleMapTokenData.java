@@ -11,8 +11,8 @@ import lombok.experimental.Accessors;
 @Generated
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DnDTokenData extends TokenData {
+public class DnDBattleMapTokenData extends BattleMapTokenData {
 
-	private int rk;
-	private int tpMaximum;
+	private int currentRk;
+	private int currentTp;
 }

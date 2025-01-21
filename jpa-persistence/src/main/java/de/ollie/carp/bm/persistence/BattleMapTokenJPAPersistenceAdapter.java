@@ -4,7 +4,7 @@ import static de.ollie.carp.bm.util.Check.ensure;
 
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
-import de.ollie.carp.bm.core.model.Coordinates;
+import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.port.persistence.BattleMapTokenPersistencePort;
 import de.ollie.carp.bm.persistence.entity.BattleMapTokenDBO;
@@ -30,13 +30,13 @@ class BattleMapTokenJPAPersistenceAdapter implements BattleMapTokenPersistencePo
 	private final TokenDBOMapper tokenMapper;
 
 	@Override
-	public BattleMapToken addTokenToBattleMap(Token token, BattleMap battleMap, Coordinates coordinates) {
+	public BattleMapToken addTokenToBattleMap(Token token, BattleMap battleMap, BattleMapTokenData battleMapTokenData) {
 		ensure(battleMap != null, "battle map cannot be null!");
-		ensure(coordinates != null, "coordinates cannot be null!");
+		ensure(battleMapTokenData != null, "battle map token data cannot be null!");
 		ensure(token != null, "token cannot be null!");
 		BattleMapTokenDBO dbo = factory.create(battleMapMapper.toDBO(battleMap), tokenMapper.toDBO(token));
-		dbo.setFieldX(coordinates.getFieldX());
-		dbo.setFieldY(coordinates.getFieldY());
+		dbo.setFieldX(battleMapTokenData.getCoordinates().getFieldX());
+		dbo.setFieldY(battleMapTokenData.getCoordinates().getFieldY());
 		BattleMapToken bmt = mapper.toModel(repository.save(dbo));
 		repository.findAll().forEach(System.out::println);
 		return bmt;

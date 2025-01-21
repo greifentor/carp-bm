@@ -1,6 +1,5 @@
 package de.ollie.carp.bm.core.model;
 
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
@@ -8,8 +7,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class TokenData {
+public class BattleMapTokenData {
 
-	private UUID id;
-	private Token token;
+	private Coordinates coordinates;
 }

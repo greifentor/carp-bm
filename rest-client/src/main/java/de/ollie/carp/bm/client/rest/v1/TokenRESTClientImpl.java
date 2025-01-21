@@ -3,9 +3,11 @@ package de.ollie.carp.bm.client.rest.v1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.client.rest.v1.mapper.BattleMapTokenDTOClientMapper;
+import de.ollie.carp.bm.client.rest.v1.mapper.BattleMapTokenDataDTOClientMapper;
 import de.ollie.carp.bm.client.rest.v1.mapper.TokenDTOClientMapper;
 import de.ollie.carp.bm.core.exception.ServiceException;
 import de.ollie.carp.bm.core.model.BattleMapToken;
+import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.rest.v1.RestBase;
@@ -31,7 +33,8 @@ import org.springframework.web.client.RestClient;
 public class TokenRESTClientImpl implements TokenClient {
 
 	private final BattleMapTokenDTOClientMapper battleMapTokenMapper;
-	private final CoordinatesDTOMapper coordinatesMapper;
+	private final BattleMapTokenDataDTOClientMapper battleMapTokenDataDTOClientMapper;
+	private final CoordinatesDTOMapper coordinatesDTOMapper;
 	private final RestClientConfiguration clientConfiguration;
 	private final TokenDTOClientMapper mapper;
 
@@ -109,7 +112,7 @@ public class TokenRESTClientImpl implements TokenClient {
 	public String setTokenToBattleMapOfSpielrunde(
 		String tokenIdOrName,
 		String battleMapIdOrName,
-		Coordinates coordinates
+		BattleMapTokenData battleMapTokenData
 	) {
 		restClient
 			.post()
@@ -123,7 +126,7 @@ public class TokenRESTClientImpl implements TokenClient {
 			)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(coordinatesMapper.toDTO(coordinates))
+			.body(battleMapTokenDataDTOClientMapper.toDTO(battleMapTokenData))
 			.retrieve()
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 		return "set token to battlemap.";
@@ -161,7 +164,7 @@ public class TokenRESTClientImpl implements TokenClient {
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + battleMapTokenId + "/move")
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(coordinatesMapper.toDTO(coordinates))
+			.body(coordinatesDTOMapper.toDTO(coordinates))
 			.retrieve()
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 		return "moved token to " + coordinates.getFieldX() + "/" + coordinates.getFieldY() + ".";

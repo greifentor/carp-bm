@@ -9,9 +9,11 @@ import de.ollie.carp.bm.core.service.BattleMapTokenService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
 import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDTO;
+import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDataDTO;
 import de.ollie.carp.bm.rest.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDTOMapper;
+import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDataDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.List;
@@ -39,6 +41,7 @@ public class TokenController {
 	private final BattleMapService battleMapService;
 	private final BattleMapTokenService battleMapTokenService;
 	private final BattleMapTokenDTOMapper battleMapTokenMapper;
+	private final BattleMapTokenDataDTOMapper battleMapTokenDataMapper;
 	private final CoordinatesDTOMapper coordinatesMapper;
 	private final SecurityChecker securityChecker;
 	private final TokenDTOMapper mapper;
@@ -113,7 +116,7 @@ public class TokenController {
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@PathVariable String tokenIdOrName,
 		@PathVariable String battleMapIdOrName,
-		@RequestBody CoordinatesDTO coordinatesDTO
+		@RequestBody BattleMapTokenDataDTO battleMapTokenDTO
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		BattleMap battleMap = battleMapService
@@ -122,7 +125,7 @@ public class TokenController {
 		Token token = tokenService
 			.findByIdOrName(tokenIdOrName)
 			.orElseThrow(() -> new NoSuchRecordException(tokenIdOrName, "Token", "id"));
-		tokenService.addTokenToBattleMap(token, battleMap, coordinatesMapper.toModel(coordinatesDTO));
+		tokenService.addTokenToBattleMap(token, battleMap, battleMapTokenDataMapper.toModel(battleMapTokenDTO));
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 

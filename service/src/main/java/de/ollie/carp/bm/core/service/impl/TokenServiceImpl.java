@@ -3,7 +3,7 @@ package de.ollie.carp.bm.core.service.impl;
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
-import de.ollie.carp.bm.core.model.Coordinates;
+import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
@@ -23,8 +23,8 @@ public class TokenServiceImpl implements TokenService {
 	private final UUIDFactory uuidFactory;
 
 	@Override
-	public void addTokenToBattleMap(Token token, BattleMap battleMap, Coordinates coordinates) {
-		battleMapTokenPersistencePort.addTokenToBattleMap(token, battleMap, coordinates);
+	public void addTokenToBattleMap(Token token, BattleMap battleMap, BattleMapTokenData battleMapTokenData) {
+		battleMapTokenPersistencePort.addTokenToBattleMap(token, battleMap, battleMapTokenData);
 	}
 
 	@Override

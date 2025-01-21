@@ -2,7 +2,9 @@ package de.ollie.carp.bm.shell.command;
 
 import de.ollie.carp.bm.client.TokenClient;
 import de.ollie.carp.bm.core.model.BattleMapToken;
+import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
+import de.ollie.carp.bm.core.model.DnDBattleMapTokenData;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,33 @@ public class BattleMapTokenCommands {
 			return client.setTokenToBattleMapOfSpielrunde(
 				tokenIdOrName,
 				battleMapIdOrName,
-				new Coordinates().setFieldX(x).setFieldY(y)
+				new BattleMapTokenData().setCoordinates(new Coordinates().setFieldX(x).setFieldY(y))
+			);
+		} catch (Exception e) {
+			return exceptionMapper.map(e);
+		}
+	}
+
+	@ShellMethod(value = "Adds a D&D token to a battle map.", key = { "add-dnd-token-to-battle-map", "adtbm" })
+	public String add(
+		@ShellOption(
+			help = "Id or name of the token to place on the battle map.",
+			value = "tokenIdOrName"
+		) String tokenIdOrName,
+		@ShellOption(help = "Id or name of the battle map.", value = "battleMapIdOrName") String battleMapIdOrName,
+		@ShellOption(help = "X field coordinate where the token is to place.", value = "x") BigDecimal x,
+		@ShellOption(help = "Y field coordinate where the token is to place.", value = "y") BigDecimal y,
+		@ShellOption(help = "Current AC of the token.", value = "rk") int rk,
+		@ShellOption(help = "Current HP of the token.", value = "tp") int tp
+	) {
+		try {
+			return client.setTokenToBattleMapOfSpielrunde(
+				tokenIdOrName,
+				battleMapIdOrName,
+				new DnDBattleMapTokenData()
+					.setCurrentRk(rk)
+					.setCurrentTp(tp)
+					.setCoordinates(new Coordinates().setFieldX(x).setFieldY(y))
 			);
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
