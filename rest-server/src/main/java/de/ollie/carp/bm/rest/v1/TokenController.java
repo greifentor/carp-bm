@@ -112,7 +112,7 @@ public class TokenController {
 		consumes = MediaType.APPLICATION_JSON_VALUE,
 		produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<HttpStatus> setTokenToBattleMapOfSpielrunde(
+	public ResponseEntity<HttpStatus> setTokenToBattleMap(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@PathVariable String tokenIdOrName,
 		@PathVariable String battleMapIdOrName,

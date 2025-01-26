@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
+import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.BattleMapService;
@@ -15,9 +16,11 @@ import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
 import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDTO;
+import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDataDTO;
 import de.ollie.carp.bm.rest.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDTOMapper;
+import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDataDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
 import java.util.List;
@@ -47,7 +50,16 @@ public class TokenControllerTest {
 	private BattleMapToken battleMapToken;
 
 	@Mock
+	private BattleMapTokenData battleMapTokenData;
+
+	@Mock
+	private BattleMapTokenDataDTO battleMapTokenDataDTO;
+
+	@Mock
 	private BattleMapTokenDTO battleMapTokenDTO;
+
+	@Mock
+	private BattleMapTokenDataDTOMapper battleMapTokenDataDTOMapper;
 
 	@Mock
 	private BattleMapTokenDTOMapper battleMapTokenDTOMapper;
@@ -164,9 +176,6 @@ public class TokenControllerTest {
 		@Test
 		void throwsAnException_whenBattleMapNotFound() {
 			// Prepare
-			List<BattleMapToken> battleMapTokens = List.of(battleMapToken);
-			List<BattleMapTokenDTO> responseList = List.of(battleMapTokenDTO);
-			ResponseEntity<List<BattleMapTokenDTO>> expected = ResponseEntity.ok(responseList);
 			when(battleMapService.findByIdOrName(NAME)).thenReturn(Optional.empty());
 			// Run & Check
 			assertThrows(NoSuchRecordException.class, () -> unitUnderTest.findAllTokenByBattleMap(ACCESS_TOKEN, NAME));
@@ -174,7 +183,7 @@ public class TokenControllerTest {
 	}
 
 	@Nested
-	class setTokenToMapOfSitzung_String_String_String_CoordinatesDTO {
+	class setTokenToBattleMap_String_String_String_CoordinatesDTO {
 
 		@Test
 		void throwsAnException_passingAnIdOfAnUnknownBattleMap() {
@@ -184,11 +193,11 @@ public class TokenControllerTest {
 			assertThrows(
 				NoSuchRecordException.class,
 				() ->
-					unitUnderTest.setTokenToBattleMapOfSpielrunde(
+					unitUnderTest.setTokenToBattleMap(
 						ACCESS_TOKEN,
 						TOKEN_ID.toString(),
 						BATTLE_MAP_ID.toString(),
-						coordinatesDTO
+						battleMapTokenDataDTO
 					)
 			);
 		}
@@ -202,11 +211,11 @@ public class TokenControllerTest {
 			assertThrows(
 				NoSuchRecordException.class,
 				() ->
-					unitUnderTest.setTokenToBattleMapOfSpielrunde(
+					unitUnderTest.setTokenToBattleMap(
 						ACCESS_TOKEN,
 						TOKEN_ID.toString(),
 						BATTLE_MAP_ID.toString(),
-						coordinatesDTO
+						battleMapTokenDataDTO
 					)
 			);
 		}
@@ -217,13 +226,13 @@ public class TokenControllerTest {
 			ResponseEntity<HttpStatus> expected = ResponseEntity.of(Optional.of(HttpStatus.OK));
 			when(battleMapService.findByIdOrName(BATTLE_MAP_ID.toString())).thenReturn(Optional.of(battleMap));
 			when(service.findByIdOrName(TOKEN_ID.toString())).thenReturn(Optional.of(token));
-			when(coordinatesMapper.toModel(coordinatesDTO)).thenReturn(coordinates);
+			when(battleMapTokenDataDTOMapper.toModel(battleMapTokenDataDTO)).thenReturn(battleMapTokenData);
 			// Run
-			ResponseEntity<HttpStatus> returned = unitUnderTest.setTokenToBattleMapOfSpielrunde(
+			ResponseEntity<HttpStatus> returned = unitUnderTest.setTokenToBattleMap(
 				ACCESS_TOKEN,
 				TOKEN_ID.toString(),
 				BATTLE_MAP_ID.toString(),
-				coordinatesDTO
+				battleMapTokenDataDTO
 			);
 			// Check
 			assertEquals(expected, returned);

@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
+import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
@@ -39,6 +40,9 @@ class TokenServiceImplTest {
 	private BattleMapToken battleMapToken;
 
 	@Mock
+	private BattleMapTokenData battleMapTokenData;
+
+	@Mock
 	private Coordinates coordinates;
 
 	@Mock
@@ -65,9 +69,9 @@ class TokenServiceImplTest {
 		@Test
 		void delegatesToSitzungTokenPersistencePortMethodCorrectly() {
 			// Run
-			unitUnderTest.addTokenToBattleMap(token0, battleMap, coordinates);
+			unitUnderTest.addTokenToBattleMap(token0, battleMap, battleMapTokenData);
 			// Check
-			verify(battleMapTokenPersistencePort, times(1)).addTokenToBattleMap(token0, battleMap, coordinates);
+			verify(battleMapTokenPersistencePort, times(1)).addTokenToBattleMap(token0, battleMap, battleMapTokenData);
 			verifyNoMoreInteractions(battleMapTokenPersistencePort);
 		}
 	}

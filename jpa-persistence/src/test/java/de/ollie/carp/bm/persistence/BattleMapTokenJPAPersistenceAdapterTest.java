@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
+import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.persistence.entity.BattleMapDBO;
@@ -51,6 +52,9 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 	private BattleMapToken battleMapToken1;
 
 	@Mock
+	private BattleMapTokenData battleMapTokenData;
+
+	@Mock
 	private BattleMapTokenDBO battleMapTokenDBO0;
 
 	@Mock
@@ -88,11 +92,14 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 
 		@Test
 		void throwsAnException_passingBattleMapAsNullValue() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.addTokenToBattleMap(token, null, coordinates));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.addTokenToBattleMap(token, null, battleMapTokenData)
+			);
 		}
 
 		@Test
-		void throwsAnException_passingCoordinatesAsNullValue() {
+		void throwsAnException_passingBattleMapTokenDataAsNullValue() {
 			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.addTokenToBattleMap(token, battleMap, null));
 		}
 
@@ -100,20 +107,23 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 		void throwsAnException_passingTokenAsNullValue() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.addTokenToBattleMap(null, battleMap, coordinates)
+				() -> unitUnderTest.addTokenToBattleMap(null, battleMap, battleMapTokenData)
 			);
 		}
 
 		@Test
 		void returnsANewBattleMapToken() {
 			// Prepare
+			when(coordinates.getFieldX()).thenReturn(X);
+			when(coordinates.getFieldY()).thenReturn(Y);
 			when(battleMapMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
+			when(battleMapTokenData.getCoordinates()).thenReturn(coordinates);
 			when(tokenMapper.toDBO(token)).thenReturn(tokenDBO);
 			when(factory.create(battleMapDBO, tokenDBO)).thenReturn(battleMapTokenDBO0);
 			when(repository.save(battleMapTokenDBO0)).thenReturn(battleMapTokenDBO1);
 			when(mapper.toModel(battleMapTokenDBO1)).thenReturn(battleMapToken0);
 			// Run
-			BattleMapToken returned = unitUnderTest.addTokenToBattleMap(token, battleMap, coordinates);
+			BattleMapToken returned = unitUnderTest.addTokenToBattleMap(token, battleMap, battleMapTokenData);
 			// Check
 			assertNotNull(returned);
 		}
@@ -124,12 +134,13 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 			when(coordinates.getFieldX()).thenReturn(X);
 			when(coordinates.getFieldY()).thenReturn(Y);
 			when(battleMapMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
+			when(battleMapTokenData.getCoordinates()).thenReturn(coordinates);
 			when(tokenMapper.toDBO(token)).thenReturn(tokenDBO);
 			when(factory.create(battleMapDBO, tokenDBO)).thenReturn(battleMapTokenDBO0);
 			when(repository.save(battleMapTokenDBO0)).thenReturn(battleMapTokenDBO1);
 			when(mapper.toModel(battleMapTokenDBO1)).thenReturn(battleMapToken0);
 			// Run
-			unitUnderTest.addTokenToBattleMap(token, battleMap, coordinates);
+			unitUnderTest.addTokenToBattleMap(token, battleMap, battleMapTokenData);
 			// Check
 			verify(battleMapTokenDBO0, times(1)).setFieldX(X);
 		}
@@ -140,12 +151,13 @@ class BattleMapTokenJPAPersistenceAdapterTest {
 			when(coordinates.getFieldX()).thenReturn(X);
 			when(coordinates.getFieldY()).thenReturn(Y);
 			when(battleMapMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
+			when(battleMapTokenData.getCoordinates()).thenReturn(coordinates);
 			when(tokenMapper.toDBO(token)).thenReturn(tokenDBO);
 			when(factory.create(battleMapDBO, tokenDBO)).thenReturn(battleMapTokenDBO0);
 			when(repository.save(battleMapTokenDBO0)).thenReturn(battleMapTokenDBO1);
 			when(mapper.toModel(battleMapTokenDBO1)).thenReturn(battleMapToken0);
 			// Run
-			unitUnderTest.addTokenToBattleMap(token, battleMap, coordinates);
+			unitUnderTest.addTokenToBattleMap(token, battleMap, battleMapTokenData);
 			// Check
 			verify(battleMapTokenDBO0, times(1)).setFieldY(Y);
 		}
