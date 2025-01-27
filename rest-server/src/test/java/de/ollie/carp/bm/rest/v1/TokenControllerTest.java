@@ -1,8 +1,12 @@
 package de.ollie.carp.bm.rest.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
@@ -179,6 +183,50 @@ public class TokenControllerTest {
 			when(battleMapService.findByIdOrName(NAME)).thenReturn(Optional.empty());
 			// Run & Check
 			assertThrows(NoSuchRecordException.class, () -> unitUnderTest.findAllTokenByBattleMap(ACCESS_TOKEN, NAME));
+		}
+	}
+
+	@Nested
+	class findById_String_String {
+
+		@Test
+		void callsTheSecurityCheckerCorrectly() {
+			// Prepare
+			when(service.findByIdOrName(TOKEN_ID.toString())).thenReturn(Optional.of(token));
+			// Run
+			unitUnderTest.findById(ACCESS_TOKEN, TOKEN_ID.toString());
+			// Check
+			verify(securityChecker, times(1)).throwExceptionIfAccessTokenInvalid(ACCESS_TOKEN);
+		}
+
+		@Test
+		void throwsAnException_passingAnIdWhichMatchesNoToken() {
+			// Prepare
+			when(service.findByIdOrName(TOKEN_ID.toString())).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(NoSuchRecordException.class, () -> unitUnderTest.findById(ACCESS_TOKEN, TOKEN_ID.toString()));
+		}
+
+		@Test
+		void returnsADto_passingAMatchingId() {
+			// Prepare
+			when(service.findByIdOrName(TOKEN_ID.toString())).thenReturn(Optional.of(token));
+			when(mapper.toDTO(token)).thenReturn(responseDTO);
+			// Run
+			ResponseEntity<TokenDTO> returned = unitUnderTest.findById(ACCESS_TOKEN, TOKEN_ID.toString());
+			// Check
+			assertSame(responseDTO, returned.getBody());
+		}
+
+		@Test
+		void returnsTheOkStatus_passingAMatchingId() {
+			// Prepare
+			when(service.findByIdOrName(TOKEN_ID.toString())).thenReturn(Optional.of(token));
+			when(mapper.toDTO(token)).thenReturn(responseDTO);
+			// Run
+			ResponseEntity<TokenDTO> returned = unitUnderTest.findById(ACCESS_TOKEN, TOKEN_ID.toString());
+			// Check
+			assertTrue(returned.getStatusCode().is2xxSuccessful());
 		}
 	}
 
