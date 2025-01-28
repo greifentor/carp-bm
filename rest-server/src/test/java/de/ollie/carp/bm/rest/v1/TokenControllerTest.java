@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
@@ -16,6 +18,7 @@ import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.BattleMapService;
+import de.ollie.carp.bm.core.service.BattleMapTokenService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.rest.security.SecurityChecker;
@@ -27,6 +30,7 @@ import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDataDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,6 +48,9 @@ public class TokenControllerTest {
 
 	private static final String ACCESS_TOKEN = "access-token";
 	private static final UUID BATTLE_MAP_ID = UUID.randomUUID();
+	private static final UUID BATTLE_MAP_TOKEN_ID = UUID.randomUUID();
+	private static final BigDecimal FIELD_X = BigDecimal.valueOf(42);
+	private static final BigDecimal FIELD_Y = BigDecimal.valueOf(1701);
 	private static final UUID TOKEN_ID = UUID.randomUUID();
 	private static final String NAME = "name";
 
@@ -70,6 +77,9 @@ public class TokenControllerTest {
 
 	@Mock
 	private BattleMapService battleMapService;
+
+	@Mock
+	private BattleMapTokenService battleMapTokenService;
 
 	@Mock
 	private Coordinates coordinates;
@@ -227,6 +237,84 @@ public class TokenControllerTest {
 			ResponseEntity<TokenDTO> returned = unitUnderTest.findById(ACCESS_TOKEN, TOKEN_ID.toString());
 			// Check
 			assertTrue(returned.getStatusCode().is2xxSuccessful());
+		}
+	}
+
+	@Nested
+	class moveBattleMapToken_String_String_CoordinatesDTO {
+
+		@Test
+		void throwsAnException_passingANotExistingBattlemapTokenId() {
+			// Prepare
+			when(battleMapTokenService.findById(BATTLE_MAP_TOKEN_ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(
+				NoSuchRecordException.class,
+				() -> unitUnderTest.moveBattleMapToken(ACCESS_TOKEN.toString(), BATTLE_MAP_TOKEN_ID.toString(), coordinatesDTO)
+			);
+		}
+
+		@Test
+		void returnsACorrectResponseEntity_passingAnExistingBattleMapTokenId() {
+			// Prepare
+			when(battleMapToken.setFieldX(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapToken.setFieldY(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapTokenService.findById(BATTLE_MAP_TOKEN_ID)).thenReturn(Optional.of(battleMapToken));
+			when(coordinatesDTO.getFieldX()).thenReturn(FIELD_X);
+			when(coordinatesDTO.getFieldY()).thenReturn(FIELD_Y);
+			// Run
+			ResponseEntity<HttpStatus> returned = unitUnderTest.moveBattleMapToken(
+				ACCESS_TOKEN.toString(),
+				BATTLE_MAP_TOKEN_ID.toString(),
+				coordinatesDTO
+			);
+			// Check
+			assertEquals(ResponseEntity.of(Optional.of(HttpStatus.OK)), returned);
+		}
+
+		@Test
+		void callsServicesSaveMethod_passingAnExistingBattleMapTokenId() {
+			// Prepare
+			when(battleMapToken.setFieldX(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapToken.setFieldY(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapTokenService.findById(BATTLE_MAP_TOKEN_ID)).thenReturn(Optional.of(battleMapToken));
+			when(coordinatesDTO.getFieldX()).thenReturn(FIELD_X);
+			when(coordinatesDTO.getFieldY()).thenReturn(FIELD_Y);
+			// Run
+			unitUnderTest.moveBattleMapToken(ACCESS_TOKEN.toString(), BATTLE_MAP_TOKEN_ID.toString(), coordinatesDTO);
+			// Check
+			verify(battleMapTokenService, times(1)).save(battleMapToken);
+			verifyNoMoreInteractions(battleMapTokenService);
+		}
+
+		@Test
+		void setsCorrectFieldXOfTheBattleMapToken() {
+			// Prepare
+			when(battleMapToken.setFieldX(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapToken.setFieldY(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapTokenService.findById(BATTLE_MAP_TOKEN_ID)).thenReturn(Optional.of(battleMapToken));
+			when(coordinatesDTO.getFieldX()).thenReturn(FIELD_X);
+			when(coordinatesDTO.getFieldY()).thenReturn(FIELD_Y);
+			// Run
+			unitUnderTest.moveBattleMapToken(ACCESS_TOKEN.toString(), BATTLE_MAP_TOKEN_ID.toString(), coordinatesDTO);
+			// Check
+			verify(battleMapToken, times(1)).setFieldX(FIELD_X);
+			verifyNoMoreInteractions(battleMapToken);
+		}
+
+		@Test
+		void setsCorrectFieldYOfTheBattleMapToken() {
+			// Prepare
+			when(battleMapToken.setFieldX(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapToken.setFieldY(any(BigDecimal.class))).thenReturn(battleMapToken);
+			when(battleMapTokenService.findById(BATTLE_MAP_TOKEN_ID)).thenReturn(Optional.of(battleMapToken));
+			when(coordinatesDTO.getFieldX()).thenReturn(FIELD_X);
+			when(coordinatesDTO.getFieldY()).thenReturn(FIELD_Y);
+			// Run
+			unitUnderTest.moveBattleMapToken(ACCESS_TOKEN, BATTLE_MAP_TOKEN_ID.toString(), coordinatesDTO);
+			// Check
+			verify(battleMapToken, times(1)).setFieldY(FIELD_Y);
+			verifyNoMoreInteractions(battleMapToken);
 		}
 	}
 
