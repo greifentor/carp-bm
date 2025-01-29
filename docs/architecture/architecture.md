@@ -98,6 +98,10 @@ TBD
 
 * Using optimistic locking to prevent data loss while saving records.
 
+### Data Model
+
+* Inheritance in token and battlemap token structure for saving data accesses.
+
 
 ## Quality
 
