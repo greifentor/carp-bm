@@ -6,7 +6,9 @@ import de.ollie.carp.bm.core.model.CoordinatesXY;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ShapeFactory;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.DnDBattleMapTokenGO;
 import jakarta.inject.Named;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.util.List;
@@ -51,5 +53,13 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		ensure(graphics != null, "graphics cannot be null!");
 		CoordinatesXY leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
 		graphics.drawImage(battleMapToken.getToken().getImage(), leftUpperCorner.getX(), leftUpperCorner.getY(), null);
+		if (battleMapToken instanceof DnDBattleMapTokenGO) {
+			int x = leftUpperCorner.getX();
+			int y = leftUpperCorner.getY();
+			graphics.setColor(Color.LIGHT_GRAY);
+			graphics.fillRect(x, y, x + 50, y + 50);
+			graphics.setColor(Color.BLACK);
+			graphics.drawRect(x, y, x + 50, y + 50);
+		}
 	}
 }
