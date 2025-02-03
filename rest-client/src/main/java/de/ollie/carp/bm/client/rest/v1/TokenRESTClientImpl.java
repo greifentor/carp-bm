@@ -141,7 +141,7 @@ public class TokenRESTClientImpl implements TokenClient {
 			.retrieve()
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.body(new ParameterizedTypeReference<List<BattleMapTokenDTO>>() {});
-		dtos.forEach(System.out::println);
+		dtos.forEach(dto -> System.out.println("##### " + dto));
 		return battleMapTokenMapper.toModels(dtos);
 	}
 

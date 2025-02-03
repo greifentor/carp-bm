@@ -57,9 +57,9 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 			int x = leftUpperCorner.getX();
 			int y = leftUpperCorner.getY();
 			graphics.setColor(Color.LIGHT_GRAY);
-			graphics.fillRect(x, y, x + 50, y + 50);
+			graphics.fillRect(x, y, 50, 3);
 			graphics.setColor(Color.BLACK);
-			graphics.drawRect(x, y, x + 50, y + 50);
+			graphics.drawRect(x, y, 50, 3);
 		}
 	}
 }
