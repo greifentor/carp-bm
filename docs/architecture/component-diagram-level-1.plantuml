@@ -3,27 +3,69 @@
 '!theme mono
 'COMMENT - skinparam linetype ortho
 
-component carpbm as "carp-bm" {
+interface cli as "CLI"
+interface restserverrest as "REST"
+interface ui as "UI"
 
-	component service
-	component rest
+component restserver as "rest server" {
+    component rsjpapersistence as "jpa-persistence"
+    component rsrest as "rest"
+    component rsserver as "server"
+    component rsservice as "service"
+    component rsserviceinterface as "service-interface"
 
-	rest --> service
+    rsjpapersistence --> rsserviceinterface
 
+    rsserver --> rsserviceinterface
+
+    rsservice --> rsserviceinterface
 }
 
-interface rest_carp_bm as "REST"
-rest -RIGHT- rest_carp_bm
+component shell {
+    component shclient as "client"
+    component shgui as "gui"
+    component shrest as "rest"
+    component shrestclient as "rest-client"
+    component shserviceinterface as "service-interface"
+    component shserver as "server"
 
-component carpbmshell as "carp-bm-shell" {
+    shclient --> shserviceinterface
 
-	component shell
-	component client
+    shgui -RIGHT-> shserviceinterface
 
-	shell -UP-> client
+    shrestclient --> shclient
+    shrestclient --> shrest
+    shrestclient --> shserver
 
+    shserver --> shserviceinterface
+
+    restserverrest )-- shclient
 }
 
-client --( rest_carp_bm
+component swinggui as "swing gui" {
+    component client
+    component gui
+    component rest
+    component restclient as "rest-client"
+    component serviceinterface as "service-interface"
+    component server
+
+    client --> serviceinterface
+
+    gui -RIGHT-> serviceinterface
+
+    restclient --> client
+    restclient --> rest
+    restclient --> server
+
+    server --> serviceinterface
+
+    restserverrest )-UP- client
+}
+
+cli -- shell
+ui -- swinggui
+
+restserver -UP- restserverrest
 
 @enduml

@@ -67,9 +67,14 @@ Modules
 * **shell** A shell to connect with the server.
 * **swing-gui** A swing GUI for the GM's side.
 
-### Component Diagram Level 1
+### Component Diagram Level 0
 
-TBD
+![collaboration diagram (level 0)](./component-diagram-level-0.png)
+
+
+### Component Diagram Level 0
+
+![Component diagram (level 1)](./component-diagram-level-1.png)
 
 
 ## Runtime View

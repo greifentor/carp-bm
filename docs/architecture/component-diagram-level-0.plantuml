@@ -1,0 +1,17 @@
+@startuml
+
+'!theme mono
+'COMMENT - skinparam linetype ortho
+
+component shell
+component swinggui as "swing gui"
+component restserver as "rest server"
+
+interface restserverrest as "REST"
+
+restserver -LEFT- restserverrest
+
+restserverrest )-LEFT- shell
+restserverrest )-UP- swinggui
+
+@enduml
