@@ -1,6 +1,7 @@
 package de.ollie.carp.bm.shell.command;
 
 import de.ollie.carp.bm.client.TokenClient;
+import de.ollie.carp.bm.core.model.DnDTokenSize;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
 import java.io.FileInputStream;
@@ -24,11 +25,14 @@ public class TokenCommands {
 		@ShellOption(help = "Name of the token.", value = "name") String name,
 		@ShellOption(help = "Name of the file which contains the image", value = "imageFileName") String imageFileName,
 		@ShellOption(help = "The AC for the token", value = "rk") int rk,
-		@ShellOption(help = "The HP maximum for the token", value = "tpMaximum") int tpMaximum
+		@ShellOption(help = "The HP maximum for the token", value = "tpMaximum") int tpMaximum,
+		@ShellOption(help = "Size of the token", value = "tokenSize", defaultValue = "MITTEL") String tokenSizeStr
 	) {
 		try (FileInputStream fis = new FileInputStream(imageFileName)) {
 			byte[] imageContent = fis.readAllBytes();
-			return tokenClient.createDnDToken(name, imageContent, rk, tpMaximum).toString();
+			return tokenClient
+				.createDnDToken(name, imageContent, rk, tpMaximum, DnDTokenSize.valueOf(tokenSizeStr))
+				.toString();
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
 		}

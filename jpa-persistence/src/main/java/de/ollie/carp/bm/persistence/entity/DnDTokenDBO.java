@@ -25,4 +25,7 @@ public class DnDTokenDBO extends TokenDBO {
 
 	@Column(name = "TP_MAXIMUM", nullable = false)
 	private int tpMaximum;
+
+	@Column(name = "TOKEN_SIZE", nullable = false)
+	private DnDTokenSizeDBO tokenSize;
 }

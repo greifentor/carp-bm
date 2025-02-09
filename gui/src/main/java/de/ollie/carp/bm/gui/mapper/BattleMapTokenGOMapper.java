@@ -12,10 +12,10 @@ import org.mapstruct.SubclassMapping;
 
 @Mapper(componentModel = "spring", uses = { BattleMapGOMapper.class, TokenGOMapper.class })
 public interface BattleMapTokenGOMapper {
-	@Named("BattleMapTokenDBOToModel")
+	@Named("BattleMapTokenGOToModel")
 	@SubclassMapping(source = DnDBattleMapToken.class, target = DnDBattleMapTokenGO.class)
 	BattleMapTokenGO toGO(BattleMapToken model);
 
-	@IterableMapping(qualifiedByName = "BattleMapTokenDBOToModel")
+	@IterableMapping(qualifiedByName = "BattleMapTokenGOToModel")
 	List<BattleMapTokenGO> toGOs(List<BattleMapToken> model);
 }

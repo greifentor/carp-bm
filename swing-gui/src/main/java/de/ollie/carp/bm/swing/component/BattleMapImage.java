@@ -41,11 +41,7 @@ public class BattleMapImage extends JLabel implements MouseListener {
 		Image img = imageIconFactory.create(bmImage.getIconWidth(), bmImage.getIconHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D) img.getGraphics();
 		g.drawImage(bmImage.getImage(), 0, 0, null);
-		getBattleMapTokenGOs()
-			.forEach(bmt -> {
-				System.out.println("***** " + bmt);
-				tokenGUIService.setTokenToBattleMap(bmt, g);
-			});
+		getBattleMapTokenGOs().forEach(bmt -> tokenGUIService.setTokenToBattleMap(bmt, g));
 		setIcon(new ImageIcon(img));
 		removeMouseListener(this);
 		addMouseListener(this);

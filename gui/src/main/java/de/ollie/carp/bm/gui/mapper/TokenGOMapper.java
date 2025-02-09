@@ -20,6 +20,6 @@ public abstract class TokenGOMapper {
 	@Mapping(target = "image", expression = "java(imageIconFactory.create(model.getImage()))")
 	public abstract TokenGO toGO(Token model);
 
-	@Mapping(target = "image", expression = "java(imageIconFactory.create(model.getImage()))")
+	@Mapping(target = "image", expression = "java(imageIconFactory.create(dnDToken.getImage()))")
 	public abstract DnDTokenGO toGO(DnDToken model);
 }

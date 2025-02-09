@@ -15,4 +15,5 @@ public class DnDTokenGO extends TokenGO {
 
 	private int rk;
 	private int tpMaximum;
+	private DnDTokenSizeGO tokenSize;
 }

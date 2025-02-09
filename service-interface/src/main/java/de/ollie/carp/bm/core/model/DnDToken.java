@@ -15,4 +15,5 @@ public class DnDToken extends Token {
 
 	private int rk;
 	private int tpMaximum;
+	private DnDTokenSize tokenSize;
 }

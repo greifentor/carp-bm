@@ -7,10 +7,12 @@ import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ShapeFactory;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.DnDBattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.DnDTokenGO;
 import jakarta.inject.Named;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -52,14 +54,26 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		ensure(battleMapToken != null, "battle map token cannot be null!");
 		ensure(graphics != null, "graphics cannot be null!");
 		CoordinatesXY leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
-		graphics.drawImage(battleMapToken.getToken().getImage(), leftUpperCorner.getX(), leftUpperCorner.getY(), null);
-		if (battleMapToken instanceof DnDBattleMapTokenGO) {
+		int fieldSizeInPixels = battleMapToken.getBattleMap().getFieldSizeInPixels();
+		BufferedImage token = battleMapToken.getToken().getImage();
+		graphics.drawImage(token, leftUpperCorner.getX(), leftUpperCorner.getY(), null);
+		if (battleMapToken instanceof DnDBattleMapTokenGO dndToken) {
 			int x = leftUpperCorner.getX();
 			int y = leftUpperCorner.getY();
 			graphics.setColor(Color.LIGHT_GRAY);
-			graphics.fillRect(x, y, 50, 3);
+			graphics.fillRect(
+				x,
+				y,
+				(int) (fieldSizeInPixels * ((DnDTokenGO) dndToken.getToken()).getTokenSize().getFieldSize()),
+				3
+			);
 			graphics.setColor(Color.BLACK);
-			graphics.drawRect(x, y, 50, 3);
+			graphics.drawRect(
+				x,
+				y,
+				(int) (fieldSizeInPixels * ((DnDTokenGO) dndToken.getToken()).getTokenSize().getFieldSize()),
+				3
+			);
 		}
 	}
 }
