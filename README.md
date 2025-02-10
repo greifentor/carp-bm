@@ -31,5 +31,3 @@ TBD
 ## Architecture
 
 For details look here: [architecture documentation](docs/architecture/architecture.md)
-
-:)
