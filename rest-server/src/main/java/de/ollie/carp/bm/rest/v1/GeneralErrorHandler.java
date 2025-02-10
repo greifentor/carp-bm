@@ -1,8 +1,8 @@
 package de.ollie.carp.bm.rest.v1;
 
+import de.ollie.carp.bm.client.v1.dto.ErrorMessageDTO;
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.exception.UniqueConstraintViolationException;
-import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

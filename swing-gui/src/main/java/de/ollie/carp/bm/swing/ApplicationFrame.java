@@ -1,8 +1,8 @@
 package de.ollie.carp.bm.swing;
 
-import de.ollie.carp.bm.client.BattleMapClient;
-import de.ollie.carp.bm.client.TokenClient;
-import de.ollie.carp.bm.core.model.Coordinates;
+import de.ollie.carp.bm.client.v1.BattleMapClient;
+import de.ollie.carp.bm.client.v1.TokenClient;
+import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
@@ -117,7 +117,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 		// NOP
 	}
 
-	private Coordinates selectedField;
+	private CoordinatesDTO selectedField;
 	private BattleMapTokenGO selectedToken;
 
 	@Override
@@ -125,7 +125,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 		System.out.println("selected field was:    " + selectedField);
 		System.out.println("selected token:        " + selectedToken);
 		selectedField =
-			new Coordinates().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
+			new CoordinatesDTO().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
 		if ((selectedToken != null) && hits.getBattleMapTokens().isEmpty()) {
 			tokenClient.moveBattleMapToken(selectedToken.getId().toString(), selectedField);
 			bmi.update();

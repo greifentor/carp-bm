@@ -1,6 +1,5 @@
 package de.ollie.carp.bm.gui.go;
 
-import de.ollie.carp.bm.core.model.CoordinatesXY;
 import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Data;
@@ -18,8 +17,8 @@ public class BattleMapTokenGO {
 	private BigDecimal fieldX;
 	private BigDecimal fieldY;
 
-	public CoordinatesXY getTokenLeftUpperCorner() {
-		return new CoordinatesXY()
+	public CoordinatesXYGO getTokenLeftUpperCorner() {
+		return new CoordinatesXYGO()
 			.setX(
 				(int) (getBattleMap().getFieldSizeInPixels() * getFieldX().doubleValue()) + getBattleMap().getOffsetInPixels()
 			)

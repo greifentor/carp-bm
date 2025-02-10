@@ -1,11 +1,11 @@
 package de.ollie.carp.bm.swing.component;
 
-import de.ollie.carp.bm.client.TokenClient;
-import de.ollie.carp.bm.core.model.Coordinates;
+import de.ollie.carp.bm.client.v1.TokenClient;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.CoordinatesGO;
 import de.ollie.carp.bm.gui.go.HitsGO;
 import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import java.awt.Graphics2D;
@@ -73,7 +73,7 @@ public class BattleMapImage extends JLabel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Coordinates coordinates = battleMap.getFieldCoordinates(e.getX(), e.getY());
+		CoordinatesGO coordinates = battleMap.getFieldCoordinates(e.getX(), e.getY());
 		fireEvent(
 			coordinates.getFieldX().intValue(),
 			coordinates.getFieldY().intValue(),

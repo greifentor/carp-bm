@@ -11,13 +11,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import de.ollie.carp.bm.client.TokenClient;
-import de.ollie.carp.bm.core.model.BattleMapToken;
-import de.ollie.carp.bm.core.model.Coordinates;
+import de.ollie.carp.bm.client.v1.TokenClient;
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDTO;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.CoordinatesGO;
 import de.ollie.carp.bm.gui.go.HitsGO;
 import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import java.awt.Graphics2D;
@@ -51,7 +51,7 @@ class BattleMapImageTest {
 	private BattleMapGO battleMap;
 
 	@Mock
-	private BattleMapToken battleMapToken;
+	private BattleMapTokenDTO battleMapTokenDTO;
 
 	@Mock
 	private BattleMapTokenGO battleMapTokenGO;
@@ -60,7 +60,7 @@ class BattleMapImageTest {
 	private List<BattleMapTokenGO> battleMapTokens;
 
 	@Mock
-	private Coordinates coordinates;
+	private CoordinatesGO coordinates;
 
 	@Mock
 	private RuntimeException exception;
@@ -174,12 +174,12 @@ class BattleMapImageTest {
 			MouseEvent e = mock(MouseEvent.class);
 			when(battleMap.getFieldCoordinates(X, Y)).thenReturn(coordinates);
 			when(battleMap.getName()).thenReturn(NAME);
-			when(battleMapTokenGOMapper.toGOs(List.of(battleMapToken))).thenReturn(battleMapTokens);
+			when(battleMapTokenGOMapper.toGOs(List.of(battleMapTokenDTO))).thenReturn(battleMapTokens);
 			when(coordinates.getFieldX()).thenReturn(FIELD_X_BD);
 			when(coordinates.getFieldY()).thenReturn(FIELD_Y_BD);
 			when(e.getX()).thenReturn(X);
 			when(e.getY()).thenReturn(Y);
-			when(tokenClient.findAllByBattleMap(NAME)).thenReturn(List.of(battleMapToken));
+			when(tokenClient.findAllByBattleMap(NAME)).thenReturn(List.of(battleMapTokenDTO));
 			when(tokenGUIService.reduceToHitTokens(battleMapTokens, X, Y)).thenReturn(battleMapTokens);
 			unitUnderTest.addListener(listener0);
 			// Run
@@ -228,7 +228,7 @@ class BattleMapImageTest {
 			when(battleMap.getImage()).thenReturn(bufferedImage0);
 			when(imageIconFactory.create(bufferedImage0)).thenReturn(imageIcon);
 			when(imageIconFactory.create(width, height, BufferedImage.TYPE_INT_RGB)).thenReturn(bufferedImage1);
-			when(tokenClient.findAllByBattleMap(NAME)).thenReturn(List.of(battleMapToken));
+			when(tokenClient.findAllByBattleMap(NAME)).thenReturn(List.of(battleMapTokenDTO));
 			// Run & Check
 			assertDoesNotThrow(() -> unitUnderTest.update());
 		}

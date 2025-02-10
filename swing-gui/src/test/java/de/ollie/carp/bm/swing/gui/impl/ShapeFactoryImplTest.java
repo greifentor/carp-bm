@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-import de.ollie.carp.bm.core.model.CoordinatesXY;
+import de.ollie.carp.bm.gui.go.CoordinatesXYGO;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.Nested;
@@ -28,7 +28,7 @@ class ShapeFactoryImplTest {
 	private BufferedImage image;
 
 	@Mock
-	private CoordinatesXY leftUpperCorner;
+	private CoordinatesXYGO leftUpperCorner;
 
 	@InjectMocks
 	private ShapeFactoryImpl unitUnderTest;

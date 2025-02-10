@@ -3,7 +3,6 @@ package de.ollie.carp.bm.gui.go;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-import de.ollie.carp.bm.core.model.CoordinatesXY;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,7 @@ class BattleMapTokenGOTest {
 			when(battleMap.getOffsetInPixels()).thenReturn(OFFSET_IN_PIXELS);
 			// Run & Check
 			assertEquals(
-				new CoordinatesXY()
+				new CoordinatesXYGO()
 					.setX((int) (FIELD_SIZE_IN_PIXELS * FIELD_X.doubleValue() + OFFSET_IN_PIXELS))
 					.setY((int) (FIELD_SIZE_IN_PIXELS * FIELD_Y.doubleValue() + OFFSET_IN_PIXELS)),
 				unitUnderTest.getTokenLeftUpperCorner()

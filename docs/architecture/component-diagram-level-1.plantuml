@@ -8,7 +8,9 @@ interface restserverrest as "REST"
 interface ui as "UI"
 
 component restserver as "rest server" {
+    component rsbaselib as "base-lib"
     component rsjpapersistence as "jpa-persistence"
+    component rsclient as "client"
     component rsrest as "rest"
     component rsserver as "server"
     component rsservice as "service"
@@ -16,33 +18,32 @@ component restserver as "rest server" {
 
     rsjpapersistence --> rsserviceinterface
 
-    rsserver --> rsserviceinterface
+    rsrest --> rsclient
 
     rsservice --> rsserviceinterface
+
+    rsserviceinterface --> rsbaselib
 }
 
 component shell {
+    component shbaselib as "base-lib"
     component shclient as "client"
-    component shgui as "gui"
     component shrest as "rest"
     component shrestclient as "rest-client"
     component shserviceinterface as "service-interface"
     component shserver as "server"
 
-    shclient --> shserviceinterface
+    shrest --> shclient
 
-    shgui -RIGHT-> shserviceinterface
-
+    shrestclient --> shbaselib
     shrestclient --> shclient
     shrestclient --> shrest
-    shrestclient --> shserver
-
-    shserver --> shserviceinterface
 
     restserverrest )-- shclient
 }
 
 component swinggui as "swing gui" {
+    component baselib as "base-lib"
     component client
     component gui
     component rest
@@ -50,15 +51,16 @@ component swinggui as "swing gui" {
     component serviceinterface as "service-interface"
     component server
 
-    client --> serviceinterface
+    gui -DOWN-> baselib
+    gui -RIGHT-> client
 
-    gui -RIGHT-> serviceinterface
+    rest --> client
 
+    restclient --> baselib
     restclient --> client
     restclient --> rest
-    restclient --> server
 
-    server --> serviceinterface
+    serviceinterface --> baselib
 
     restserverrest )-UP- client
 }

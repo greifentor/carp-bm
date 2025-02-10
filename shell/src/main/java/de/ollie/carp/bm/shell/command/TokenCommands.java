@@ -1,8 +1,8 @@
 package de.ollie.carp.bm.shell.command;
 
-import de.ollie.carp.bm.client.TokenClient;
-import de.ollie.carp.bm.core.model.DnDTokenSize;
-import de.ollie.carp.bm.core.model.Token;
+import de.ollie.carp.bm.client.v1.TokenClient;
+import de.ollie.carp.bm.client.v1.dto.DnDTokenSizeDTO;
+import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
 import java.io.FileInputStream;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class TokenCommands {
 		try (FileInputStream fis = new FileInputStream(imageFileName)) {
 			byte[] imageContent = fis.readAllBytes();
 			return tokenClient
-				.createDnDToken(name, imageContent, rk, tpMaximum, DnDTokenSize.valueOf(tokenSizeStr))
+				.createDnDToken(name, imageContent, rk, tpMaximum, DnDTokenSizeDTO.valueOf(tokenSizeStr))
 				.toString();
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
@@ -53,7 +53,7 @@ public class TokenCommands {
 
 	@ShellMethod(value = "Lists all stored tokens.", key = { "list-tokens", "lt" })
 	public String list() {
-		return tokenClient.findAllTokens().stream().map(Token::toString).reduce((t0, t1) -> t0 + "\n" + t1).orElse("");
+		return tokenClient.findAllTokens().stream().map(TokenDTO::toString).reduce((t0, t1) -> t0 + "\n" + t1).orElse("");
 	}
 
 	@ShellMethod(value = "Deletes the token by UUID or name.", key = { "delete-token", "dt" })

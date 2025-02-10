@@ -2,9 +2,9 @@ package de.ollie.carp.bm.rest.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import de.ollie.carp.bm.client.v1.dto.ErrorMessageDTO;
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.exception.UniqueConstraintViolationException;
-import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

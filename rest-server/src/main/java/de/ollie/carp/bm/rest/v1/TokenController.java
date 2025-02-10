@@ -1,5 +1,9 @@
 package de.ollie.carp.bm.rest.v1;
 
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDTO;
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDataDTO;
+import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
+import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
@@ -7,15 +11,11 @@ import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.BattleMapService;
 import de.ollie.carp.bm.core.service.BattleMapTokenService;
 import de.ollie.carp.bm.core.service.TokenService;
-import de.ollie.carp.bm.rest.security.SecurityChecker;
-import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDTO;
-import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDataDTO;
-import de.ollie.carp.bm.rest.v1.dto.CoordinatesDTO;
-import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDataDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.TokenDTOMapper;
+import de.ollie.carp.bm.server.security.SecurityChecker;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

@@ -2,10 +2,10 @@ package de.ollie.carp.bm.gui.impl;
 
 import static de.ollie.carp.bm.util.Check.ensure;
 
-import de.ollie.carp.bm.core.model.CoordinatesXY;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ShapeFactory;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.CoordinatesXYGO;
 import de.ollie.carp.bm.gui.go.DnDBattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.DnDTokenGO;
 import jakarta.inject.Named;
@@ -27,14 +27,14 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 	@Override
 	public boolean isHit(BattleMapTokenGO battleMapToken, int mouseX, int mouseY) {
 		ensure(battleMapToken != null, "battle map token cannot be null!");
-		CoordinatesXY leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
+		CoordinatesXYGO leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
 		Shape shape = shapeFactory.create(leftUpperCorner, battleMapToken.getToken().getImage());
 		return shape.contains(mouseX, mouseY) && !isTransparent(battleMapToken, leftUpperCorner, mouseX, mouseY);
 	}
 
 	private boolean isTransparent(
 		BattleMapTokenGO battleMapToken,
-		CoordinatesXY leftUpperCorner,
+		CoordinatesXYGO leftUpperCorner,
 		int mouseX,
 		int mouseY
 	) {
@@ -53,7 +53,7 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 	public void setTokenToBattleMap(BattleMapTokenGO battleMapToken, Graphics2D graphics) {
 		ensure(battleMapToken != null, "battle map token cannot be null!");
 		ensure(graphics != null, "graphics cannot be null!");
-		CoordinatesXY leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
+		CoordinatesXYGO leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
 		int fieldSizeInPixels = battleMapToken.getBattleMap().getFieldSizeInPixels();
 		BufferedImage token = battleMapToken.getToken().getImage();
 		graphics.drawImage(token, leftUpperCorner.getX(), leftUpperCorner.getY(), null);

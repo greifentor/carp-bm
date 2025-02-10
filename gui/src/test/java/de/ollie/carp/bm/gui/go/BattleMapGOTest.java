@@ -2,7 +2,6 @@ package de.ollie.carp.bm.gui.go;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import de.ollie.carp.bm.core.model.Coordinates;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,11 +30,11 @@ public class BattleMapGOTest {
 			BigDecimal expectedY
 		) {
 			// Prepare
-			Coordinates expected = new Coordinates().setFieldX(expectedX).setFieldY(expectedY);
+			CoordinatesGO expected = new CoordinatesGO().setFieldX(expectedX).setFieldY(expectedY);
 			unitUnderTest.setFieldSizeInPixels(fieldSizeInPixels);
 			unitUnderTest.setOffsetInPixels(offsetInPixels);
 			// Run
-			Coordinates returned = unitUnderTest.getFieldCoordinates(x, y);
+			CoordinatesGO returned = unitUnderTest.getFieldCoordinates(x, y);
 			// Check
 			assertEquals(expected, returned);
 		}

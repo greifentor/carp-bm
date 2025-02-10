@@ -1,7 +1,7 @@
 package de.ollie.carp.bm.shell.command;
 
-import de.ollie.carp.bm.client.BattleMapClient;
-import de.ollie.carp.bm.core.model.BattleMap;
+import de.ollie.carp.bm.client.v1.BattleMapClient;
+import de.ollie.carp.bm.client.v1.dto.BattleMapDTO;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
 import java.io.FileInputStream;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,12 @@ public class BattleMapCommands {
 
 	@ShellMethod(value = "Lists all stored battle maps.", key = { "list-battle-maps", "lbm" })
 	public String list() {
-		return client.findAllBattleMaps().stream().map(BattleMap::toString).reduce((t0, t1) -> t0 + "\n" + t1).orElse("");
+		return client
+			.findAllBattleMaps()
+			.stream()
+			.map(BattleMapDTO::toString)
+			.reduce((t0, t1) -> t0 + "\n" + t1)
+			.orElse("");
 	}
 
 	@ShellMethod(value = "Deletes the battle map by UUID or name.", key = { "delete-battle-map", "dbm" })

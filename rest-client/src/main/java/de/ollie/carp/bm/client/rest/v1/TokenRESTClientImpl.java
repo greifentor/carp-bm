@@ -1,23 +1,16 @@
 package de.ollie.carp.bm.client.rest.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.ollie.carp.bm.client.TokenClient;
-import de.ollie.carp.bm.client.rest.v1.mapper.BattleMapTokenDTOClientMapper;
-import de.ollie.carp.bm.client.rest.v1.mapper.BattleMapTokenDataDTOClientMapper;
-import de.ollie.carp.bm.client.rest.v1.mapper.TokenDTOClientMapper;
+import de.ollie.carp.bm.client.v1.TokenClient;
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDTO;
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDataDTO;
+import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
+import de.ollie.carp.bm.client.v1.dto.DnDTokenDTO;
+import de.ollie.carp.bm.client.v1.dto.DnDTokenSizeDTO;
+import de.ollie.carp.bm.client.v1.dto.ErrorMessageDTO;
+import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.core.exception.ServiceException;
-import de.ollie.carp.bm.core.model.BattleMapToken;
-import de.ollie.carp.bm.core.model.BattleMapTokenData;
-import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.DnDTokenSize;
-import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.rest.v1.RestBase;
-import de.ollie.carp.bm.rest.v1.dto.BattleMapTokenDTO;
-import de.ollie.carp.bm.rest.v1.dto.DnDTokenDTO;
-import de.ollie.carp.bm.rest.v1.dto.DnDTokenSizeDTO;
-import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
-import de.ollie.carp.bm.rest.v1.dto.TokenDTO;
-import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
 import jakarta.inject.Named;
 import java.io.IOException;
 import java.util.List;
@@ -34,17 +27,13 @@ import org.springframework.web.client.RestClient;
 @RequiredArgsConstructor
 public class TokenRESTClientImpl implements TokenClient {
 
-	private final BattleMapTokenDTOClientMapper battleMapTokenMapper;
-	private final BattleMapTokenDataDTOClientMapper battleMapTokenDataDTOClientMapper;
-	private final CoordinatesDTOMapper coordinatesDTOMapper;
 	private final RestClientConfiguration clientConfiguration;
-	private final TokenDTOClientMapper mapper;
 
 	private RestClient restClient = RestClient.create();
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public Token createToken(String name, byte[] image) {
+	public TokenDTO createToken(String name, byte[] image) {
 		ResponseEntity<TokenDTO> response = restClient
 			.post()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
@@ -54,12 +43,11 @@ public class TokenRESTClientImpl implements TokenClient {
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class);
-		return mapper.toModel(response.getBody());
+		return response.getBody();
 	}
 
 	@Override
-	// TODO OLI: Is it a good idea to have service model used here?!?
-	public Token createDnDToken(String name, byte[] image, int rk, int tpMaximum, DnDTokenSize dndTokenSize) {
+	public TokenDTO createDnDToken(String name, byte[] image, int rk, int tpMaximum, DnDTokenSizeDTO dndTokenSize) {
 		ResponseEntity<TokenDTO> response = restClient
 			.post()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
@@ -76,7 +64,7 @@ public class TokenRESTClientImpl implements TokenClient {
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class);
-		return mapper.toModel(response.getBody());
+		return response.getBody();
 	}
 
 	private void throwServiceExceptionFromErrorResponse(ClientHttpResponse response) throws IOException {
@@ -94,7 +82,7 @@ public class TokenRESTClientImpl implements TokenClient {
 	}
 
 	@Override
-	public List<Token> findAllTokens() {
+	public List<TokenDTO> findAllTokens() {
 		List<TokenDTO> dtos = restClient
 			.get()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
@@ -102,7 +90,7 @@ public class TokenRESTClientImpl implements TokenClient {
 			.retrieve()
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.body(new ParameterizedTypeReference<List<TokenDTO>>() {});
-		return mapper.toModels(dtos);
+		return dtos;
 	}
 
 	@Override
@@ -122,7 +110,7 @@ public class TokenRESTClientImpl implements TokenClient {
 	public String setTokenToBattleMapOfSpielrunde(
 		String tokenIdOrName,
 		String battleMapIdOrName,
-		BattleMapTokenData battleMapTokenData
+		BattleMapTokenDataDTO battleMapTokenDataDTO
 	) {
 		restClient
 			.post()
@@ -136,14 +124,14 @@ public class TokenRESTClientImpl implements TokenClient {
 			)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(battleMapTokenDataDTOClientMapper.toDTO(battleMapTokenData))
+			.body(battleMapTokenDataDTO)
 			.retrieve()
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 		return "set token to battlemap.";
 	}
 
 	@Override
-	public List<BattleMapToken> findAllByBattleMap(String battleMapIdOrName) {
+	public List<BattleMapTokenDTO> findAllByBattleMap(String battleMapIdOrName) {
 		List<BattleMapTokenDTO> dtos = restClient
 			.get()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/battlemaps/" + battleMapIdOrName)
@@ -152,11 +140,11 @@ public class TokenRESTClientImpl implements TokenClient {
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.body(new ParameterizedTypeReference<List<BattleMapTokenDTO>>() {});
 		dtos.forEach(dto -> System.out.println("##### " + dto));
-		return battleMapTokenMapper.toModels(dtos);
+		return dtos;
 	}
 
 	@Override
-	public Token getByIdOrName(String idOrName) {
+	public TokenDTO getByIdOrName(String idOrName) {
 		TokenDTO dto = restClient
 			.get()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + idOrName)
@@ -165,17 +153,17 @@ public class TokenRESTClientImpl implements TokenClient {
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class)
 			.getBody();
-		return mapper.toModel(dto);
+		return dto;
 	}
 
 	@Override
-	public String moveBattleMapToken(String battleMapTokenId, Coordinates coordinates) {
+	public String moveBattleMapToken(String battleMapTokenId, CoordinatesDTO coordinates) {
 		restClient
 			.post()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + battleMapTokenId + "/move")
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(coordinatesDTOMapper.toDTO(coordinates))
+			.body(coordinates)
 			.retrieve()
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 		return "moved token to " + coordinates.getFieldX() + "/" + coordinates.getFieldY() + ".";

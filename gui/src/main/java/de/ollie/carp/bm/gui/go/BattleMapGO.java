@@ -1,6 +1,5 @@
 package de.ollie.carp.bm.gui.go;
 
-import de.ollie.carp.bm.core.model.Coordinates;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -21,9 +20,9 @@ public class BattleMapGO {
 	private String name;
 	private int offsetInPixels;
 
-	public Coordinates getFieldCoordinates(int x, int y) {
+	public CoordinatesGO getFieldCoordinates(int x, int y) {
 		String fieldX = ((x - offsetInPixels) / fieldSizeInPixels) + ".0";
 		String fieldY = ((y - offsetInPixels) / fieldSizeInPixels) + ".0";
-		return new Coordinates().setFieldX(new BigDecimal(fieldX)).setFieldY(new BigDecimal(fieldY));
+		return new CoordinatesGO().setFieldX(new BigDecimal(fieldX)).setFieldY(new BigDecimal(fieldY));
 	}
 }

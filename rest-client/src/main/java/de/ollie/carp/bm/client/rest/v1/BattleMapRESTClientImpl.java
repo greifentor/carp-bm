@@ -1,13 +1,11 @@
 package de.ollie.carp.bm.client.rest.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.ollie.carp.bm.client.BattleMapClient;
-import de.ollie.carp.bm.client.rest.v1.mapper.BattleMapDTOClientMapper;
+import de.ollie.carp.bm.client.v1.BattleMapClient;
+import de.ollie.carp.bm.client.v1.dto.BattleMapDTO;
+import de.ollie.carp.bm.client.v1.dto.ErrorMessageDTO;
 import de.ollie.carp.bm.core.exception.ServiceException;
-import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.rest.v1.RestBase;
-import de.ollie.carp.bm.rest.v1.dto.BattleMapDTO;
-import de.ollie.carp.bm.rest.v1.dto.ErrorMessageDTO;
 import jakarta.inject.Named;
 import java.io.IOException;
 import java.util.List;
@@ -25,13 +23,11 @@ import org.springframework.web.client.RestClient;
 public class BattleMapRESTClientImpl implements BattleMapClient {
 
 	private final RestClientConfiguration clientConfiguration;
-	private final BattleMapDTOClientMapper mapper;
-
 	private RestClient restClient = RestClient.create();
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public BattleMap createBattleMap(String name, byte[] imageContent, int fieldSizeInPixels, int offsetInPixels) {
+	public BattleMapDTO createBattleMap(String name, byte[] imageContent, int fieldSizeInPixels, int offsetInPixels) {
 		ResponseEntity<BattleMapDTO> response = restClient
 			.post()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.BATTLE_MAP_URL)
@@ -47,7 +43,7 @@ public class BattleMapRESTClientImpl implements BattleMapClient {
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(BattleMapDTO.class);
-		return mapper.toModel(response.getBody());
+		return response.getBody();
 	}
 
 	private void throwServiceExceptionFromErrorResponse(ClientHttpResponse response) throws IOException {
@@ -64,7 +60,7 @@ public class BattleMapRESTClientImpl implements BattleMapClient {
 	}
 
 	@Override
-	public List<BattleMap> findAllBattleMaps() {
+	public List<BattleMapDTO> findAllBattleMaps() {
 		List<BattleMapDTO> dtos = restClient
 			.get()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.BATTLE_MAP_URL)
@@ -72,7 +68,7 @@ public class BattleMapRESTClientImpl implements BattleMapClient {
 			.retrieve()
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.body(new ParameterizedTypeReference<List<BattleMapDTO>>() {});
-		return mapper.toModels(dtos);
+		return dtos;
 	}
 
 	@Override

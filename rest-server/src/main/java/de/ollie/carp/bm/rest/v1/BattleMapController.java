@@ -1,10 +1,10 @@
 package de.ollie.carp.bm.rest.v1;
 
+import de.ollie.carp.bm.client.v1.dto.BattleMapDTO;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.service.BattleMapService;
-import de.ollie.carp.bm.rest.security.SecurityChecker;
-import de.ollie.carp.bm.rest.v1.dto.BattleMapDTO;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapDTOMapper;
+import de.ollie.carp.bm.server.security.SecurityChecker;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

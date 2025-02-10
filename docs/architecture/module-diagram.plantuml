@@ -3,6 +3,7 @@
 '!theme mono
 'COMMENT - skinparam linetype ortho
 
+component baselib as "base-lib"
 component client
 component gui
 component jpaservice as "jpa-service"
@@ -15,23 +16,25 @@ component serviceinterface as "service-interface"
 component shell << application >> #gold
 component swing << application >> as "swing-gui" #gold
 
-client --> serviceinterface
-
-gui --> serviceinterface
+gui --> baselib
+gui --> client
 
 jpaservice --> serviceinterface
 
+rest --> client
+
+restclient --> baselib
+restclient --> client
 restclient --> rest
-restclient --> server
 
 restserver ..> jpaservice
 restserver --> rest
 restserver --> server
 restserver --> service
 
-server --> serviceinterface
-
 service --> serviceinterface
+
+serviceinterface --> baselib
 
 shell --> restclient
 

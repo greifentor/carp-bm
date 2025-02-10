@@ -21,6 +21,12 @@
 	</properties>
 
 	<dependencies>
+		<!-- carp-bm -->
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>carp-bm-client</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 		<!-- java -->
 		<dependency>
 			<groupId>org.springframework</groupId>

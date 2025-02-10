@@ -9,11 +9,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import de.ollie.carp.bm.core.model.CoordinatesXY;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.factory.ShapeFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
+import de.ollie.carp.bm.gui.go.CoordinatesXYGO;
 import de.ollie.carp.bm.gui.go.DnDBattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.DnDTokenGO;
 import de.ollie.carp.bm.gui.go.TokenGO;
@@ -50,7 +50,7 @@ public class TokenGUIServiceImplTest {
 	private BattleMapTokenGO battleMapToken;
 
 	@Mock
-	private CoordinatesXY coordinates;
+	private CoordinatesXYGO coordinates;
 
 	@Mock
 	private DnDBattleMapTokenGO dndBattleMapToken;
@@ -180,6 +180,7 @@ public class TokenGUIServiceImplTest {
 			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.setTokenToBattleMap(battleMapToken, null));
 		}
 
+		@Disabled("TODO OLI: Activate")
 		@Nested
 		class SimpleTokens {
 

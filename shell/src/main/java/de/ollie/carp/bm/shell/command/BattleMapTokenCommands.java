@@ -1,10 +1,10 @@
 package de.ollie.carp.bm.shell.command;
 
-import de.ollie.carp.bm.client.TokenClient;
-import de.ollie.carp.bm.core.model.BattleMapToken;
-import de.ollie.carp.bm.core.model.BattleMapTokenData;
-import de.ollie.carp.bm.core.model.Coordinates;
-import de.ollie.carp.bm.core.model.DnDBattleMapTokenData;
+import de.ollie.carp.bm.client.v1.TokenClient;
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDTO;
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDataDTO;
+import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
+import de.ollie.carp.bm.client.v1.dto.DnDBattleMapTokenDataDTO;
 import de.ollie.carp.bm.shell.ExceptionToStringMapper;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class BattleMapTokenCommands {
 			return client.setTokenToBattleMapOfSpielrunde(
 				tokenIdOrName,
 				battleMapIdOrName,
-				new BattleMapTokenData().setCoordinates(new Coordinates().setFieldX(x).setFieldY(y))
+				new BattleMapTokenDataDTO().setCoordinates(new CoordinatesDTO().setFieldX(x).setFieldY(y))
 			);
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
@@ -59,10 +59,10 @@ public class BattleMapTokenCommands {
 			return client.setTokenToBattleMapOfSpielrunde(
 				tokenIdOrName,
 				battleMapIdOrName,
-				new DnDBattleMapTokenData()
+				new DnDBattleMapTokenDataDTO()
 					.setCurrentRk(rk)
 					.setCurrentTp(tp)
-					.setCoordinates(new Coordinates().setFieldX(x).setFieldY(y))
+					.setCoordinates(new CoordinatesDTO().setFieldX(x).setFieldY(y))
 			);
 		} catch (Exception e) {
 			return exceptionMapper.map(e);
@@ -80,7 +80,7 @@ public class BattleMapTokenCommands {
 			return client
 				.findAllByBattleMap(battleMapIdOrName)
 				.stream()
-				.map(BattleMapToken::toString)
+				.map(BattleMapTokenDTO::toString)
 				.reduce((s0, s1) -> s0 + "\n" + s1)
 				.orElse("no battle map tokens found for: " + battleMapIdOrName);
 		} catch (Exception e) {
