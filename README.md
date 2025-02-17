@@ -25,8 +25,13 @@ An application for pen and paper role playing battle maps.
 
 ### Start
 
-TBD
-
+* Build the project in the main folder with `mvn clean install -Pproduction`.
+* Start the rest-server application by `java -jar rest-server\target\carp-bm-rest-server-[version].jar`
+* Start the shell application by `java -jar rest-server\target\carp-bm-shell-[version].jar`
+* Create and set some tokens via the shell comands.
+* Create a battle map via shell command.
+* Start the swing gui application by `java -jar rest-server\target\carp-bm-swing-[version].jar`
+* Click a token and click a free position on the map. Token should move to the new field.
 
 ## Architecture
 
