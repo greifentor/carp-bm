@@ -85,6 +85,10 @@ public class TokenController {
 		BattleMap battleMap = battleMapService
 			.findByIdOrName(battleMapIdOrName)
 			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
+		List<BattleMapToken> models = tokenService.findAllByBattleMap(battleMap);
+		models.forEach(m -> System.out.println("$$$$$ " + m));
+		List<BattleMapTokenDTO> dtos = battleMapTokenMapper.toDTOList(models);
+		dtos.forEach(dto -> System.out.println("***** " + dto));
 		return ResponseEntity.ok(battleMapTokenMapper.toDTOList(tokenService.findAllByBattleMap(battleMap)));
 	}
 

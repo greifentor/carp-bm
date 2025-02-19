@@ -5,12 +5,14 @@ import de.ollie.carp.bm.client.v1.dto.DnDBattleMapTokenDTO;
 import de.ollie.carp.bm.gui.go.BattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.DnDBattleMapTokenGO;
 import java.util.List;
+import lombok.Generated;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(componentModel = "spring", uses = { BattleMapGOMapper.class, TokenGOMapper.class })
+@Generated
 public interface BattleMapTokenGOMapper {
 	@Named("BattleMapTokenGOToModel")
 	@SubclassMapping(source = DnDBattleMapTokenDTO.class, target = DnDBattleMapTokenGO.class)

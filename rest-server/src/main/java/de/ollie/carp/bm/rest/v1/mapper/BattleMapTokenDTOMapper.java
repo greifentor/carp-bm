@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.mapstruct.SubclassMapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { BattleMapDTOMapper.class, TokenDTOMapper.class })
 public interface BattleMapTokenDTOMapper {
 	@Named("BattleMapTokenToDTO")
 	@SubclassMapping(source = DnDBattleMapToken.class, target = DnDBattleMapTokenDTO.class)

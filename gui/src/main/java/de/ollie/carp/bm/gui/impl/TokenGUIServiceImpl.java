@@ -28,7 +28,7 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 	public boolean isHit(BattleMapTokenGO battleMapToken, int mouseX, int mouseY) {
 		ensure(battleMapToken != null, "battle map token cannot be null!");
 		CoordinatesXYGO leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
-		Shape shape = shapeFactory.create(leftUpperCorner, battleMapToken.getToken().getImage());
+		Shape shape = shapeFactory.create(leftUpperCorner, battleMapToken.getToken().getBufferedImage());
 		return shape.contains(mouseX, mouseY) && !isTransparent(battleMapToken, leftUpperCorner, mouseX, mouseY);
 	}
 
@@ -39,7 +39,10 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		int mouseY
 	) {
 		return (
-			battleMapToken.getToken().getImage().getRGB(mouseX - leftUpperCorner.getX(), mouseY - leftUpperCorner.getY()) ==
+			battleMapToken
+				.getToken()
+				.getBufferedImage()
+				.getRGB(mouseX - leftUpperCorner.getX(), mouseY - leftUpperCorner.getY()) ==
 			TRANSPARENT
 		);
 	}
@@ -55,7 +58,7 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		ensure(graphics != null, "graphics cannot be null!");
 		CoordinatesXYGO leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
 		int fieldSizeInPixels = battleMapToken.getBattleMap().getFieldSizeInPixels();
-		BufferedImage token = battleMapToken.getToken().getImage();
+		BufferedImage token = battleMapToken.getToken().getBufferedImage();
 		graphics.drawImage(token, leftUpperCorner.getX(), leftUpperCorner.getY(), null);
 		if (battleMapToken instanceof DnDBattleMapTokenGO dndToken) {
 			int x = leftUpperCorner.getX();

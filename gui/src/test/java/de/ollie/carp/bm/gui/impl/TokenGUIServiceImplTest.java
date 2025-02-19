@@ -89,7 +89,7 @@ public class TokenGUIServiceImplTest {
 		when(image.getRGB(MOUSE_X - X, MOUSE_Y - Y)).thenReturn(TokenGUIServiceImpl.TRANSPARENT + 1);
 		when(shape.contains(MOUSE_X, MOUSE_Y)).thenReturn(true);
 		when(shapeFactory.create(coordinates, image)).thenReturn(shape);
-		when(token.getImage()).thenReturn(image);
+		when(token.getBufferedImage()).thenReturn(image);
 	}
 
 	@Nested
@@ -118,7 +118,7 @@ public class TokenGUIServiceImplTest {
 			when(image.getRGB(MOUSE_X - X, MOUSE_Y - Y)).thenReturn(TokenGUIServiceImpl.TRANSPARENT);
 			when(shape.contains(MOUSE_X, MOUSE_Y)).thenReturn(true);
 			when(shapeFactory.create(coordinates, image)).thenReturn(shape);
-			when(token.getImage()).thenReturn(image);
+			when(token.getBufferedImage()).thenReturn(image);
 			// Run & Check
 			assertFalse(unitUnderTest.isHit(battleMapToken, MOUSE_X, MOUSE_Y));
 		}
@@ -130,7 +130,7 @@ public class TokenGUIServiceImplTest {
 			when(battleMapToken.getTokenLeftUpperCorner()).thenReturn(coordinates);
 			when(shape.contains(MOUSE_X, MOUSE_Y)).thenReturn(false);
 			when(shapeFactory.create(coordinates, image)).thenReturn(shape);
-			when(token.getImage()).thenReturn(image);
+			when(token.getBufferedImage()).thenReturn(image);
 			// Run & Check
 			assertFalse(unitUnderTest.isHit(battleMapToken, MOUSE_X, MOUSE_Y));
 		}
@@ -152,7 +152,7 @@ public class TokenGUIServiceImplTest {
 			when(battleMapToken.getTokenLeftUpperCorner()).thenReturn(coordinates);
 			when(shape.contains(MOUSE_X, MOUSE_Y)).thenReturn(false);
 			when(shapeFactory.create(coordinates, image)).thenReturn(shape);
-			when(token.getImage()).thenReturn(image);
+			when(token.getBufferedImage()).thenReturn(image);
 			// Run & Check
 			assertEquals(List.of(), unitUnderTest.reduceToHitTokens(bmts, MOUSE_X, MOUSE_Y));
 		}
@@ -191,7 +191,7 @@ public class TokenGUIServiceImplTest {
 				when(battleMapToken.getToken()).thenReturn(token);
 				when(coordinates.getX()).thenReturn(X);
 				when(coordinates.getY()).thenReturn(Y);
-				when(token.getImage()).thenReturn(image);
+				when(token.getBufferedImage()).thenReturn(image);
 				// Run
 				unitUnderTest.setTokenToBattleMap(battleMapToken, graphics);
 				// Check
@@ -211,7 +211,7 @@ public class TokenGUIServiceImplTest {
 				when(dndBattleMapToken.getToken()).thenReturn(dndToken);
 				when(coordinates.getX()).thenReturn(X);
 				when(coordinates.getY()).thenReturn(Y);
-				when(dndToken.getImage()).thenReturn(image);
+				when(dndToken.getBufferedImage()).thenReturn(image);
 				// Run
 				unitUnderTest.setTokenToBattleMap(dndBattleMapToken, graphics);
 				// Check
