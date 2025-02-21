@@ -15,7 +15,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.SubclassMapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { BattleMapDBOMapper.class })
 public abstract class BattleMapTokenDBOMapper implements DBOMapper<BattleMapToken, BattleMapTokenDBO> {
 
 	@Inject
