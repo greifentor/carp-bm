@@ -5,9 +5,11 @@ import static de.ollie.carp.bm.util.Check.ensure;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.BattleMapTokenData;
+import de.ollie.carp.bm.core.model.DnDBattleMapTokenData;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.port.persistence.BattleMapTokenPersistencePort;
 import de.ollie.carp.bm.persistence.entity.BattleMapTokenDBO;
+import de.ollie.carp.bm.persistence.entity.DnDBattleMapTokenDBO;
 import de.ollie.carp.bm.persistence.factory.BattleMapTokenDBOFactory;
 import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.BattleMapTokenDBOMapper;
@@ -37,8 +39,13 @@ class BattleMapTokenJPAPersistenceAdapter implements BattleMapTokenPersistencePo
 		BattleMapTokenDBO dbo = factory.create(battleMapMapper.toDBO(battleMap), tokenMapper.toDBO(token));
 		dbo.setFieldX(battleMapTokenData.getCoordinates().getFieldX());
 		dbo.setFieldY(battleMapTokenData.getCoordinates().getFieldY());
+		if (
+			(battleMapTokenData instanceof DnDBattleMapTokenData dndBmtd) && (dbo instanceof DnDBattleMapTokenDBO dndBmtDBO)
+		) {
+			dndBmtDBO.setTpCurrent(dndBmtd.getCurrentTp());
+			dndBmtDBO.setRkCurrent(dndBmtd.getCurrentRk());
+		}
 		BattleMapToken bmt = mapper.toModel(repository.save(dbo));
-		repository.findAll().forEach(System.out::println);
 		return bmt;
 	}
 

@@ -61,22 +61,17 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		BufferedImage token = battleMapToken.getToken().getBufferedImage();
 		graphics.drawImage(token, leftUpperCorner.getX(), leftUpperCorner.getY(), null);
 		if (battleMapToken instanceof DnDBattleMapTokenGO dndToken) {
+			DnDTokenGO dndTokenGO = (DnDTokenGO) dndToken.getToken();
 			int x = leftUpperCorner.getX();
 			int y = leftUpperCorner.getY();
+			int width = (int) (fieldSizeInPixels * dndTokenGO.getTokenSize().getFieldSize());
 			graphics.setColor(Color.LIGHT_GRAY);
-			graphics.fillRect(
-				x,
-				y,
-				(int) (fieldSizeInPixels * ((DnDTokenGO) dndToken.getToken()).getTokenSize().getFieldSize()),
-				3
-			);
+			graphics.fillRect(x, y, width, 3);
 			graphics.setColor(Color.BLACK);
-			graphics.drawRect(
-				x,
-				y,
-				(int) (fieldSizeInPixels * ((DnDTokenGO) dndToken.getToken()).getTokenSize().getFieldSize()),
-				3
-			);
+			graphics.drawRect(x, y, width, 3);
+			int tpWidth = (int) Math.round(((double) width / (double) dndTokenGO.getTpMaximum()) * dndToken.getTpCurrent());
+			graphics.setColor(Color.GREEN);
+			graphics.fillRect(x + 1, y + 1, tpWidth - 2, 1);
 		}
 	}
 }
