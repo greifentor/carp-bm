@@ -13,12 +13,15 @@ import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
 import de.ollie.carp.bm.core.model.Token;
+import de.ollie.carp.bm.core.model.TokenSelection;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.core.service.port.persistence.BattleMapTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.TokenSelectionPersistencePort;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,10 +58,19 @@ class TokenServiceImplTest {
 	private Token token1;
 
 	@Mock
+	private TokenSelection tokenSelection0;
+
+	@Mock
+	private TokenSelection tokenSelection1;
+
+	@Mock
 	private BattleMapTokenPersistencePort battleMapTokenPersistencePort;
 
 	@Mock
 	private TokenPersistencePort persistencePort;
+
+	@Mock
+	private TokenSelectionPersistencePort tokenSelectionPersistencePort;
 
 	@InjectMocks
 	private TokenServiceImpl unitUnderTest;
@@ -179,6 +191,32 @@ class TokenServiceImplTest {
 			Optional<Token> returned = unitUnderTest.findByIdOrName(NAME);
 			// Check
 			assertSame(expected, returned);
+		}
+	}
+
+	@Nested
+	class selectTokenOnBattleMap_Token_BattleMap_boolean {
+
+		@Test
+		void throwsAnException_passingANullValueAsBattleMap() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.selectTokenOnBattleMap(null, battleMap, false));
+		}
+
+		@Test
+		void throwsAnException_passingANullValueAsToken() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.selectTokenOnBattleMap(token0, null, false));
+		}
+
+		@Disabled
+		@Test
+		void callsPersistenceLayerForSaveASelectionDataRecord_whenATokenSelectionForTokenAndBattleMapIsAlreadyPresent() {
+			// Prepare
+			when(tokenSelectionPersistencePort.findSelectedTokenByBattleMap(battleMap))
+				.thenReturn(Optional.of(tokenSelection1));
+			// Run
+			unitUnderTest.selectTokenOnBattleMap(token0, battleMap, false);
+			// Check
+			verify(tokenSelectionPersistencePort, times(1)).save(tokenSelection0);
 		}
 	}
 }

@@ -14,6 +14,8 @@ public interface TokenService {
 
 	Token delete(String uuidOrName);
 
+	Token selectTokenOnBattleMap(Token token, BattleMap battleMap, boolean selectState);
+
 	List<Token> findAll();
 
 	List<BattleMapToken> findAllByBattleMap(BattleMap battleMap);
