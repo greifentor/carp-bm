@@ -1,0 +1,7 @@
+adt Character example-data/character.png 17 54
+adt Monster example-data/monster.png 21 250 GROSS
+at Block example-data/block.png
+abm Spielrunde example-data/battle-map.jpg
+adtbm Character Spielrunde 4.0 2.0 18 50
+adtbm Monster Spielrunde 5.0 6.0 21 99
+atbm Block Spielrunde 14.0 4.0
