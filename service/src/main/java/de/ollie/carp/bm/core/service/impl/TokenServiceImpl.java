@@ -6,13 +6,13 @@ import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.BattleMapTokenData;
+import de.ollie.carp.bm.core.model.SelectedToken;
 import de.ollie.carp.bm.core.model.Token;
-import de.ollie.carp.bm.core.model.TokenSelection;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.core.service.port.persistence.BattleMapTokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.SelectedTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
-import de.ollie.carp.bm.core.service.port.persistence.TokenSelectionPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class TokenServiceImpl implements TokenService {
 
 	private final BattleMapTokenPersistencePort battleMapTokenPersistencePort;
 	private final TokenPersistencePort tokenPersistencePort;
-	private final TokenSelectionPersistencePort tokenSelectionPersistencePort;
+	private final SelectedTokenPersistencePort tokenSelectionPersistencePort;
 	private final UUIDFactory uuidFactory;
 
 	@Override
@@ -67,7 +67,7 @@ public class TokenServiceImpl implements TokenService {
 	public Token selectTokenOnBattleMap(Token token, BattleMap battleMap, boolean selectState) {
 		ensure(battleMap != null, "battle map cannot be null!");
 		ensure(token != null, "token cannot be null!");
-		Optional<TokenSelection> tokenSelectionBefore = tokenSelectionPersistencePort.findSelectedTokenByBattleMap(
+		Optional<SelectedToken> tokenSelectionBefore = tokenSelectionPersistencePort.findSelectedTokenByBattleMap(
 			battleMap
 		);
 		return null;

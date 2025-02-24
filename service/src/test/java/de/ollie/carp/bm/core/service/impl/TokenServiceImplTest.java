@@ -12,12 +12,12 @@ import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.BattleMapTokenData;
 import de.ollie.carp.bm.core.model.Coordinates;
+import de.ollie.carp.bm.core.model.SelectedToken;
 import de.ollie.carp.bm.core.model.Token;
-import de.ollie.carp.bm.core.model.TokenSelection;
 import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.core.service.port.persistence.BattleMapTokenPersistencePort;
+import de.ollie.carp.bm.core.service.port.persistence.SelectedTokenPersistencePort;
 import de.ollie.carp.bm.core.service.port.persistence.TokenPersistencePort;
-import de.ollie.carp.bm.core.service.port.persistence.TokenSelectionPersistencePort;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,10 +58,10 @@ class TokenServiceImplTest {
 	private Token token1;
 
 	@Mock
-	private TokenSelection tokenSelection0;
+	private SelectedToken tokenSelection0;
 
 	@Mock
-	private TokenSelection tokenSelection1;
+	private SelectedToken tokenSelection1;
 
 	@Mock
 	private BattleMapTokenPersistencePort battleMapTokenPersistencePort;
@@ -70,7 +70,7 @@ class TokenServiceImplTest {
 	private TokenPersistencePort persistencePort;
 
 	@Mock
-	private TokenSelectionPersistencePort tokenSelectionPersistencePort;
+	private SelectedTokenPersistencePort tokenSelectionPersistencePort;
 
 	@InjectMocks
 	private TokenServiceImpl unitUnderTest;

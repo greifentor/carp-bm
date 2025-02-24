@@ -9,8 +9,8 @@ import lombok.experimental.Accessors;
 @Data
 @Generated
 @ToString(exclude = { "token" })
-public class TokenSelection {
+public class SelectedToken {
 
+	private BattleMap id;
 	private Token token;
-	private boolean selected;
 }
