@@ -4,6 +4,7 @@ import static de.ollie.carp.bm.util.Check.ensure;
 
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.SelectedToken;
+import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.core.service.port.persistence.SelectedTokenPersistencePort;
 import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.SelectedTokenDBOMapper;
@@ -19,6 +20,7 @@ public class SelectedTokenJPAPersistenceAdapter implements SelectedTokenPersiste
 	private final BattleMapDBOMapper battleMapDBOMapper;
 	private final SelectedTokenDBOMapper mapper;
 	private final SelectedTokenDBORepository repository;
+	private final UUIDFactory uuidFactory;
 
 	@Override
 	public void delete(SelectedToken selectedToken) {
@@ -35,6 +37,9 @@ public class SelectedTokenJPAPersistenceAdapter implements SelectedTokenPersiste
 	@Override
 	public SelectedToken save(SelectedToken selectedToken) {
 		ensure(selectedToken != null, "selected token cannot be null!");
+		if (selectedToken.getId() == null) {
+			selectedToken.setId(uuidFactory.create());
+		}
 		return mapper.toModel(repository.save(mapper.toDBO(selectedToken)));
 	}
 }
