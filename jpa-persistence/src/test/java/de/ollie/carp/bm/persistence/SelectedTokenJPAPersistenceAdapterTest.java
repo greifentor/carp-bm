@@ -7,10 +7,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.SelectedToken;
+import de.ollie.carp.bm.persistence.entity.BattleMapDBO;
 import de.ollie.carp.bm.persistence.entity.SelectedTokenDBO;
+import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.SelectedTokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.SelectedTokenDBORepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +24,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class SelectedTokenJPAPersistenceAdapterTest {
+
+	@Mock
+	private BattleMap battleMap;
+
+	@Mock
+	private BattleMapDBO battleMapDBO;
+
+	@Mock
+	private BattleMapDBOMapper battleMapDBOMapper;
 
 	@Mock
 	private SelectedToken selectedToken;
@@ -52,6 +65,27 @@ class SelectedTokenJPAPersistenceAdapterTest {
 			unitUnderTest.delete(selectedToken);
 			// Check
 			verify(repository, times(1)).delete(selectedTokenDBO);
+		}
+	}
+
+	@Nested
+	class findSelectedTokenByBattleMap_BattleMap {
+
+		@Test
+		void throwsAnException_passingANullValueAsBattleMap() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.findSelectedTokenByBattleMap(null));
+		}
+
+		@Test
+		void callsTheRepositoryFindByBattleMapCorrectly() {
+			// Prepare
+			when(battleMapDBOMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
+			when(repository.findByBattleMap(battleMapDBO)).thenReturn(Optional.of(selectedTokenDBO));
+			when(mapper.toModel(selectedTokenDBO)).thenReturn(selectedToken);
+			// Run
+			Optional<SelectedToken> returned = unitUnderTest.findSelectedTokenByBattleMap(battleMap);
+			// Check
+			assertEquals(selectedToken, returned.get());
 		}
 	}
 

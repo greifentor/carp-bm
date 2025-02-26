@@ -5,6 +5,7 @@ import static de.ollie.carp.bm.util.Check.ensure;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.SelectedToken;
 import de.ollie.carp.bm.core.service.port.persistence.SelectedTokenPersistencePort;
+import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.SelectedTokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.SelectedTokenDBORepository;
 import jakarta.inject.Named;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SelectedTokenJPAPersistenceAdapter implements SelectedTokenPersistencePort {
 
+	private final BattleMapDBOMapper battleMapDBOMapper;
 	private final SelectedTokenDBOMapper mapper;
 	private final SelectedTokenDBORepository repository;
 
@@ -26,8 +28,8 @@ public class SelectedTokenJPAPersistenceAdapter implements SelectedTokenPersiste
 
 	@Override
 	public Optional<SelectedToken> findSelectedTokenByBattleMap(BattleMap battleMap) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		ensure(battleMap != null, "battle map cannot be null!");
+		return repository.findByBattleMap(battleMapDBOMapper.toDBO(battleMap)).map(mapper::toModel);
 	}
 
 	@Override
