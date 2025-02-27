@@ -24,7 +24,7 @@ public class TokenServiceImpl implements TokenService {
 
 	private final BattleMapTokenPersistencePort battleMapTokenPersistencePort;
 	private final TokenPersistencePort tokenPersistencePort;
-	private final SelectedTokenPersistencePort tokenSelectionPersistencePort;
+	private final SelectedTokenPersistencePort selectionTokenPersistencePort;
 	private final UUIDFactory uuidFactory;
 
 	@Override
@@ -67,7 +67,7 @@ public class TokenServiceImpl implements TokenService {
 	public Token selectTokenOnBattleMap(Token token, BattleMap battleMap, boolean selectState) {
 		ensure(battleMap != null, "battle map cannot be null!");
 		ensure(token != null, "token cannot be null!");
-		Optional<SelectedToken> tokenSelectionBefore = tokenSelectionPersistencePort.findSelectedTokenByBattleMap(
+		Optional<SelectedToken> tokenSelectionBefore = selectionTokenPersistencePort.findSelectedTokenByBattleMap(
 			battleMap
 		);
 		return null;
