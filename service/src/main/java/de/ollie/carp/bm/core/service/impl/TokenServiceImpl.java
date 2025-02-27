@@ -67,9 +67,7 @@ public class TokenServiceImpl implements TokenService {
 	public Token selectTokenOnBattleMap(Token token, BattleMap battleMap, boolean selectState) {
 		ensure(battleMap != null, "battle map cannot be null!");
 		ensure(token != null, "token cannot be null!");
-		Optional<SelectedToken> tokenSelectionBefore = selectionTokenPersistencePort.findSelectedTokenByBattleMap(
-			battleMap
-		);
-		return null;
+		SelectedToken selectedToken = selectionTokenPersistencePort.findSelectedTokenByBattleMap(battleMap).orElse(null);
+		return selectedToken == null ? null : selectedToken.getToken();
 	}
 }
