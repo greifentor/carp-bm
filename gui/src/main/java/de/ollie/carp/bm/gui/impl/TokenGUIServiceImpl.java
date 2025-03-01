@@ -29,6 +29,17 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		ensure(battleMapToken != null, "battle map token cannot be null!");
 		CoordinatesXYGO leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
 		Shape shape = shapeFactory.create(leftUpperCorner, battleMapToken.getToken().getBufferedImage());
+		System.out.println(
+			battleMapToken.getToken().getName() +
+			" > " +
+			mouseX +
+			" - " +
+			mouseY +
+			" - " +
+			shape.getBounds() +
+			" -- " +
+			shape.contains(mouseX, mouseY)
+		);
 		return shape.contains(mouseX, mouseY) && !isTransparent(battleMapToken, leftUpperCorner, mouseX, mouseY);
 	}
 
