@@ -8,6 +8,7 @@ import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.client.v1.dto.DnDTokenDTO;
 import de.ollie.carp.bm.client.v1.dto.DnDTokenSizeDTO;
 import de.ollie.carp.bm.client.v1.dto.ErrorMessageDTO;
+import de.ollie.carp.bm.client.v1.dto.ShapeTypeDTO;
 import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.core.exception.ServiceException;
 import de.ollie.carp.bm.rest.v1.RestBase;
@@ -39,7 +40,7 @@ public class TokenRESTClientImpl implements TokenClient {
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(new TokenDTO().setImage(image).setName(name))
+			.body(new TokenDTO().setImage(image).setName(name).setShapeType(ShapeTypeDTO.CIRCLE))
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class);
@@ -60,6 +61,7 @@ public class TokenRESTClientImpl implements TokenClient {
 					.setTokenSize(DnDTokenSizeDTO.valueOf(dndTokenSize.name()))
 					.setImage(image)
 					.setName(name)
+					.setShapeType(ShapeTypeDTO.CIRCLE)
 			)
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))

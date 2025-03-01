@@ -22,6 +22,7 @@ public class TokenGO {
 	private UUID id;
 	private byte[] image;
 	private String name;
+	private ShapeTypeGO shapeType;
 
 	@Setter(AccessLevel.PRIVATE)
 	private BufferedImage bufferedImage;
