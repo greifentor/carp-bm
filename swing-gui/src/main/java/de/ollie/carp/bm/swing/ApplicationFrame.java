@@ -64,7 +64,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 
 	private JPanel createMainPanel() {
 		JPanel p = new JPanel(new BorderLayout(VGAP, HGAP));
-		p.add(BorderLayout.CENTER, new JScrollPane(createImage()));
+		p.add(BorderLayout.NORTH, new JScrollPane(createImage()));
 		return p;
 	}
 
