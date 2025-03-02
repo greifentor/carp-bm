@@ -16,4 +16,5 @@ public class BattleMapToken {
 	private Token token;
 	private BigDecimal fieldX;
 	private BigDecimal fieldY;
+	private boolean selected;
 }

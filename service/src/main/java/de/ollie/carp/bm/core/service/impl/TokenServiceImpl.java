@@ -53,7 +53,17 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public List<BattleMapToken> findAllByBattleMap(BattleMap battleMap) {
-		return battleMapTokenPersistencePort.findAllByBattleMap(battleMap);
+		List<BattleMapToken> bmts = battleMapTokenPersistencePort.findAllByBattleMap(battleMap);
+		selectionTokenPersistencePort
+			.findSelectedTokenByBattleMap(battleMap)
+			.ifPresent(selected ->
+				bmts
+					.stream()
+					.filter(bmt -> bmt.getId().equals(selected.getId()))
+					.findFirst()
+					.ifPresent(bmt -> bmt.setSelected(true))
+			);
+		return bmts;
 	}
 
 	@Override
@@ -69,11 +79,21 @@ public class TokenServiceImpl implements TokenService {
 		ensure(token != null, "token cannot be null!");
 		SelectedToken selectedToken = selectionTokenPersistencePort.findSelectedTokenByBattleMap(battleMap).orElse(null);
 		if (selectedToken != null) {
-			Token selectedBefore = selectedToken.getToken();
-			selectionTokenPersistencePort.save(selectedToken.setToken(token));
+			Token selectedBefore = selectedToken.getBattleMapToken().getToken();
+			selectedToken.getBattleMapToken().setToken(token);
+			selectionTokenPersistencePort.save(selectedToken);
 			return selectedBefore;
 		}
-		selectionTokenPersistencePort.save(new SelectedToken().setBattleMap(battleMap).setToken(token));
+		selectionTokenPersistencePort.save(
+			new SelectedToken()
+				.setBattleMap(battleMap)
+				.setBattleMapToken(new BattleMapToken().setBattleMap(battleMap).setToken(token))
+		);
 		return null;
+	}
+
+	@Override
+	public Optional<BattleMapToken> findSelectedTokenByBattleMap(BattleMap battleMap) {
+		return selectionTokenPersistencePort.findSelectedTokenByBattleMap(battleMap).map(st -> st.getBattleMapToken());
 	}
 }

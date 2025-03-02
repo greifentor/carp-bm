@@ -47,6 +47,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	@Inject
 	private TokenGUIService tokenSetterService;
 
+	private BattleMapGO battleMap;
 	private BattleMapImage bmi;
 
 	public ApplicationFrame() {
@@ -55,6 +56,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 
 	@PostConstruct
 	void postConstruct() {
+		battleMap = battleMapClient.findAllBattleMaps().stream().map(battleMapGOMapper::toGO).findFirst().orElse(null);
 		addWindowListener(this);
 		setSize(new Dimension(800, 600));
 		setContentPane(createMainPanel());
@@ -69,12 +71,6 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	}
 
 	private BattleMapImage createImage() {
-		BattleMapGO battleMap = battleMapClient
-			.findAllBattleMaps()
-			.stream()
-			.map(battleMapGOMapper::toGO)
-			.findFirst()
-			.orElse(null);
 		bmi = new BattleMapImage(battleMap, imageIconFactory, tokenClient, tokenSetterService, battleMapTokenGOMapper);
 		bmi.addListener(this);
 		bmi.update();
@@ -124,6 +120,8 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	public void hitsDetected(HitsGO hits) {
 		System.out.println("selected field was:    " + selectedField);
 		System.out.println("selected token:        " + selectedToken);
+		selectedToken =
+			tokenClient.findSelectedTokenByBattleMap(battleMap.getName()).map(battleMapTokenGOMapper::toGO).orElse(null);
 		selectedField =
 			new CoordinatesDTO().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
 		if ((selectedToken != null) && hits.getBattleMapTokens().isEmpty()) {

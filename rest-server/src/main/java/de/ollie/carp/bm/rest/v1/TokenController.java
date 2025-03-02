@@ -92,6 +92,20 @@ public class TokenController {
 		return ResponseEntity.ok(battleMapTokenMapper.toDTOList(tokenService.findAllByBattleMap(battleMap)));
 	}
 
+	@GetMapping(value = "/battlemaps/{battleMapIdOrName}/selected", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BattleMapTokenDTO> findSelectedTokenByBattleMap(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String battleMapIdOrName
+	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		BattleMap battleMap = battleMapService
+			.findByIdOrName(battleMapIdOrName)
+			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
+		return ResponseEntity.ok(
+			tokenService.findSelectedTokenByBattleMap(battleMap).map(battleMapTokenMapper::toDTO).orElse(null)
+		);
+	}
+
 	@PostMapping(
 		value = "/{battleMapTokenId}/move",
 		consumes = MediaType.APPLICATION_JSON_VALUE,

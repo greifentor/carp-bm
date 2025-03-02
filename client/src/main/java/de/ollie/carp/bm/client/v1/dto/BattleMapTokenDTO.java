@@ -23,4 +23,5 @@ public class BattleMapTokenDTO {
 	private TokenDTO token;
 	private BigDecimal fieldX;
 	private BigDecimal fieldY;
+	private boolean selected;
 }

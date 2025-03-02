@@ -16,6 +16,7 @@ public class BattleMapTokenGO {
 	private TokenGO token;
 	private BigDecimal fieldX;
 	private BigDecimal fieldY;
+	private boolean selected;
 
 	public CoordinatesXYGO getTokenLeftUpperCorner() {
 		return new CoordinatesXYGO()

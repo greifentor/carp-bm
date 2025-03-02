@@ -6,6 +6,7 @@ import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.client.v1.dto.DnDTokenSizeDTO;
 import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TokenClient {
@@ -20,6 +21,8 @@ public interface TokenClient {
 	TokenDTO getByIdOrName(String idOrName);
 
 	List<BattleMapTokenDTO> findAllByBattleMap(String battleMapIdOrName);
+
+	Optional<BattleMapTokenDTO> findSelectedTokenByBattleMap(String battleMapIdOrName);
 
 	String moveBattleMapToken(String battleMapTokenId, CoordinatesDTO coordinates);
 
