@@ -124,13 +124,13 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 			tokenClient.findSelectedTokenByBattleMap(battleMap.getName()).map(battleMapTokenGOMapper::toGO).orElse(null);
 		selectedField =
 			new CoordinatesDTO().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
-		if ((selectedToken != null) && hits.getBattleMapTokens().isEmpty()) {
-			tokenClient.moveBattleMapToken(selectedToken.getId().toString(), selectedField);
-			bmi.update();
-			System.out.println("repainted");
-			selectedToken = null;
-		} else if ((selectedToken == null) && !hits.getBattleMapTokens().isEmpty()) {
+		if (!hits.getBattleMapTokens().isEmpty()) {
 			selectedToken = hits.getBattleMapTokens().get(0);
+			tokenClient.selectToken(selectedToken.getId().toString());
+		} else {
+			if (selectedToken != null) {
+				tokenClient.moveBattleMapToken(selectedToken.getId().toString(), selectedField);
+			}
 		}
 		System.out.println("selected field is now: " + selectedField);
 		System.out.println("selected token:        " + selectedToken);

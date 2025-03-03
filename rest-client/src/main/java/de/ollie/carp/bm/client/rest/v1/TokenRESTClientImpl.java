@@ -186,4 +186,15 @@ public class TokenRESTClientImpl implements TokenClient {
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 		return "moved token to " + coordinates.getFieldX() + "/" + coordinates.getFieldY() + ".";
 	}
+
+	@Override
+	public void selectToken(String battleMapTokenId) {
+		restClient
+			.post()
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + battleMapTokenId + "/select")
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.contentType(MediaType.APPLICATION_JSON)
+			.retrieve()
+			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
+	}
 }

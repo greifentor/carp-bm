@@ -26,6 +26,8 @@ public interface TokenClient {
 
 	String moveBattleMapToken(String battleMapTokenId, CoordinatesDTO coordinates);
 
+	void selectToken(String battleMapTokenId);
+
 	String setTokenToBattleMapOfSpielrunde(
 		String tokenIdOrName,
 		String battleMapIdOrName,

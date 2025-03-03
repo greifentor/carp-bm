@@ -7,10 +7,12 @@ import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.core.exception.NoSuchRecordException;
 import de.ollie.carp.bm.core.model.BattleMap;
 import de.ollie.carp.bm.core.model.BattleMapToken;
+import de.ollie.carp.bm.core.model.SelectedToken;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.BattleMapService;
 import de.ollie.carp.bm.core.service.BattleMapTokenService;
 import de.ollie.carp.bm.core.service.TokenService;
+import de.ollie.carp.bm.core.service.port.persistence.SelectedTokenPersistencePort;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDataDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.CoordinatesDTOMapper;
@@ -44,6 +46,7 @@ public class TokenController {
 	private final BattleMapTokenDataDTOMapper battleMapTokenDataMapper;
 	private final CoordinatesDTOMapper coordinatesMapper;
 	private final SecurityChecker securityChecker;
+	private final SelectedTokenPersistencePort selectedTokenPersistencePort;
 	private final TokenDTOMapper mapper;
 	private final TokenService tokenService;
 
@@ -122,6 +125,27 @@ public class TokenController {
 			.orElseThrow(() -> new NoSuchRecordException(battleMapTokenId, "BattleMapToken", "id"));
 		battleMapToken.setFieldX(coordinatesDTO.getFieldX()).setFieldY(coordinatesDTO.getFieldY());
 		battleMapTokenService.save(battleMapToken);
+		return ResponseEntity.of(Optional.of(HttpStatus.OK));
+	}
+
+	@PostMapping(
+		value = "/{battleMapTokenId}/select",
+		consumes = MediaType.APPLICATION_JSON_VALUE,
+		produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<HttpStatus> moveBattleMapToken(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String battleMapTokenId
+	) {
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		BattleMapToken battleMapToken = battleMapTokenService
+			.findById(UUID.fromString(battleMapTokenId))
+			.orElseThrow(() -> new NoSuchRecordException(battleMapTokenId, "BattleMapToken", "id"));
+		SelectedToken selectedToken = selectedTokenPersistencePort
+			.findSelectedTokenByBattleMap(battleMapToken.getBattleMap())
+			.orElseGet(() -> new SelectedToken().setBattleMap(battleMapToken.getBattleMap()).setBattleMapToken(battleMapToken)
+			);
+		selectedTokenPersistencePort.save(selectedToken);
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 
