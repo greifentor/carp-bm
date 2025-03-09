@@ -71,7 +71,6 @@ public class TokenRESTClientImpl implements TokenClient {
 	}
 
 	private void throwServiceExceptionFromErrorResponse(ClientHttpResponse response) throws IOException {
-		System.out.println("exception thrown");
 		ErrorMessageDTO errorDTO = objectMapper.readValue(
 			new String(response.getBody().readAllBytes()),
 			ErrorMessageDTO.class

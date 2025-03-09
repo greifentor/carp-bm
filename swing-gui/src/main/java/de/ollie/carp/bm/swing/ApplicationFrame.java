@@ -135,5 +135,6 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 		System.out.println("selected field is now: " + selectedField);
 		System.out.println("selected token:        " + selectedToken);
 		System.out.println();
+		bmi.update();
 	}
 }

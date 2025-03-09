@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,6 +41,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(RestBase.TOKEN_URL)
 @RequiredArgsConstructor
 public class TokenController {
+
+	private static final Logger LOG = LogManager.getLogger(TokenController.class);
 
 	private final BattleMapService battleMapService;
 	private final BattleMapTokenService battleMapTokenService;
@@ -89,9 +93,9 @@ public class TokenController {
 			.findByIdOrName(battleMapIdOrName)
 			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
 		List<BattleMapToken> models = tokenService.findAllByBattleMap(battleMap);
-		models.forEach(m -> System.out.println("$$$$$ " + m));
+		models.forEach(System.out::println);
 		List<BattleMapTokenDTO> dtos = battleMapTokenMapper.toDTOList(models);
-		dtos.forEach(dto -> System.out.println("***** " + dto));
+		dtos.forEach(System.out::println);
 		return ResponseEntity.ok(battleMapTokenMapper.toDTOList(tokenService.findAllByBattleMap(battleMap)));
 	}
 
@@ -133,10 +137,11 @@ public class TokenController {
 		consumes = MediaType.APPLICATION_JSON_VALUE,
 		produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<HttpStatus> moveBattleMapToken(
+	public ResponseEntity<HttpStatus> selectToken(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@PathVariable String battleMapTokenId
 	) {
+		LOG.info("token selected: " + battleMapTokenId);
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		BattleMapToken battleMapToken = battleMapTokenService
 			.findById(UUID.fromString(battleMapTokenId))
@@ -146,6 +151,7 @@ public class TokenController {
 			.orElseGet(() -> new SelectedToken().setBattleMap(battleMapToken.getBattleMap()).setBattleMapToken(battleMapToken)
 			);
 		selectedTokenPersistencePort.save(selectedToken);
+		LOG.info("token selected: " + battleMapTokenId);
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 
