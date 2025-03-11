@@ -9,8 +9,10 @@ import de.ollie.carp.bm.gui.go.CoordinatesXYGO;
 import de.ollie.carp.bm.gui.go.DnDBattleMapTokenGO;
 import de.ollie.carp.bm.gui.go.DnDTokenGO;
 import jakarta.inject.Named;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -29,17 +31,6 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		ensure(battleMapToken != null, "battle map token cannot be null!");
 		CoordinatesXYGO leftUpperCorner = battleMapToken.getTokenLeftUpperCorner();
 		Shape shape = shapeFactory.create(leftUpperCorner, battleMapToken.getToken().getBufferedImage());
-		System.out.println(
-			battleMapToken.getToken().getName() +
-			" > " +
-			mouseX +
-			" - " +
-			mouseY +
-			" - " +
-			shape.getBounds() +
-			" -- " +
-			shape.contains(mouseX, mouseY)
-		);
 		return shape.contains(mouseX, mouseY) && !isTransparent(battleMapToken, leftUpperCorner, mouseX, mouseY);
 	}
 
@@ -76,6 +67,12 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 			int x = leftUpperCorner.getX();
 			int y = leftUpperCorner.getY();
 			int width = (int) (fieldSizeInPixels * dndTokenGO.getTokenSize().getFieldSize());
+			if (battleMapToken.isSelected()) {
+				graphics.setColor(Color.YELLOW);
+				graphics.setStroke(new BasicStroke(2));
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				graphics.drawArc(x, y, width, width, 0, 360);
+			}
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.fillRect(x, y, width, 3);
 			graphics.setColor(Color.BLACK);

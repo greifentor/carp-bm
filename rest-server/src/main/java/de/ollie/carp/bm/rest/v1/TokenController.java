@@ -10,6 +10,7 @@ import de.ollie.carp.bm.core.model.BattleMapToken;
 import de.ollie.carp.bm.core.model.Token;
 import de.ollie.carp.bm.core.service.BattleMapService;
 import de.ollie.carp.bm.core.service.BattleMapTokenService;
+import de.ollie.carp.bm.core.service.SelectedTokenService;
 import de.ollie.carp.bm.core.service.TokenService;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDTOMapper;
 import de.ollie.carp.bm.rest.v1.mapper.BattleMapTokenDataDTOMapper;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,17 +41,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TokenController {
 
+	private static final Logger LOG = LogManager.getLogger(TokenController.class);
+
 	private final BattleMapService battleMapService;
 	private final BattleMapTokenService battleMapTokenService;
 	private final BattleMapTokenDTOMapper battleMapTokenMapper;
 	private final BattleMapTokenDataDTOMapper battleMapTokenDataMapper;
 	private final CoordinatesDTOMapper coordinatesMapper;
 	private final SecurityChecker securityChecker;
+	private final SelectedTokenService selectedTokenService;
 	private final TokenDTOMapper mapper;
 	private final TokenService tokenService;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TokenDTO>> findAllTokens(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+		LOG.info("server - findAllTokens");
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		return ResponseEntity.ok(mapper.toDTOList(tokenService.findAll()));
 	}
@@ -58,6 +65,7 @@ public class TokenController {
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@RequestBody TokenDTO requestDTO
 	) {
+		LOG.info("server - createToken: " + requestDTO);
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		Token token = tokenService.create(mapper.toModel(requestDTO));
 		return ResponseEntity.ok(mapper.toDTO(token));
@@ -68,6 +76,7 @@ public class TokenController {
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@PathVariable String idOrName
 	) {
+		LOG.info("server - findById: " + idOrName);
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		return ResponseEntity.ok(
 			mapper.toDTO(
@@ -81,15 +90,27 @@ public class TokenController {
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@PathVariable String battleMapIdOrName
 	) {
+		LOG.info("server - findAllTokenByBattleMap: " + battleMapIdOrName);
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		BattleMap battleMap = battleMapService
 			.findByIdOrName(battleMapIdOrName)
 			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
-		List<BattleMapToken> models = tokenService.findAllByBattleMap(battleMap);
-		models.forEach(m -> System.out.println("$$$$$ " + m));
-		List<BattleMapTokenDTO> dtos = battleMapTokenMapper.toDTOList(models);
-		dtos.forEach(dto -> System.out.println("***** " + dto));
 		return ResponseEntity.ok(battleMapTokenMapper.toDTOList(tokenService.findAllByBattleMap(battleMap)));
+	}
+
+	@GetMapping(value = "/battlemaps/{battleMapIdOrName}/selected", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BattleMapTokenDTO> findSelectedTokenByBattleMap(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String battleMapIdOrName
+	) {
+		LOG.info("server - findSelectedTokenByBattleMap: " + battleMapIdOrName);
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		BattleMap battleMap = battleMapService
+			.findByIdOrName(battleMapIdOrName)
+			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
+		return ResponseEntity.ok(
+			tokenService.findSelectedTokenByBattleMap(battleMap).map(battleMapTokenMapper::toDTO).orElse(null)
+		);
 	}
 
 	@PostMapping(
@@ -102,12 +123,51 @@ public class TokenController {
 		@PathVariable String battleMapTokenId,
 		@RequestBody CoordinatesDTO coordinatesDTO
 	) {
+		LOG.info("server - moveBattleMapToken: " + battleMapTokenId);
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
 		BattleMapToken battleMapToken = battleMapTokenService
 			.findById(UUID.fromString(battleMapTokenId))
 			.orElseThrow(() -> new NoSuchRecordException(battleMapTokenId, "BattleMapToken", "id"));
 		battleMapToken.setFieldX(coordinatesDTO.getFieldX()).setFieldY(coordinatesDTO.getFieldY());
 		battleMapTokenService.save(battleMapToken);
+		return ResponseEntity.of(Optional.of(HttpStatus.OK));
+	}
+
+	@PostMapping(
+		value = "/selectedtokens/{battleMapTokenId}/select",
+		consumes = MediaType.APPLICATION_JSON_VALUE,
+		produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<HttpStatus> selectToken(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String battleMapTokenId
+	) {
+		LOG.info("select token (" + battleMapTokenId + ")");
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		BattleMapToken battleMapToken = battleMapTokenService
+			.findById(UUID.fromString(battleMapTokenId))
+			.orElseThrow(() -> new NoSuchRecordException(battleMapTokenId, "BattleMapToken", "id"));
+		selectedTokenService.selectToken(battleMapToken);
+		LOG.info("select token (" + battleMapTokenId + ")");
+		return ResponseEntity.of(Optional.of(HttpStatus.OK));
+	}
+
+	@DeleteMapping(
+		value = "/selectedtokens/{battleMapTokenId}/unselect",
+		consumes = MediaType.APPLICATION_JSON_VALUE,
+		produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<HttpStatus> unselectToken(
+		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+		@PathVariable String battleMapTokenId
+	) {
+		LOG.info("server - token unselect: " + battleMapTokenId);
+		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		BattleMapToken battleMapToken = battleMapTokenService
+			.findById(UUID.fromString(battleMapTokenId))
+			.orElseThrow(() -> new NoSuchRecordException(battleMapTokenId, "BattleMapToken", "id"));
+		selectedTokenService.unselectToken(battleMapToken);
+		LOG.info("server - token unselected: " + battleMapTokenId);
 		return ResponseEntity.of(Optional.of(HttpStatus.OK));
 	}
 
@@ -123,6 +183,7 @@ public class TokenController {
 		@RequestBody BattleMapTokenDataDTO battleMapTokenDTO
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		LOG.info("server - setTokenToBattleMap: " + tokenIdOrName);
 		BattleMap battleMap = battleMapService
 			.findByIdOrName(battleMapIdOrName)
 			.orElseThrow(() -> new NoSuchRecordException(battleMapIdOrName, "BattleMap", "id"));
@@ -139,6 +200,7 @@ public class TokenController {
 		@PathVariable String idOrName
 	) {
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
+		LOG.info("server - delete: " + idOrName);
 		return ResponseEntity.ok(mapper.toDTO(tokenService.delete(idOrName)));
 	}
 }

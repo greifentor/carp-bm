@@ -10,6 +10,7 @@ import de.ollie.carp.bm.persistence.mapper.BattleMapDBOMapper;
 import de.ollie.carp.bm.persistence.mapper.SelectedTokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.SelectedTokenDBORepository;
 import jakarta.inject.Named;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -25,13 +26,19 @@ public class SelectedTokenJPAPersistenceAdapter implements SelectedTokenPersiste
 	@Override
 	public void delete(SelectedToken selectedToken) {
 		ensure(selectedToken != null, "selected token cannot be null!");
+		System.out.println(selectedToken);
 		repository.delete(mapper.toDBO(selectedToken));
+	}
+
+	@Override
+	public List<SelectedToken> findAll() {
+		return mapper.toModels(repository.findAll());
 	}
 
 	@Override
 	public Optional<SelectedToken> findSelectedTokenByBattleMap(BattleMap battleMap) {
 		ensure(battleMap != null, "battle map cannot be null!");
-		return repository.findByBattleMap(battleMapDBOMapper.toDBO(battleMap)).map(mapper::toModel);
+		return repository.findByBattleMapId(battleMap.getId()).map(mapper::toModel);
 	}
 
 	@Override

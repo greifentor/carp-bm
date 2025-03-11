@@ -15,4 +15,5 @@ public class Token {
 	private UUID id;
 	private byte[] image;
 	private String name;
+	private ShapeType shapeType;
 }

@@ -21,4 +21,6 @@ public interface TokenService {
 	List<BattleMapToken> findAllByBattleMap(BattleMap battleMap);
 
 	Optional<Token> findByIdOrName(String tokenIdOrName);
+
+	Optional<BattleMapToken> findSelectedTokenByBattleMap(BattleMap battleMap);
 }

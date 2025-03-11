@@ -24,7 +24,7 @@ public class TokenServiceImpl implements TokenService {
 
 	private final BattleMapTokenPersistencePort battleMapTokenPersistencePort;
 	private final TokenPersistencePort tokenPersistencePort;
-	private final SelectedTokenPersistencePort selectionTokenPersistencePort;
+	private final SelectedTokenPersistencePort selectedTokenPersistencePort;
 	private final UUIDFactory uuidFactory;
 
 	@Override
@@ -53,7 +53,20 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public List<BattleMapToken> findAllByBattleMap(BattleMap battleMap) {
-		return battleMapTokenPersistencePort.findAllByBattleMap(battleMap);
+		List<BattleMapToken> bmts = battleMapTokenPersistencePort.findAllByBattleMap(battleMap);
+		selectedTokenPersistencePort
+			.findSelectedTokenByBattleMap(battleMap)
+			.ifPresent(selected ->
+				bmts
+					.stream()
+					.map(bmt -> {
+						return bmt;
+					})
+					.filter(bmt -> bmt.getId().equals(selected.getBattleMapToken().getId()))
+					.findFirst()
+					.ifPresent(bmt -> bmt.setSelected(true))
+			);
+		return bmts;
 	}
 
 	@Override
@@ -67,13 +80,23 @@ public class TokenServiceImpl implements TokenService {
 	public Token selectTokenOnBattleMap(Token token, BattleMap battleMap, boolean selectState) {
 		ensure(battleMap != null, "battle map cannot be null!");
 		ensure(token != null, "token cannot be null!");
-		SelectedToken selectedToken = selectionTokenPersistencePort.findSelectedTokenByBattleMap(battleMap).orElse(null);
+		SelectedToken selectedToken = selectedTokenPersistencePort.findSelectedTokenByBattleMap(battleMap).orElse(null);
 		if (selectedToken != null) {
-			Token selectedBefore = selectedToken.getToken();
-			selectionTokenPersistencePort.save(selectedToken.setToken(token));
+			Token selectedBefore = selectedToken.getBattleMapToken().getToken();
+			selectedToken.getBattleMapToken().setToken(token);
+			selectedTokenPersistencePort.save(selectedToken);
 			return selectedBefore;
 		}
-		selectionTokenPersistencePort.save(new SelectedToken().setBattleMap(battleMap).setToken(token));
+		selectedTokenPersistencePort.save(
+			new SelectedToken()
+				.setBattleMap(battleMap)
+				.setBattleMapToken(new BattleMapToken().setBattleMap(battleMap).setToken(token))
+		);
 		return null;
+	}
+
+	@Override
+	public Optional<BattleMapToken> findSelectedTokenByBattleMap(BattleMap battleMap) {
+		return selectedTokenPersistencePort.findSelectedTokenByBattleMap(battleMap).map(st -> st.getBattleMapToken());
 	}
 }

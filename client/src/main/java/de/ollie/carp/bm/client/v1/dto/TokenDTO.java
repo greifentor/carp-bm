@@ -20,4 +20,5 @@ public class TokenDTO {
 	private UUID id;
 	private byte[] image;
 	private String name;
+	private ShapeTypeDTO shapeType;
 }

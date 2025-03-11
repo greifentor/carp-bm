@@ -12,5 +12,5 @@ public class SelectedToken {
 
 	private UUID id;
 	private BattleMap battleMap;
-	private Token token;
+	private BattleMapToken battleMapToken;
 }

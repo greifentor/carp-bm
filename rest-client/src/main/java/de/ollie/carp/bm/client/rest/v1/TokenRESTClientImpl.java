@@ -8,14 +8,18 @@ import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
 import de.ollie.carp.bm.client.v1.dto.DnDTokenDTO;
 import de.ollie.carp.bm.client.v1.dto.DnDTokenSizeDTO;
 import de.ollie.carp.bm.client.v1.dto.ErrorMessageDTO;
+import de.ollie.carp.bm.client.v1.dto.ShapeTypeDTO;
 import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.core.exception.ServiceException;
 import de.ollie.carp.bm.rest.v1.RestBase;
 import jakarta.inject.Named;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,6 +30,8 @@ import org.springframework.web.client.RestClient;
 @Named
 @RequiredArgsConstructor
 public class TokenRESTClientImpl implements TokenClient {
+
+	private static final Logger LOG = LogManager.getLogger(TokenRESTClientImpl.class);
 
 	private final RestClientConfiguration clientConfiguration;
 
@@ -39,7 +45,7 @@ public class TokenRESTClientImpl implements TokenClient {
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
-			.body(new TokenDTO().setImage(image).setName(name))
+			.body(new TokenDTO().setImage(image).setName(name).setShapeType(ShapeTypeDTO.CIRCLE))
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class);
@@ -60,6 +66,7 @@ public class TokenRESTClientImpl implements TokenClient {
 					.setTokenSize(DnDTokenSizeDTO.valueOf(dndTokenSize.name()))
 					.setImage(image)
 					.setName(name)
+					.setShapeType(ShapeTypeDTO.CIRCLE)
 			)
 			.retrieve()
 			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
@@ -68,7 +75,6 @@ public class TokenRESTClientImpl implements TokenClient {
 	}
 
 	private void throwServiceExceptionFromErrorResponse(ClientHttpResponse response) throws IOException {
-		System.out.println("exception thrown");
 		ErrorMessageDTO errorDTO = objectMapper.readValue(
 			new String(response.getBody().readAllBytes()),
 			ErrorMessageDTO.class
@@ -83,14 +89,32 @@ public class TokenRESTClientImpl implements TokenClient {
 
 	@Override
 	public List<TokenDTO> findAllTokens() {
-		List<TokenDTO> dtos = restClient
+		return restClient
 			.get()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.retrieve()
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.body(new ParameterizedTypeReference<List<TokenDTO>>() {});
-		return dtos;
+	}
+
+	@Override
+	public Optional<BattleMapTokenDTO> findSelectedTokenByBattleMap(String battleMapIdOrName) {
+		BattleMapTokenDTO dto = restClient
+			.get()
+			.uri(
+				clientConfiguration.getServerSchemaHostAndPort() +
+				RestBase.TOKEN_URL +
+				"/battlemaps/" +
+				battleMapIdOrName +
+				"/selected"
+			)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.retrieve()
+			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
+			.toEntity(BattleMapTokenDTO.class)
+			.getBody();
+		return Optional.ofNullable(dto);
 	}
 
 	@Override
@@ -132,19 +156,18 @@ public class TokenRESTClientImpl implements TokenClient {
 
 	@Override
 	public List<BattleMapTokenDTO> findAllByBattleMap(String battleMapIdOrName) {
-		List<BattleMapTokenDTO> dtos = restClient
+		return restClient
 			.get()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/battlemaps/" + battleMapIdOrName)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.retrieve()
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.body(new ParameterizedTypeReference<List<BattleMapTokenDTO>>() {});
-		return dtos;
 	}
 
 	@Override
 	public TokenDTO getByIdOrName(String idOrName) {
-		TokenDTO dto = restClient
+		return restClient
 			.get()
 			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + idOrName)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
@@ -152,7 +175,6 @@ public class TokenRESTClientImpl implements TokenClient {
 			.onStatus(status -> status.value() == 404, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
 			.toEntity(TokenDTO.class)
 			.getBody();
-		return dto;
 	}
 
 	@Override
@@ -166,5 +188,42 @@ public class TokenRESTClientImpl implements TokenClient {
 			.retrieve()
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 		return "moved token to " + coordinates.getFieldX() + "/" + coordinates.getFieldY() + ".";
+	}
+
+	@Override
+	public void selectToken(String battleMapTokenId) {
+		LOG.info("selectToken({})", battleMapTokenId);
+		restClient
+			.post()
+			.uri(
+				clientConfiguration.getServerSchemaHostAndPort() +
+				RestBase.TOKEN_URL +
+				"/selectedtokens/" +
+				battleMapTokenId +
+				"/select"
+			)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.contentType(MediaType.APPLICATION_JSON)
+			.retrieve()
+			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
+			.body(Void.class);
+	}
+
+	@Override
+	public void unselectToken(String battleMapTokenId) {
+		LOG.info("unselectToken({})", battleMapTokenId);
+		restClient
+			.delete()
+			.uri(
+				clientConfiguration.getServerSchemaHostAndPort() +
+				RestBase.TOKEN_URL +
+				"/selectedtokens/" +
+				battleMapTokenId +
+				"/unselect"
+			)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.header(HttpHeaders.CONTENT_TYPE, "application/json")
+			.retrieve()
+			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 	}
 }

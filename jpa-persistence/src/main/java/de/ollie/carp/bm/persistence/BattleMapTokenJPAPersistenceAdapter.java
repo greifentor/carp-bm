@@ -58,10 +58,7 @@ class BattleMapTokenJPAPersistenceAdapter implements BattleMapTokenPersistencePo
 	@Override
 	public List<BattleMapToken> findAllByBattleMap(BattleMap battleMap) {
 		List<BattleMapTokenDBO> dbos = repository.findAllByBattleMap(battleMapMapper.toDBO(battleMap));
-		dbos.forEach(dbo -> System.out.println("dbo: " + dbo));
-		List<BattleMapToken> models = mapper.toModels(dbos);
-		models.forEach(model -> System.out.println("model: " + model));
-		return models;
+		return mapper.toModels(dbos);
 	}
 
 	@Override

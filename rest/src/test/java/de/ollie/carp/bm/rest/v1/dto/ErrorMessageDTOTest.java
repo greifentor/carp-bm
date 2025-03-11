@@ -34,7 +34,6 @@ class ErrorMessageDTOTest {
 		@Test
 		void returnsAnArrayWithTwoElements_whenMessageDataContainsOneKeyValuePairOnly() {
 			// Prepare
-			System.out.println(unitUnderTest);
 			unitUnderTest.setMessageData(Map.of(KEY0, VALUE0));
 			// Run & Check
 			assertArrayEquals(new String[] { KEY0, VALUE0 }, unitUnderTest.getMessageDataToStringArray());
@@ -44,7 +43,6 @@ class ErrorMessageDTOTest {
 		void returnsAnArrayWithFourElements_whenMessageDataContainsTwoKeyValuePairs() {
 			// Prepare
 			unitUnderTest.setMessageData(MAP);
-			System.out.println(unitUnderTest);
 			// Run & Check
 			assertArrayEquals(new String[] { KEY0, VALUE0, KEY1, VALUE1 }, unitUnderTest.getMessageDataToStringArray());
 		}

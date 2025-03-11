@@ -30,4 +30,7 @@ public class TokenDBO {
 
 	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
+
+	@Column(name = "SHAPE_TYPE", nullable = false)
+	private ShapeTypeDBO shapeType;
 }
