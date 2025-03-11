@@ -2,12 +2,16 @@ package de.ollie.carp.bm.server.security.impl;
 
 import de.ollie.carp.bm.server.security.SecurityChecker;
 import jakarta.inject.Named;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Named
-public class SecurityCheckerImpl implements SecurityChecker {
+class SecurityCheckerImpl implements SecurityChecker {
+
+	private static final Logger LOG = LogManager.getLogger(SecurityCheckerImpl.class);
 
 	@Override
 	public void throwExceptionIfAccessTokenInvalid(String accessToken) {
-		System.out.println("access token checked: " + accessToken);
+		LOG.info("access token checked: " + accessToken);
 	}
 }

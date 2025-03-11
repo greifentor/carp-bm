@@ -60,18 +60,12 @@ public class TokenServiceImpl implements TokenService {
 				bmts
 					.stream()
 					.map(bmt -> {
-						System.out.println("\ncheck " + bmt.getId() + " == " + selected.getBattleMapToken().getId());
 						return bmt;
 					})
 					.filter(bmt -> bmt.getId().equals(selected.getBattleMapToken().getId()))
 					.findFirst()
 					.ifPresent(bmt -> bmt.setSelected(true))
 			);
-		System.out.println("\n\ns:   " + selectedTokenPersistencePort.findSelectedTokenByBattleMap(battleMap));
-		System.out.println("a:   " + selectedTokenPersistencePort.findAll());
-		System.out.println("bmt:");
-		bmts.forEach(System.out::println);
-		System.out.println("\n\n");
 		return bmts;
 	}
 
@@ -91,7 +85,6 @@ public class TokenServiceImpl implements TokenService {
 			Token selectedBefore = selectedToken.getBattleMapToken().getToken();
 			selectedToken.getBattleMapToken().setToken(token);
 			selectedTokenPersistencePort.save(selectedToken);
-			System.out.println("\n\nSelected (e): " + token.getName() + "\n\n");
 			return selectedBefore;
 		}
 		selectedTokenPersistencePort.save(
@@ -99,7 +92,6 @@ public class TokenServiceImpl implements TokenService {
 				.setBattleMap(battleMap)
 				.setBattleMapToken(new BattleMapToken().setBattleMap(battleMap).setToken(token))
 		);
-		System.out.println("\n\nSelected (n): " + token.getName() + "\n\n");
 		return null;
 	}
 

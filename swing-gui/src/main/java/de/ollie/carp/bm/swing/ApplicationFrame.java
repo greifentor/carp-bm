@@ -22,9 +22,13 @@ import java.math.BigDecimal;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Named
 public class ApplicationFrame extends JFrame implements WindowListener, BattleMapImage.Listener {
+
+	private static final Logger LOG = LogManager.getLogger(ApplicationFrame.class);
 
 	private static final int HGAP = 3;
 	private static final int VGAP = 3;
@@ -89,7 +93,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		System.out.println("Closed");
+		LOG.info("Closed");
 		dispose();
 	}
 
@@ -118,23 +122,28 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 
 	@Override
 	public void hitsDetected(HitsGO hits) {
-		System.out.println("selected field was:    " + selectedField);
-		System.out.println("selected token:        " + selectedToken);
 		selectedToken =
 			tokenClient.findSelectedTokenByBattleMap(battleMap.getName()).map(battleMapTokenGOMapper::toGO).orElse(null);
 		selectedField =
 			new CoordinatesDTO().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
 		if (!hits.getBattleMapTokens().isEmpty()) {
-			selectedToken = hits.getBattleMapTokens().get(0);
-			tokenClient.selectToken(selectedToken.getId().toString());
+			LOG.info("Tokens hit: " + hits.getBattleMapTokens().size());
+			if (selectedToken != null) {
+				LOG.info("unselect " + selectedToken.getId().toString());
+				tokenClient.unselectToken(selectedToken.getId().toString());
+				selectedToken = null;
+			} else {
+				selectedToken = hits.getBattleMapTokens().get(0);
+				tokenClient.selectToken(selectedToken.getId().toString());
+				LOG.info("select " + selectedToken.getId().toString());
+			}
 		} else {
 			if (selectedToken != null) {
+				LOG.info("move " + selectedToken.getId().toString());
 				tokenClient.moveBattleMapToken(selectedToken.getId().toString(), selectedField);
 			}
 		}
-		System.out.println("selected field is now: " + selectedField);
-		System.out.println("selected token:        " + selectedToken);
-		System.out.println();
+		LOG.info("selected token " + (selectedToken != null ? selectedToken.getId().toString() : "NONE"));
 		bmi.update();
 	}
 }

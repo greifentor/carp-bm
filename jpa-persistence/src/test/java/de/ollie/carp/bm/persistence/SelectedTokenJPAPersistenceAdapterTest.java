@@ -88,8 +88,8 @@ class SelectedTokenJPAPersistenceAdapterTest {
 		@Test
 		void callsTheRepositoryFindByBattleMapCorrectly() {
 			// Prepare
-			when(battleMapDBOMapper.toDBO(battleMap)).thenReturn(battleMapDBO);
-			when(repository.findByBattleMap(battleMapDBO)).thenReturn(Optional.of(selectedTokenDBO));
+			when(battleMap.getId()).thenReturn(UID);
+			when(repository.findByBattleMapId(UID)).thenReturn(Optional.of(selectedTokenDBO));
 			when(mapper.toModel(selectedTokenDBO)).thenReturn(selectedToken);
 			// Run
 			Optional<SelectedToken> returned = unitUnderTest.findSelectedTokenByBattleMap(battleMap);

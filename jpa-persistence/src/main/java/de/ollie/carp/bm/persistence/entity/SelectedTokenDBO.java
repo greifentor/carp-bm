@@ -23,10 +23,10 @@ public class SelectedTokenDBO {
 	private UUID id;
 
 	@JoinColumn(name = "BATTLE_MAP", nullable = false, referencedColumnName = "ID", unique = true)
-	@OneToOne(orphanRemoval = true)
+	@OneToOne
 	private BattleMapDBO battleMap;
 
 	@JoinColumn(name = "BATTLE_MAP_TOKEN", nullable = false, referencedColumnName = "ID", unique = true)
-	@OneToOne(orphanRemoval = true)
+	@OneToOne
 	private BattleMapTokenDBO battleMapToken;
 }

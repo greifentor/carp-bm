@@ -62,7 +62,6 @@ public class TokenGUIServiceImpl implements TokenGUIService {
 		int fieldSizeInPixels = battleMapToken.getBattleMap().getFieldSizeInPixels();
 		BufferedImage token = battleMapToken.getToken().getBufferedImage();
 		graphics.drawImage(token, leftUpperCorner.getX(), leftUpperCorner.getY(), null);
-		System.out.println("\n\nYO!\n\n");
 		if (battleMapToken instanceof DnDBattleMapTokenGO dndToken) {
 			DnDTokenGO dndTokenGO = (DnDTokenGO) dndToken.getToken();
 			int x = leftUpperCorner.getX();

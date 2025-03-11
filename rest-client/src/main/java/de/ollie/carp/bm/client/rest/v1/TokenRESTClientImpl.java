@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,6 +30,8 @@ import org.springframework.web.client.RestClient;
 @Named
 @RequiredArgsConstructor
 public class TokenRESTClientImpl implements TokenClient {
+
+	private static final Logger LOG = LogManager.getLogger(TokenRESTClientImpl.class);
 
 	private final RestClientConfiguration clientConfiguration;
 
@@ -188,11 +192,37 @@ public class TokenRESTClientImpl implements TokenClient {
 
 	@Override
 	public void selectToken(String battleMapTokenId) {
+		LOG.info("selectToken({})", battleMapTokenId);
 		restClient
 			.post()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL + "/" + battleMapTokenId + "/select")
+			.uri(
+				clientConfiguration.getServerSchemaHostAndPort() +
+				RestBase.TOKEN_URL +
+				"/selectedtokens/" +
+				battleMapTokenId +
+				"/select"
+			)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.contentType(MediaType.APPLICATION_JSON)
+			.retrieve()
+			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
+			.body(Void.class);
+	}
+
+	@Override
+	public void unselectToken(String battleMapTokenId) {
+		LOG.info("unselectToken({})", battleMapTokenId);
+		restClient
+			.delete()
+			.uri(
+				clientConfiguration.getServerSchemaHostAndPort() +
+				RestBase.TOKEN_URL +
+				"/selectedtokens/" +
+				battleMapTokenId +
+				"/unselect"
+			)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.header(HttpHeaders.CONTENT_TYPE, "application/json")
 			.retrieve()
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
 	}

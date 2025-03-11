@@ -26,6 +26,7 @@ public class SelectedTokenJPAPersistenceAdapter implements SelectedTokenPersiste
 	@Override
 	public void delete(SelectedToken selectedToken) {
 		ensure(selectedToken != null, "selected token cannot be null!");
+		System.out.println(selectedToken);
 		repository.delete(mapper.toDBO(selectedToken));
 	}
 

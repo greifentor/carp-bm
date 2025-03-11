@@ -28,6 +28,8 @@ public interface TokenClient {
 
 	void selectToken(String battleMapTokenId);
 
+	void unselectToken(String battleMapTokenId);
+
 	String setTokenToBattleMapOfSpielrunde(
 		String tokenIdOrName,
 		String battleMapIdOrName,

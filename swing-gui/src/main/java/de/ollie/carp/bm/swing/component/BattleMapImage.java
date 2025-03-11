@@ -1,7 +1,6 @@
 package de.ollie.carp.bm.swing.component;
 
 import de.ollie.carp.bm.client.v1.TokenClient;
-import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDTO;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
@@ -50,10 +49,7 @@ public class BattleMapImage extends JLabel implements MouseListener {
 	}
 
 	private List<BattleMapTokenGO> getBattleMapTokenGOs() {
-		List<BattleMapTokenDTO> l = tokenClient.findAllByBattleMap(battleMap.getName());
-		l.forEach(System.out::println);
-		battleMapTokenGOMapper.toGOs(l).forEach(System.out::println);
-		return battleMapTokenGOMapper.toGOs(l);
+		return battleMapTokenGOMapper.toGOs(tokenClient.findAllByBattleMap(battleMap.getName()));
 	}
 
 	public void addListener(Listener l) {
