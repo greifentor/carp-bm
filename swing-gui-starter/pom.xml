@@ -10,11 +10,11 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>carp-bm-shell</artifactId>
+	<artifactId>carp-bm-swing-starter</artifactId>
 	<packaging>jar</packaging>
 
-	<name>CARP-BM (Shell)</name>
-	<description>The shell module of the application.</description>
+	<name>CARP-BM (Swing-Starter)</name>
+	<description>The application starter for swing mode.</description>
 
 	<properties>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
@@ -24,10 +24,14 @@
 		<!-- carp-bm -->
 		<dependency>
 			<groupId>de.ollie</groupId>
-			<artifactId>carp-bm-rest-client</artifactId>
+			<artifactId>carp-bm-swing</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<!-- java -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -36,17 +40,7 @@
 			<groupId>jakarta.inject</groupId>
 			<artifactId>jakarta.inject-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.shell</groupId>
-			<artifactId>spring-shell-starter</artifactId>
-			<version>3.1.6</version>
-		</dependency>
 		<!-- Testing -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-commons</artifactId>
@@ -105,6 +99,10 @@
 				<configuration>
 					<skipTests>false</skipTests>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>com.hubspot.maven.plugins</groupId>

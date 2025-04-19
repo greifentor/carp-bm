@@ -54,15 +54,21 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	private BattleMapGO battleMap;
 	private BattleMapImage bmi;
 
+	private boolean initialized = false;
+
 	public ApplicationFrame() {
 		super(";op");
 	}
 
 	@PostConstruct
 	void postConstruct() {
-		battleMap = battleMapClient.findAllBattleMaps().stream().map(battleMapGOMapper::toGO).findFirst().orElse(null);
 		addWindowListener(this);
 		setSize(new Dimension(800, 600));
+		LOG.info("post constructed");
+	}
+
+	public void initialize() {
+		battleMap = battleMapClient.findAllBattleMaps().stream().map(battleMapGOMapper::toGO).findFirst().orElse(null);
 		setContentPane(createMainPanel());
 		setVisible(true);
 		requestFocus();
@@ -83,38 +89,47 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 
 	@Override
 	public void windowActivated(WindowEvent e) {
+		LOG.info("activated");
 		// NOP
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
+		LOG.info("closed");
 		// NOP
 	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		LOG.info("Closed");
+		LOG.info("Closing");
 		dispose();
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
+		LOG.info("deactivated");
 		// NOP
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
+		LOG.info("deiconified");
 		// NOP
+		if (!initialized) {
+			initialize();
+		}
+		initialized = true;
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
+		LOG.info("iconified");
 		// NOP
 	}
 
 	@Override
 	public void windowOpened(WindowEvent e) {
-		// NOP
+		LOG.info("opened");
 	}
 
 	private CoordinatesDTO selectedField;

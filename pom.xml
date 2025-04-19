@@ -66,11 +66,15 @@
 		<module>rest</module>
 		<module>rest-client</module>
 		<module>rest-server</module>
+		<module>rest-server-starter</module>
 		<module>server</module>
 		<module>service</module>
 		<module>service-interface</module>
 		<module>shell</module>
+		<module>shell-starter</module>
 		<module>swing-gui</module>
+		<module>swing-gui-starter</module>
+		<module>swing-gui-with-rest-server-starter</module>
 	</modules>
 	<dependencies>
 		<dependency>
