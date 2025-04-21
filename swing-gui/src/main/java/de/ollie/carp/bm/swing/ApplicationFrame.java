@@ -11,6 +11,8 @@ import de.ollie.carp.bm.gui.go.HitsGO;
 import de.ollie.carp.bm.gui.mapper.BattleMapGOMapper;
 import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import de.ollie.carp.bm.swing.component.BattleMapImage;
+import de.ollie.carp.bm.swing.component.CarpBmMenuBar;
+import de.ollie.carp.bm.swing.component.CarpBmMenuBar.MenuItemIdentifier;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -19,14 +21,18 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.math.BigDecimal;
+import java.util.NoSuchElementException;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Named
-public class ApplicationFrame extends JFrame implements WindowListener, BattleMapImage.Listener {
+public class ApplicationFrame
+	extends JFrame
+	implements WindowListener, BattleMapImage.Listener, CarpBmMenuBar.Observer {
 
 	private static final Logger LOG = LogManager.getLogger(ApplicationFrame.class);
 
@@ -53,6 +59,7 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 
 	private BattleMapGO battleMap;
 	private BattleMapImage bmi;
+	private JMenuBar menuBar;
 
 	private boolean initialized = false;
 
@@ -64,11 +71,19 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	void postConstruct() {
 		addWindowListener(this);
 		setSize(new Dimension(800, 600));
+		menuBar = new CarpBmMenuBar(this);
+		setJMenuBar(menuBar);
 		LOG.info("post constructed");
 	}
 
 	public void initialize() {
-		battleMap = battleMapClient.findAllBattleMaps().stream().map(battleMapGOMapper::toGO).findFirst().orElse(null);
+		battleMap =
+			battleMapClient
+				.findAllBattleMaps()
+				.stream()
+				.map(battleMapGOMapper::toGO)
+				.findFirst()
+				.orElseThrow(() -> new NoSuchElementException("Found no battle maps!"));
 		setContentPane(createMainPanel());
 		setVisible(true);
 		requestFocus();
@@ -115,10 +130,6 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 	public void windowDeiconified(WindowEvent e) {
 		LOG.info("deiconified");
 		// NOP
-		if (!initialized) {
-			initialize();
-		}
-		initialized = true;
 	}
 
 	@Override
@@ -160,5 +171,15 @@ public class ApplicationFrame extends JFrame implements WindowListener, BattleMa
 		}
 		LOG.info("selected token " + (selectedToken != null ? selectedToken.getId().toString() : "NONE"));
 		bmi.update();
+	}
+
+	@Override
+	public void menuItemSelected(MenuItemIdentifier selectedMenuItem) {
+		System.out.println("\nMENU ITEM CLICKED: " + selectedMenuItem + "\n");
+		if (selectedMenuItem == MenuItemIdentifier.FILE_QUIT) {
+			System.exit(0);
+		} else if (selectedMenuItem == MenuItemIdentifier.BATTLE_MAP_OPEN) {
+			initialize();
+		}
 	}
 }
