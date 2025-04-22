@@ -22,10 +22,16 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
+import javax.swing.ImageIcon;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,6 +66,7 @@ public class ApplicationFrame
 	private BattleMapGO battleMap;
 	private BattleMapImage bmi;
 	private JMenuBar menuBar;
+	private JDesktopPane desktopPane;
 
 	private boolean initialized = false;
 
@@ -73,10 +80,66 @@ public class ApplicationFrame
 		setSize(new Dimension(800, 600));
 		menuBar = new CarpBmMenuBar(this);
 		setJMenuBar(menuBar);
+		JLabel labelBackground = new JLabel(
+			new ImageIcon("/home/ollie/rpg/DungeonsAndDragons/Material/Hintergrund-Einsteigerbox.jpg")
+		);
+		desktopPane = new JDesktopPane();
+		desktopPane.setOpaque(false);
+		labelBackground.setLayout(new BorderLayout());
+		labelBackground.add(desktopPane, BorderLayout.CENTER);
+		setLayout(new BorderLayout());
+		setContentPane(labelBackground);
+		setVisible(true);
 		LOG.info("post constructed");
 	}
 
 	public void initialize() {
+		JInternalFrame internalFrame = new JInternalFrame("Bla", true, true, true, true);
+		internalFrame.addInternalFrameListener(
+			new InternalFrameListener() {
+				@Override
+				public void internalFrameOpened(InternalFrameEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void internalFrameIconified(InternalFrameEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void internalFrameDeiconified(InternalFrameEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void internalFrameDeactivated(InternalFrameEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void internalFrameClosing(InternalFrameEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void internalFrameClosed(InternalFrameEvent e) {
+					desktopPane.remove(e.getInternalFrame());
+				}
+
+				@Override
+				public void internalFrameActivated(InternalFrameEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+			}
+		);
+		desktopPane.add(internalFrame);
 		battleMap =
 			battleMapClient
 				.findAllBattleMaps()
@@ -84,9 +147,10 @@ public class ApplicationFrame
 				.map(battleMapGOMapper::toGO)
 				.findFirst()
 				.orElseThrow(() -> new NoSuchElementException("Found no battle maps!"));
-		setContentPane(createMainPanel());
-		setVisible(true);
-		requestFocus();
+		internalFrame.setContentPane(createMainPanel());
+		internalFrame.setVisible(true);
+		internalFrame.setSize(600, 400);
+		internalFrame.requestFocus();
 	}
 
 	private JPanel createMainPanel() {
@@ -175,7 +239,6 @@ public class ApplicationFrame
 
 	@Override
 	public void menuItemSelected(MenuItemIdentifier selectedMenuItem) {
-		System.out.println("\nMENU ITEM CLICKED: " + selectedMenuItem + "\n");
 		if (selectedMenuItem == MenuItemIdentifier.FILE_QUIT) {
 			System.exit(0);
 		} else if (selectedMenuItem == MenuItemIdentifier.BATTLE_MAP_OPEN) {
