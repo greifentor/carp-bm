@@ -13,6 +13,8 @@ import de.ollie.carp.bm.gui.mapper.BattleMapTokenGOMapper;
 import de.ollie.carp.bm.swing.component.BattleMapImage;
 import de.ollie.carp.bm.swing.component.CarpBmMenuBar;
 import de.ollie.carp.bm.swing.component.CarpBmMenuBar.MenuItemIdentifier;
+import de.ollie.carp.bm.swing.component.SimplifiedInternalFrameListener;
+import de.ollie.carp.bm.swing.component.SimplifiedInternalFrameListener.EventType;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -31,14 +33,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Named
 public class ApplicationFrame
 	extends JFrame
-	implements WindowListener, BattleMapImage.Listener, CarpBmMenuBar.Observer {
+	implements WindowListener, BattleMapImage.Listener, CarpBmMenuBar.Observer, SimplifiedInternalFrameListener.Observer {
 
 	private static final Logger LOG = LogManager.getLogger(ApplicationFrame.class);
 
@@ -95,50 +96,7 @@ public class ApplicationFrame
 
 	public void initialize() {
 		JInternalFrame internalFrame = new JInternalFrame("Bla", true, true, true, true);
-		internalFrame.addInternalFrameListener(
-			new InternalFrameListener() {
-				@Override
-				public void internalFrameOpened(InternalFrameEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void internalFrameIconified(InternalFrameEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void internalFrameDeiconified(InternalFrameEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void internalFrameDeactivated(InternalFrameEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void internalFrameClosing(InternalFrameEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void internalFrameClosed(InternalFrameEvent e) {
-					desktopPane.remove(e.getInternalFrame());
-				}
-
-				@Override
-				public void internalFrameActivated(InternalFrameEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-			}
-		);
+		internalFrame.addInternalFrameListener(new SimplifiedInternalFrameListener(this));
 		desktopPane.add(internalFrame);
 		battleMap =
 			battleMapClient
@@ -243,6 +201,13 @@ public class ApplicationFrame
 			System.exit(0);
 		} else if (selectedMenuItem == MenuItemIdentifier.BATTLE_MAP_OPEN) {
 			initialize();
+		}
+	}
+
+	@Override
+	public void internalFrameEvent(EventType eventType, InternalFrameEvent event) {
+		if (eventType == EventType.CLOSED) {
+			desktopPane.remove(event.getInternalFrame());
 		}
 	}
 }
