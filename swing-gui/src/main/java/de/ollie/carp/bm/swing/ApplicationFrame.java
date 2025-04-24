@@ -15,13 +15,13 @@ import de.ollie.carp.bm.swing.component.CarpBmMenuBar;
 import de.ollie.carp.bm.swing.component.CarpBmMenuBar.MenuItemIdentifier;
 import de.ollie.carp.bm.swing.component.SimplifiedInternalFrameListener;
 import de.ollie.carp.bm.swing.component.SimplifiedInternalFrameListener.EventType;
+import de.ollie.carp.bm.swing.component.SimplifiedWindowListener;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import javax.swing.ImageIcon;
@@ -39,7 +39,11 @@ import org.apache.logging.log4j.Logger;
 @Named
 public class ApplicationFrame
 	extends JFrame
-	implements WindowListener, BattleMapImage.Listener, CarpBmMenuBar.Observer, SimplifiedInternalFrameListener.Observer {
+	implements
+		BattleMapImage.Listener,
+		CarpBmMenuBar.Observer,
+		SimplifiedInternalFrameListener.Observer,
+		SimplifiedWindowListener.Observer {
 
 	private static final Logger LOG = LogManager.getLogger(ApplicationFrame.class);
 
@@ -77,7 +81,7 @@ public class ApplicationFrame
 
 	@PostConstruct
 	void postConstruct() {
-		addWindowListener(this);
+		addWindowListener(new SimplifiedWindowListener(this));
 		setSize(new Dimension(800, 600));
 		menuBar = new CarpBmMenuBar(this);
 		setJMenuBar(menuBar);
@@ -124,47 +128,6 @@ public class ApplicationFrame
 		return bmi;
 	}
 
-	@Override
-	public void windowActivated(WindowEvent e) {
-		LOG.info("activated");
-		// NOP
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		LOG.info("closed");
-		// NOP
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		LOG.info("Closing");
-		dispose();
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		LOG.info("deactivated");
-		// NOP
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		LOG.info("deiconified");
-		// NOP
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		LOG.info("iconified");
-		// NOP
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		LOG.info("opened");
-	}
-
 	private CoordinatesDTO selectedField;
 	private BattleMapTokenGO selectedToken;
 
@@ -208,6 +171,14 @@ public class ApplicationFrame
 	public void internalFrameEvent(EventType eventType, InternalFrameEvent event) {
 		if (eventType == EventType.CLOSED) {
 			desktopPane.remove(event.getInternalFrame());
+		}
+	}
+
+	@Override
+	public void windowEvent(SimplifiedWindowListener.EventType eventType, WindowEvent e) {
+		if (SimplifiedWindowListener.EventType.CLOSING == eventType) {
+			dispose();
+			System.exit(0);
 		}
 	}
 }
