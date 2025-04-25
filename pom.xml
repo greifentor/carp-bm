@@ -60,6 +60,7 @@
 	</build>
 	<modules>
 		<module>base-lib</module>
+		<module>carp-maps-rest-api</module>
 		<module>client</module>
 		<module>gui</module>
 		<module>jpa-persistence</module>
