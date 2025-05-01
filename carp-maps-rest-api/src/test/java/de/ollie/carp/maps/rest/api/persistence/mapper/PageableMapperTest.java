@@ -3,9 +3,9 @@ package de.ollie.carp.maps.rest.api.persistence.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import de.ollie.carp.maps.rest.api.service.model.SeitenParameter;
-import de.ollie.carp.maps.rest.api.service.model.SeitenParameter.Richtung;
-import de.ollie.carp.maps.rest.api.service.model.SeitenParameter.Sortierung;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter.Richtung;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter.Sortierung;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

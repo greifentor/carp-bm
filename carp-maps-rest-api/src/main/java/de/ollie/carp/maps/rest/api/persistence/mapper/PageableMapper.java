@@ -2,9 +2,9 @@ package de.ollie.carp.maps.rest.api.persistence.mapper;
 
 import static de.ollie.carp.bm.util.Check.ensure;
 
-import de.ollie.carp.maps.rest.api.service.model.SeitenParameter;
-import de.ollie.carp.maps.rest.api.service.model.SeitenParameter.Richtung;
-import de.ollie.carp.maps.rest.api.service.model.SeitenParameter.Sortierung;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter.Richtung;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter.Sortierung;
 import jakarta.inject.Named;
 import java.util.Arrays;
 import org.springframework.data.domain.PageRequest;

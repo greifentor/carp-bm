@@ -1,4 +1,4 @@
-package de.ollie.carp.maps.rest.api.service.model;
+package de.ollie.carp.maps.rest.api.core.model;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

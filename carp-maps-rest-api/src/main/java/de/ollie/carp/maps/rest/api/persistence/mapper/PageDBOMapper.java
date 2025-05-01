@@ -2,7 +2,7 @@ package de.ollie.carp.maps.rest.api.persistence.mapper;
 
 import static de.ollie.carp.bm.util.Check.ensure;
 
-import de.ollie.carp.maps.rest.api.service.model.Seite;
+import de.ollie.carp.maps.rest.api.core.model.Seite;
 import jakarta.inject.Named;
 import org.springframework.data.domain.Page;
 
