@@ -1,7 +1,8 @@
-package de.ollie.carp.maps.rest.api.core.service;
+package de.ollie.carp.maps.rest.api.core.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import de.ollie.carp.maps.rest.api.core.exception.AuthorizationInvalidException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

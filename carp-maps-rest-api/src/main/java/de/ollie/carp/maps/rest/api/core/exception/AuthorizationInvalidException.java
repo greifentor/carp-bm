@@ -1,4 +1,4 @@
-package de.ollie.carp.maps.rest.api.core.service;
+package de.ollie.carp.maps.rest.api.core.exception;
 
 public class AuthorizationInvalidException extends RuntimeException {
 
