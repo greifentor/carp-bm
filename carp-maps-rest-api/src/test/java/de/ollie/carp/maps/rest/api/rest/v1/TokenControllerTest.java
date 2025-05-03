@@ -2,8 +2,16 @@ package de.ollie.carp.maps.rest.api.rest.v1;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import de.ollie.carp.maps.rest.api.core.model.Seite;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter;
+import de.ollie.carp.maps.rest.api.core.model.Token;
 import de.ollie.carp.maps.rest.api.core.service.SecurityService;
+import de.ollie.carp.maps.rest.api.core.service.TokenService;
+import de.ollie.carp.maps.rest.api.rest.v1.dto.SeiteDTO;
+import de.ollie.carp.maps.rest.api.rest.v1.dto.TokenDTO;
+import de.ollie.carp.maps.rest.api.rest.v1.mapper.TokenDTOMapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +32,18 @@ class TokenControllerTest {
 	@Mock
 	private SecurityService securityService;
 
+	@Mock
+	private Seite<Token> seite;
+
+	@Mock
+	private SeiteDTO<TokenDTO> seiteDTO;
+
+	@Mock
+	private TokenDTOMapper tokenMapper;
+
+	@Mock
+	private TokenService tokenService;
+
 	@InjectMocks
 	private TokenController unitUnderTest;
 
@@ -32,6 +52,10 @@ class TokenControllerTest {
 
 		@Test
 		void callsTheSecurityService_withThePassedAuthorizationToken() {
+			// Prepare
+			when(tokenService.findBy(new SeitenParameter(MAX_RECORDS_PER_PAGE, PAGE, TokenController.SORTIERUNG)))
+				.thenReturn(seite);
+			when(tokenMapper.toDto(seite)).thenReturn(seiteDTO);
 			// Run
 			unitUnderTest.getTokens(AUTHORIZATION, PAGE, MAX_RECORDS_PER_PAGE);
 			// Check

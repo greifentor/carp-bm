@@ -1,8 +1,13 @@
 package de.ollie.carp.maps.rest.api.rest.v1;
 
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter.Richtung;
+import de.ollie.carp.maps.rest.api.core.model.SeitenParameter.Sortierung;
 import de.ollie.carp.maps.rest.api.core.service.SecurityService;
-import java.util.List;
-import java.util.UUID;
+import de.ollie.carp.maps.rest.api.core.service.TokenService;
+import de.ollie.carp.maps.rest.api.rest.v1.dto.SeiteDTO;
+import de.ollie.carp.maps.rest.api.rest.v1.dto.TokenDTO;
+import de.ollie.carp.maps.rest.api.rest.v1.mapper.TokenDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 class TokenController {
 
 	static final String URL = "api/v1/tokens";
+	static final Sortierung SORTIERUNG = new Sortierung("id", Richtung.AUFSTEIGEND);
 
 	private final SecurityService securityService;
+	private final TokenDTOMapper tokenMapper;
+	private final TokenService tokenService;
 
 	@GetMapping(value = "", produces = "application/json")
-	public List<TokenDTO> getTokens(
+	public SeiteDTO<TokenDTO> getTokens(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
 		@RequestParam(required = true, defaultValue = "0") int page,
 		@RequestParam(name = "max", defaultValue = "20") int maxRecordsPerPage
 	) {
 		securityService.checkAuthorization(authorization);
-		return List.of(new TokenDTO().setId(UUID.randomUUID()).setName("a-name"));
+		return tokenMapper.toDto(tokenService.findBy(new SeitenParameter(maxRecordsPerPage, page, SORTIERUNG)));
 	}
 }
