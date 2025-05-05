@@ -10,28 +10,17 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>carp-bm-shell</artifactId>
+	<artifactId>carp-maps-client</artifactId>
 	<packaging>jar</packaging>
 
-	<name>CARP-BM (Shell)</name>
-	<description>The shell module of the application.</description>
+	<name>CARP-Maps (Client)</name>
+	<description>The rest client module for CARP-Maps access.</description>
 
 	<properties>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
 	</properties>
 
 	<dependencies>
-		<!-- carp-bm -->
-		<dependency>
-			<groupId>de.ollie</groupId>
-			<artifactId>carp-bm-rest-client</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>de.ollie</groupId>
-			<artifactId>carp-maps-client</artifactId>
-			<version>0.0.1</version>
-		</dependency>
 		<!-- java -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -42,9 +31,26 @@
 			<artifactId>jakarta.inject-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.shell</groupId>
-			<artifactId>spring-shell-starter</artifactId>
-			<version>3.1.6</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.18.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
 		</dependency>
 		<!-- Testing -->
 		<dependency>

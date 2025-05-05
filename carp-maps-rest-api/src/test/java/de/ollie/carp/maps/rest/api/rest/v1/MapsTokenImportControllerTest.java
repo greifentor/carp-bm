@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 import de.ollie.carp.maps.rest.api.core.model.Seite;
 import de.ollie.carp.maps.rest.api.core.model.SeitenParameter;
 import de.ollie.carp.maps.rest.api.core.model.Token;
+import de.ollie.carp.maps.rest.api.core.service.MapsTokenImportService;
 import de.ollie.carp.maps.rest.api.core.service.SecurityService;
-import de.ollie.carp.maps.rest.api.core.service.TokenService;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.SeiteDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.TokenDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.mapper.TokenDTOMapper;
@@ -20,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class TokenControllerTest {
+class MapsTokenImportControllerTest {
 
 	private static final String BEARER = "Bearer";
 	private static final int MAX_RECORDS_PER_PAGE = 42;
@@ -42,10 +42,10 @@ class TokenControllerTest {
 	private TokenDTOMapper tokenMapper;
 
 	@Mock
-	private TokenService tokenService;
+	private MapsTokenImportService tokenService;
 
 	@InjectMocks
-	private TokenController unitUnderTest;
+	private MapsTokenImportController unitUnderTest;
 
 	@Nested
 	class getTokens_String_int_int {
@@ -53,7 +53,11 @@ class TokenControllerTest {
 		@Test
 		void callsTheSecurityService_withThePassedAuthorizationToken() {
 			// Prepare
-			when(tokenService.findBy(new SeitenParameter(MAX_RECORDS_PER_PAGE, PAGE, TokenController.SORTIERUNG)))
+			when(
+				tokenService.findAllTokens(
+					new SeitenParameter(MAX_RECORDS_PER_PAGE, PAGE, MapsTokenImportController.SORTIERUNG)
+				)
+			)
 				.thenReturn(seite);
 			when(tokenMapper.toDto(seite)).thenReturn(seiteDTO);
 			// Run

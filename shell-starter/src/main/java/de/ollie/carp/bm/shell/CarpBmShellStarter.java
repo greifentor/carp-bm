@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @Generated
 @SpringBootApplication
-@ComponentScan("de.ollie.carp.bm")
+@ComponentScan("de.ollie.carp")
 public class CarpBmShellStarter {
 
 	public static void main(String[] args) {

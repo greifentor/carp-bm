@@ -5,7 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import de.ollie.carp.maps.rest.api.core.model.SeitenParameter;
-import de.ollie.carp.maps.rest.api.core.service.port.TokenPersistencePort;
+import de.ollie.carp.maps.rest.api.core.service.port.MapsTokenImportPersistencePort;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,32 +14,32 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class TokenServiceImplTest {
+class MapsTokenImportServiceImplTest {
 
 	@Mock
 	private SeitenParameter seitenParameter;
 
 	@Mock
-	private TokenPersistencePort persistencePort;
+	private MapsTokenImportPersistencePort persistencePort;
 
 	@InjectMocks
-	private TokenServiceImpl unitUnderTest;
+	private MapsTokenImportServiceImpl unitUnderTest;
 
 	@Nested
-	class findBy_SeitenParameter {
+	class findAllTokens_SeitenParameter {
 
 		@Test
 		void throwsAnException_passingANullValueAsSeitenParameters() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.findBy(null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.findAllTokens(null));
 		}
 
 		@Test
 		void callsThePersistencePortMethodCorrectly() {
 			// Prepare
 			// Run
-			unitUnderTest.findBy(seitenParameter);
+			unitUnderTest.findAllTokens(seitenParameter);
 			// Check
-			verify(persistencePort, times(1)).findAll(seitenParameter);
+			verify(persistencePort, times(1)).findAllTokens(seitenParameter);
 		}
 	}
 }

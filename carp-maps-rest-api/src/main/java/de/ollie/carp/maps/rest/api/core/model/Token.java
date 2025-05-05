@@ -12,5 +12,5 @@ public class Token {
 
 	private UUID id;
 	private String name;
-	private byte[] icon;
+	private byte[] image;
 }

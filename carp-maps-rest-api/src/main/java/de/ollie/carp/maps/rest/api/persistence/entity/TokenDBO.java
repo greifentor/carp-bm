@@ -2,6 +2,8 @@ package de.ollie.carp.maps.rest.api.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -17,16 +19,20 @@ import lombok.experimental.Accessors;
 @Generated
 @Entity(name = "Token")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "TOKEN")
+@Table(name = "IMAGE")
 @ToString(exclude = "image")
 public class TokenDBO {
 
 	@Id
-	@Column(name = "ID", nullable = false)
+	@Column(name = "GLOBAL_ID", nullable = false)
 	private UUID id;
 
 	@Column(name = "IMAGE", columnDefinition = "BLOB")
 	private byte[] image;
+
+	@Column(name = "IMAGE_TYPE")
+	@Enumerated(EnumType.STRING)
+	private ImageTypeDBO imageType;
 
 	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
