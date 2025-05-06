@@ -1,4 +1,5 @@
 java \
+-Dserver.port=8081 \
 -Dspring.datasource.url=jdbc:mariadb://localhost:3306/carpmapsws \
 -Dspring.datasource.driverClassName=org.mariadb.jdbc.Driver \
 -Dspring.datasource.username=carpmapsws \
