@@ -5,9 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.ollie.carp.maps.rest.api.CarpMapsRestApiStarter;
+import de.ollie.carp.maps.rest.api.persistence.entity.ImageDBO;
 import de.ollie.carp.maps.rest.api.persistence.entity.ImageTypeDBO;
-import de.ollie.carp.maps.rest.api.persistence.entity.TokenDBO;
-import de.ollie.carp.maps.rest.api.persistence.repository.TokenDBORepository;
+import de.ollie.carp.maps.rest.api.persistence.repository.ImageDBORepository;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,13 +34,14 @@ class TokenControllerITest {
 	private MockMvc mvc;
 
 	@Autowired
-	private TokenDBORepository repository;
+	private ImageDBORepository repository;
 
 	@Test
 	void happyRun() throws Exception {
 		repository.save(
-			new TokenDBO()
-				.setId(UUID.randomUUID())
+			new ImageDBO()
+				.setId(1L)
+				.setGlobalId(UUID.randomUUID().toString())
 				.setImage(new byte[] { 1, 2, 3, 4, 5 })
 				.setImageType(ImageTypeDBO.ICON)
 				.setName("a-name")
