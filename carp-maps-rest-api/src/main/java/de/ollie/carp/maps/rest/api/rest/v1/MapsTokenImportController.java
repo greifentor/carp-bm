@@ -9,6 +9,8 @@ import de.ollie.carp.maps.rest.api.rest.v1.dto.SeiteDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.TokenDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.mapper.TokenDTOMapper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(MapsTokenImportController.URL)
 @RequiredArgsConstructor
 class MapsTokenImportController {
+
+	private static final Logger LOG = LoggerFactory.getLogger(MapsTokenImportController.class);
 
 	static final String URL = "api/v1/tokens";
 	static final Sortierung SORTIERUNG = new Sortierung("id", Richtung.AUFSTEIGEND);
@@ -34,11 +38,8 @@ class MapsTokenImportController {
 		@RequestParam(required = true, defaultValue = "0") int page,
 		@RequestParam(name = "max", defaultValue = "20") int maxRecordsPerPage
 	) {
+		LOG.error("tokens page: {}, with max: {}", page, maxRecordsPerPage);
 		securityService.checkAuthorization(authorization);
-		tokenMapper
-			.toDto(mapTokenImportService.findAllTokens(new SeitenParameter(maxRecordsPerPage, page, SORTIERUNG)))
-			.getContent()
-			.forEach(t -> System.out.println(t.getId() + " - " + (t.getImage() != null ? "" + t.getImage().length : "null")));
 		return tokenMapper.toDto(
 			mapTokenImportService.findAllTokens(new SeitenParameter(maxRecordsPerPage, page, SORTIERUNG))
 		);
