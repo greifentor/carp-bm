@@ -214,16 +214,25 @@ public class TokenRESTClientImpl implements TokenClient {
 		LOG.info("unselectToken({})", battleMapTokenId);
 		restClient
 			.delete()
-			.uri(
-				clientConfiguration.getServerSchemaHostAndPort() +
-				RestBase.TOKEN_URL +
-				"/selectedtokens/" +
-				battleMapTokenId +
-				"/unselect"
-			)
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.header(HttpHeaders.CONTENT_TYPE, "application/json")
 			.retrieve()
 			.onStatus(status -> status.value() >= 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp));
+	}
+
+	@Override
+	public TokenDTO updateOrCreate(TokenDTO token) {
+		LOG.info("updateOrCreate({})", token);
+		ResponseEntity<TokenDTO> response = restClient
+			.post()
+			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
+			.header(HttpHeaders.AUTHORIZATION, ";op")
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(token)
+			.retrieve()
+			.onStatus(status -> status.value() == 400, (req, resp) -> throwServiceExceptionFromErrorResponse(resp))
+			.toEntity(TokenDTO.class);
+		return response.getBody();
 	}
 }

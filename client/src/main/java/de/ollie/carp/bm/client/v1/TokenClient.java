@@ -28,11 +28,13 @@ public interface TokenClient {
 
 	void selectToken(String battleMapTokenId);
 
-	void unselectToken(String battleMapTokenId);
-
 	String setTokenToBattleMapOfSpielrunde(
 		String tokenIdOrName,
 		String battleMapIdOrName,
 		BattleMapTokenDataDTO battleMapTokenData
 	);
+
+	void unselectToken(String battleMapTokenId);
+
+	TokenDTO updateOrCreate(TokenDTO token);
 }

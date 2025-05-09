@@ -13,4 +13,5 @@ public class TokenDTO {
 	private UUID id;
 	private String name;
 	private byte[] image;
+	private RegelsystemDTO regelsystem;
 }

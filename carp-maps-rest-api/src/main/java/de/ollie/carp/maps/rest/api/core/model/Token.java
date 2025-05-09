@@ -13,4 +13,5 @@ public class Token {
 	private UUID id;
 	private String name;
 	private byte[] image;
+	private Regelsystem regelsystem;
 }

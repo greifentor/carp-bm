@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Generated;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @AllArgsConstructor
 @EqualsAndHashCode
 @Generated
 @Getter
+@NoArgsConstructor
 @ToString
 public class SeiteDTO<T> {
 
