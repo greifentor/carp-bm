@@ -6,10 +6,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ollie.carp.maps.rest.api.CarpMapsRestApiStarter;
-import de.ollie.carp.maps.rest.api.persistence.entity.ImageDBO;
+import de.ollie.carp.maps.rest.api.persistence.entity.DndImageTokenDBO;
 import de.ollie.carp.maps.rest.api.persistence.entity.ImageTypeDBO;
+import de.ollie.carp.maps.rest.api.persistence.entity.PlaceModeDBO;
 import de.ollie.carp.maps.rest.api.persistence.entity.SitzungTypDBO;
+import de.ollie.carp.maps.rest.api.persistence.entity.TokenTypDBO;
 import de.ollie.carp.maps.rest.api.persistence.repository.ImageDBORepository;
+import de.ollie.carp.maps.rest.api.rest.v1.dto.DndDataDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.RegelsystemDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.SeiteDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.TokenDTO;
@@ -34,6 +37,7 @@ import org.springframework.test.web.servlet.MvcResult;
 class TokenControllerITest {
 
 	private static final byte[] IMAGE = new byte[] { 1, 2, 3, 4, 5 };
+	private static final int INITIATIVE_BONUS = 42;
 	private static final String NAME = "a-name";
 	private static final UUID UID = UUID.randomUUID();
 
@@ -49,9 +53,17 @@ class TokenControllerITest {
 	@Test
 	void happyRun() throws Exception {
 		// Prepare
-		TokenDTO expected = new TokenDTO().setId(UID).setImage(IMAGE).setName(NAME).setRegelsystem(RegelsystemDTO.DND);
+		TokenDTO expected = new TokenDTO()
+			.setDndData(new DndDataDTO().setInitiativeBonus(INITIATIVE_BONUS))
+			.setId(UID)
+			.setImage(IMAGE)
+			.setName(NAME)
+			.setRegelsystem(RegelsystemDTO.DND);
 		repository.save(
-			new ImageDBO()
+			new DndImageTokenDBO()
+				.setInitiativeBonus(INITIATIVE_BONUS)
+				.setPlaceMode(PlaceModeDBO.LEFT_UPPER)
+				.setTokenTyp(TokenTypDBO.NPC)
 				.setId(1L)
 				.setGlobalId(UID.toString())
 				.setImage(IMAGE)

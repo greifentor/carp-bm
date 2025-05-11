@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 @ToString(callSuper = true)
 public class DnDTokenDTO extends TokenDTO {
 
+	private int initiativeBonus;
 	private int rk;
 	private int tpMaximum;
 	private DnDTokenSizeDTO tokenSize;

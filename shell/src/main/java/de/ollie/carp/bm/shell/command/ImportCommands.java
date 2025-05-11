@@ -33,7 +33,9 @@ public class ImportCommands {
 	}
 
 	private void updateOrCreate(TokenDTO token, Counter imported) {
-		tokenClient.updateOrCreate(tokenDTOMapper.toDto(token));
-		imported.inc();
+		if (token.getDndData() != null) {
+			tokenClient.updateOrCreate(tokenDTOMapper.toDto(token));
+			imported.inc();
+		}
 	}
 }

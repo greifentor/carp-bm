@@ -13,7 +13,7 @@
 	<artifactId>carp-maps-client</artifactId>
 	<packaging>jar</packaging>
 
-	<name>CARP-Maps (Client)</name>
+	<name>CARP-MAPS (Client)</name>
 	<description>The rest client module for CARP-Maps access.</description>
 
 	<properties>

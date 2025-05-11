@@ -20,6 +20,9 @@ import lombok.experimental.Accessors;
 @ToString(callSuper = true)
 public class DnDTokenDBO extends TokenDBO {
 
+	@Column(name = "INITIATIVE_BONUS", nullable = false)
+	private int initiativeBonus;
+
 	@Column(name = "RK", nullable = false)
 	private int rk;
 

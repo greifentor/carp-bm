@@ -13,7 +13,7 @@
 	<artifactId>carp-maps-rest-api</artifactId>
 	<packaging>jar</packaging>
 
-	<name>CARP-MAP-REST-API</name>
+	<name>CARP-MAPS (REST-API)</name>
 	<description>A read only REST API for the CARP Maps database.</description>
 
 	<properties>

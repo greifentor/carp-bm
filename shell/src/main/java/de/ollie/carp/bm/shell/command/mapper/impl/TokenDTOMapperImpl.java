@@ -15,10 +15,18 @@ class TokenDTOMapperImpl implements TokenDTOMapper {
 		if (mapsTokenDto == null) {
 			return null;
 		}
-		return new DnDTokenDTO()
-			.setRk(10)
-			.setTokenSize(DnDTokenSizeDTO.MITTEL)
-			.setTpMaximum(42)
+		if (mapsTokenDto.getDndData() != null) {
+			return new DnDTokenDTO()
+				.setInitiativeBonus(mapsTokenDto.getDndData().getInitiativeBonus())
+				.setRk(mapsTokenDto.getDndData().getRk())
+				.setTokenSize(DnDTokenSizeDTO.MITTEL)
+				.setTpMaximum(mapsTokenDto.getDndData().getTpMaximum())
+				.setId(mapsTokenDto.getId())
+				.setImage(mapsTokenDto.getImage())
+				.setName(mapsTokenDto.getName())
+				.setShapeType(ShapeTypeDTO.CIRCLE);
+		}
+		return new TokenDTO()
 			.setId(mapsTokenDto.getId())
 			.setImage(mapsTokenDto.getImage())
 			.setName(mapsTokenDto.getName())
