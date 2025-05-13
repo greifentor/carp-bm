@@ -214,7 +214,13 @@ public class TokenRESTClientImpl implements TokenClient {
 		LOG.info("unselectToken({})", battleMapTokenId);
 		restClient
 			.delete()
-			.uri(clientConfiguration.getServerSchemaHostAndPort() + RestBase.TOKEN_URL)
+			.uri(
+				clientConfiguration.getServerSchemaHostAndPort() +
+				RestBase.TOKEN_URL +
+				"/selectedtokens/" +
+				battleMapTokenId +
+				"/unselect"
+			)
 			.header(HttpHeaders.AUTHORIZATION, ";op")
 			.header(HttpHeaders.CONTENT_TYPE, "application/json")
 			.retrieve()

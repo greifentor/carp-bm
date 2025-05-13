@@ -2,7 +2,9 @@ package de.ollie.carp.bm.swing;
 
 import de.ollie.carp.bm.client.v1.BattleMapClient;
 import de.ollie.carp.bm.client.v1.TokenClient;
+import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDataDTO;
 import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
+import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
 import de.ollie.carp.bm.gui.go.BattleMapGO;
@@ -24,7 +26,9 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -70,6 +74,7 @@ public class ApplicationFrame
 
 	private BattleMapGO battleMap;
 	private BattleMapImage bmi;
+	private JComboBox<TokenDTO> comboBoxIcons;
 	private JMenuBar menuBar;
 	private JDesktopPane desktopPane;
 
@@ -117,7 +122,12 @@ public class ApplicationFrame
 
 	private JPanel createMainPanel() {
 		JPanel p = new JPanel(new BorderLayout(VGAP, HGAP));
-		p.add(BorderLayout.NORTH, new JScrollPane(createImage()));
+		JPanel p0 = new JPanel(new BorderLayout(VGAP, HGAP));
+		comboBoxIcons = new JComboBox<>();
+		comboBoxIcons.setModel(new DefaultComboBoxModel<>(tokenClient.findAllTokens().toArray(new TokenDTO[0])));
+		p0.add(BorderLayout.NORTH, comboBoxIcons);
+		p0.add(BorderLayout.CENTER, new JScrollPane(createImage()));
+		p.add(BorderLayout.NORTH, p0);
 		return p;
 	}
 
@@ -138,23 +148,34 @@ public class ApplicationFrame
 		selectedField =
 			new CoordinatesDTO().setFieldX(new BigDecimal(hits.getFieldX())).setFieldY(new BigDecimal(hits.getFieldY()));
 		if (!hits.getBattleMapTokens().isEmpty()) {
-			LOG.info("Tokens hit: " + hits.getBattleMapTokens().size());
+			LOG.info("Tokens hit: {}", hits.getBattleMapTokens().size());
 			if (selectedToken != null) {
-				LOG.info("unselect " + selectedToken.getId().toString());
+				LOG.info("unselect {}", selectedToken.getId());
 				tokenClient.unselectToken(selectedToken.getId().toString());
 				selectedToken = null;
 			} else {
 				selectedToken = hits.getBattleMapTokens().get(0);
 				tokenClient.selectToken(selectedToken.getId().toString());
-				LOG.info("select " + selectedToken.getId().toString());
+				LOG.info("select {}", selectedToken.getId());
 			}
 		} else {
 			if (selectedToken != null) {
-				LOG.info("move " + selectedToken.getId().toString());
+				LOG.info("move {}", selectedToken.getId());
 				tokenClient.moveBattleMapToken(selectedToken.getId().toString(), selectedField);
+			} else if (comboBoxIcons.getSelectedItem() != null) {
+				TokenDTO tokenDTO = ((TokenDTO) comboBoxIcons.getSelectedItem());
+				LOG.info("add {}", tokenDTO.getId());
+				tokenClient.setTokenToBattleMapOfSpielrunde(
+					tokenDTO.getId().toString(),
+					battleMap.getId().toString(),
+					new BattleMapTokenDataDTO()
+						.setCoordinates(
+							new CoordinatesDTO().setFieldX(selectedField.getFieldX()).setFieldY(selectedField.getFieldY())
+						)
+				);
 			}
 		}
-		LOG.info("selected token " + (selectedToken != null ? selectedToken.getId().toString() : "NONE"));
+		LOG.info("selected token {}", (selectedToken != null ? selectedToken.getId().toString() : "NONE"));
 		bmi.update();
 	}
 

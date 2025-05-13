@@ -19,7 +19,7 @@ class TokenDTOMapperImpl implements TokenDTOMapper {
 			return new DnDTokenDTO()
 				.setInitiativeBonus(mapsTokenDto.getDndData().getInitiativeBonus())
 				.setRk(mapsTokenDto.getDndData().getRk())
-				.setTokenSize(DnDTokenSizeDTO.MITTEL)
+				.setTokenSize(convert(mapsTokenDto.getDndData().getTokenSize()))
 				.setTpMaximum(mapsTokenDto.getDndData().getTpMaximum())
 				.setId(mapsTokenDto.getId())
 				.setImage(mapsTokenDto.getImage())
@@ -31,5 +31,9 @@ class TokenDTOMapperImpl implements TokenDTOMapper {
 			.setImage(mapsTokenDto.getImage())
 			.setName(mapsTokenDto.getName())
 			.setShapeType(ShapeTypeDTO.CIRCLE);
+	}
+
+	private DnDTokenSizeDTO convert(de.ollie.carp.maps.client.v1.dto.DnDTokenSizeDTO tokenSize) {
+		return tokenSize == null ? DnDTokenSizeDTO.MITTEL : DnDTokenSizeDTO.valueOf(tokenSize.name());
 	}
 }

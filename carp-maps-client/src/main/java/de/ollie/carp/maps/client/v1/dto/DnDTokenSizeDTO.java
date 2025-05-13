@@ -1,4 +1,4 @@
-package de.ollie.carp.bm.client.v1.dto;
+package de.ollie.carp.maps.client.v1.dto;
 
 import lombok.Generated;
 import lombok.Getter;

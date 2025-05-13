@@ -11,5 +11,6 @@ public class DnDData {
 
 	private int initiativeBonus;
 	private int rk;
+	private DnDTokenSize tokenSize;
 	private int tpMaximum;
 }

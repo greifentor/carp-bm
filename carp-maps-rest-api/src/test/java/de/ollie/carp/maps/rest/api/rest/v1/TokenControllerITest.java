@@ -12,6 +12,7 @@ import de.ollie.carp.maps.rest.api.persistence.entity.PlaceModeDBO;
 import de.ollie.carp.maps.rest.api.persistence.entity.SitzungTypDBO;
 import de.ollie.carp.maps.rest.api.persistence.entity.TokenTypDBO;
 import de.ollie.carp.maps.rest.api.persistence.repository.ImageDBORepository;
+import de.ollie.carp.maps.rest.api.rest.v1.dto.DnDTokenSizeDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.DndDataDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.RegelsystemDTO;
 import de.ollie.carp.maps.rest.api.rest.v1.dto.SeiteDTO;
@@ -54,13 +55,14 @@ class TokenControllerITest {
 	void happyRun() throws Exception {
 		// Prepare
 		TokenDTO expected = new TokenDTO()
-			.setDndData(new DndDataDTO().setInitiativeBonus(INITIATIVE_BONUS))
+			.setDndData(new DndDataDTO().setInitiativeBonus(INITIATIVE_BONUS).setRk(10).setTokenSize(DnDTokenSizeDTO.RIESIG))
 			.setId(UID)
 			.setImage(IMAGE)
 			.setName(NAME)
 			.setRegelsystem(RegelsystemDTO.DND);
 		repository.save(
 			new DndImageTokenDBO()
+				.setSubHeader("Riesige Topfpflanze")
 				.setInitiativeBonus(INITIATIVE_BONUS)
 				.setPlaceMode(PlaceModeDBO.LEFT_UPPER)
 				.setTokenTyp(TokenTypDBO.NPC)

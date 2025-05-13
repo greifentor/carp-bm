@@ -15,6 +15,7 @@ public class ImageDBO2TokenMapper implements DBOMapper<Token, ImageDBO> {
 
 	private final SitzungTypDBO2RegelsystemMapper sitzungTypMapper;
 	private final SpielwerteParser spielwerteParser;
+	private final SubHeaderParser subHeaderParser;
 
 	@Override
 	public Token toModel(ImageDBO dbo) {
@@ -24,6 +25,7 @@ public class ImageDBO2TokenMapper implements DBOMapper<Token, ImageDBO> {
 					new DnDData()
 						.setInitiativeBonus(dndDbo.getInitiativeBonus())
 						.setRk(spielwerteParser.getRk(dndDbo.getSpielwerte()))
+						.setTokenSize(subHeaderParser.getTokenSize(dndDbo.getSubHeader()))
 						.setTpMaximum(dndDbo.getMaxTp())
 				)
 				.setId(UUID.fromString(dbo.getGlobalId()))
