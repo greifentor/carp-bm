@@ -31,7 +31,9 @@ class SubHeaderParserTest {
 		}
 
 		@ParameterizedTest
-		@CsvSource({ "Mittelgroßer Untoter,MITTEL", "Riesiger Drache,RIESIG", "Riesige Pflanze,RIESIG" })
+		@CsvSource(
+			{ "Mittelgroßer Untoter,MITTEL", "Riesiger Drache,RIESIG", "Riesige Pflanze,RIESIG", "Großer Popanz,GROSS" }
+		)
 		void returnsTheCorrectTokenSize_passingDifferentStrings(String s, DnDTokenSize expected) {
 			assertEquals(expected, unitUnderTest.getTokenSize(s));
 		}

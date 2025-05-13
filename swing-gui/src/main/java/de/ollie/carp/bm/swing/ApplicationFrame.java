@@ -4,6 +4,8 @@ import de.ollie.carp.bm.client.v1.BattleMapClient;
 import de.ollie.carp.bm.client.v1.TokenClient;
 import de.ollie.carp.bm.client.v1.dto.BattleMapTokenDataDTO;
 import de.ollie.carp.bm.client.v1.dto.CoordinatesDTO;
+import de.ollie.carp.bm.client.v1.dto.DnDBattleMapTokenDataDTO;
+import de.ollie.carp.bm.client.v1.dto.DnDTokenDTO;
 import de.ollie.carp.bm.client.v1.dto.TokenDTO;
 import de.ollie.carp.bm.gui.TokenGUIService;
 import de.ollie.carp.bm.gui.factory.ImageIconFactory;
@@ -165,18 +167,24 @@ public class ApplicationFrame
 			} else if (comboBoxIcons.getSelectedItem() != null) {
 				TokenDTO tokenDTO = ((TokenDTO) comboBoxIcons.getSelectedItem());
 				LOG.info("add {}", tokenDTO.getId());
-				tokenClient.setTokenToBattleMapOfSpielrunde(
-					tokenDTO.getId().toString(),
-					battleMap.getId().toString(),
-					new BattleMapTokenDataDTO()
-						.setCoordinates(
-							new CoordinatesDTO().setFieldX(selectedField.getFieldX()).setFieldY(selectedField.getFieldY())
-						)
-				);
+				BattleMapTokenDataDTO dataDTO = getDataDTO(tokenDTO);
+				tokenClient.setTokenToBattleMapOfSpielrunde(tokenDTO.getId().toString(), battleMap.getId().toString(), dataDTO);
 			}
 		}
 		LOG.info("selected token {}", (selectedToken != null ? selectedToken.getId().toString() : "NONE"));
 		bmi.update();
+	}
+
+	private BattleMapTokenDataDTO getDataDTO(TokenDTO tokenDTO) {
+		if (tokenDTO instanceof DnDTokenDTO dndTokenDTO) {
+			return new DnDBattleMapTokenDataDTO()
+				.setCurrentRk(dndTokenDTO.getRk())
+				.setCurrentTp(dndTokenDTO.getTpMaximum())
+				.setCurrentIni(dndTokenDTO.getInitiativeBonus())
+				.setCoordinates(new CoordinatesDTO().setFieldX(selectedField.getFieldX()).setFieldY(selectedField.getFieldY()));
+		}
+		return new BattleMapTokenDataDTO()
+			.setCoordinates(new CoordinatesDTO().setFieldX(selectedField.getFieldX()).setFieldY(selectedField.getFieldY()));
 	}
 
 	@Override

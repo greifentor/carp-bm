@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 @ToString(callSuper = true)
 public class DnDBattleMapTokenDataDTO extends BattleMapTokenDataDTO {
 
+	private int currentIni;
 	private int currentRk;
 	private int currentTp;
 }
