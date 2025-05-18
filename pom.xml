@@ -65,6 +65,7 @@
 		<module>client</module>
 		<module>gui</module>
 		<module>jpa-persistence</module>
+		<module>lib-server</module>
 		<module>rest</module>
 		<module>rest-client</module>
 		<module>rest-server</module>

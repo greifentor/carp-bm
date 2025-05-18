@@ -95,12 +95,10 @@ class TokenServiceImplTest {
 		void delegatesToTokenPersistencePortMethodCorrectly() {
 			// Prepare
 			when(persistencePort.create(token0)).thenReturn(token1);
-			when(uuidFactory.create()).thenReturn(UID);
 			// Run
 			Token returned = unitUnderTest.create(token0);
 			// Check
 			assertSame(token1, returned);
-			verify(token0, times(1)).setId(UID);
 			verify(persistencePort, times(1)).create(token0);
 			verifyNoMoreInteractions(persistencePort);
 		}

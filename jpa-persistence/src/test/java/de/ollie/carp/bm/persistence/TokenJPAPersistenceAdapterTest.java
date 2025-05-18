@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import de.ollie.carp.bm.core.exception.UniqueConstraintViolationException;
 import de.ollie.carp.bm.core.model.Token;
+import de.ollie.carp.bm.core.service.factory.UUIDFactory;
 import de.ollie.carp.bm.persistence.entity.TokenDBO;
 import de.ollie.carp.bm.persistence.mapper.TokenDBOMapper;
 import de.ollie.carp.bm.persistence.repository.TokenDBORepository;
@@ -43,6 +44,9 @@ public class TokenJPAPersistenceAdapterTest {
 	@Mock
 	private TokenDBORepository repository;
 
+	@Mock
+	private UUIDFactory uuidFactory;
+
 	@InjectMocks
 	private TokenJPAPersistenceAdapter unitUnderTest;
 
@@ -50,8 +54,16 @@ public class TokenJPAPersistenceAdapterTest {
 	class create_Token {
 
 		@Test
+		void throwsAnException_passingAnObjectWithoutSetId() {
+			// Run & Check
+			assertThrows(IllegalStateException.class, () -> unitUnderTest.create(model0));
+			verifyNoMoreInteractions(mapper, repository);
+		}
+
+		@Test
 		void throwsAnException_passingAnAlreadyExistingName() {
 			// Prepare
+			when(model0.getId()).thenReturn(UID);
 			when(model0.getName()).thenReturn(NAME);
 			when(repository.findByName(NAME)).thenReturn(Optional.of(dbo));
 			// Run & Check
@@ -60,13 +72,31 @@ public class TokenJPAPersistenceAdapterTest {
 		}
 
 		@Test
-		void returnsANewTokenWithPassedNameAndSetUUID() {
+		void returnsANewTokenWithPassedName() {
 			// Prepare
+			when(model0.getId()).thenReturn(UID);
 			when(model0.getName()).thenReturn(NAME);
 			when(repository.findByName(NAME)).thenReturn(Optional.empty());
 			when(repository.save(dbo)).thenReturn(dbo);
 			when(mapper.toDBO(model0)).thenReturn(dbo);
 			when(mapper.toModel(dbo)).thenReturn(model1);
+			when(uuidFactory.create()).thenReturn(UID);
+			// Run
+			unitUnderTest.create(model0);
+			// Check
+			verify(model0, times(1)).setId(UID);
+		}
+
+		@Test
+		void returnsANewTokenWithNewId() {
+			// Prepare
+			when(model0.getId()).thenReturn(UID);
+			when(model0.getName()).thenReturn(NAME);
+			when(repository.findByName(NAME)).thenReturn(Optional.empty());
+			when(repository.save(dbo)).thenReturn(dbo);
+			when(mapper.toDBO(model0)).thenReturn(dbo);
+			when(mapper.toModel(dbo)).thenReturn(model1);
+			when(uuidFactory.create()).thenReturn(UID);
 			// Run
 			Token returned = unitUnderTest.create(model0);
 			// Check
@@ -128,6 +158,43 @@ public class TokenJPAPersistenceAdapterTest {
 			Optional<Token> returned = unitUnderTest.findByName(NAME);
 			// Check
 			assertSame(model0, returned.get());
+		}
+	}
+
+	@Nested
+	class update_Token {
+
+		@Test
+		void throwsAnException_passingAnAlreadyExistingName() {
+			// Prepare
+			when(model0.getId()).thenReturn(UID);
+			when(model0.getName()).thenReturn(NAME);
+			when(repository.findByName(NAME)).thenReturn(Optional.of(dbo));
+			// Run & Check
+			assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.update(model0));
+			verifyNoMoreInteractions(mapper, repository);
+		}
+
+		@Test
+		void throwsAnException_passingAnObjectWithNoIdSet() {
+			// Run & Check
+			assertThrows(IllegalStateException.class, () -> unitUnderTest.update(model0));
+			verifyNoMoreInteractions(mapper, repository);
+		}
+
+		@Test
+		void returnsANewTokenWithPassedNameAndSetUUID() {
+			// Prepare
+			when(model0.getId()).thenReturn(UID);
+			when(model0.getName()).thenReturn(NAME);
+			when(repository.findByName(NAME)).thenReturn(Optional.empty());
+			when(repository.save(dbo)).thenReturn(dbo);
+			when(mapper.toDBO(model0)).thenReturn(dbo);
+			when(mapper.toModel(dbo)).thenReturn(model1);
+			// Run
+			Token returned = unitUnderTest.update(model0);
+			// Check
+			assertSame(model1, returned);
 		}
 	}
 }

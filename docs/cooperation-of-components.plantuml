@@ -1,0 +1,30 @@
+@startuml
+
+interface CarpBmRestInterface as "REST"
+
+node CarpBmWS as "Web-Service" {
+	component CarpBmRestWs as "Rest"
+	component CarpBmServiceWs as "Service"
+	database CarpBmDatabaseWs as "Carp-Bm-Database (Web)"
+
+	CarpBmServiceWs --> CarpBmDatabaseWs
+	CarpBmRestWs --> CarpBmServiceWs
+	CarpBmRestWs -RIGHT-> CarpBmRestInterface
+	
+}
+
+node CarpBmRichClient as "Rich-Client" {
+	component CarpBmClientRc as "Rest-Client"
+	component CarpBmSwingGui as "Swing-GUI"
+	component CarpBmServiceRc as "Service"
+	database CarpBmDatabaseLocal as "Carp-Bm-Database (Local)"
+
+	CarpBmServiceRc -LEFT-> CarpBmClientRc
+	CarpBmServiceRc --> CarpBmDatabaseLocal
+	CarpBmSwingGui --> CarpBmServiceRc
+
+}
+
+CarpBmRestInterface )-LEFT- CarpBmClientRc
+
+@enduml

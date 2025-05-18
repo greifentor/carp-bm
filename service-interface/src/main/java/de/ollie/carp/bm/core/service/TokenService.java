@@ -23,4 +23,6 @@ public interface TokenService {
 	Optional<Token> findByIdOrName(String tokenIdOrName);
 
 	Optional<BattleMapToken> findSelectedTokenByBattleMap(BattleMap battleMap);
+
+	Token updateOrCreate(Token token);
 }

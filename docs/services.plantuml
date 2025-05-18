@@ -1,0 +1,34 @@
+@startuml
+
+component CarpBmRestServer as "Carp-BM-Rest-Server"
+interface CarpBmRestServer_I_REST as "REST"
+CarpBmRestServer -- CarpBmRestServer_I_REST
+
+component CarpBmRestLibServer as "Carp-BM-Rest-Lib-Server"
+interface CarpBmRestLibServer_I_REST as "REST"
+CarpBmRestLibServer -LEFT- CarpBmRestLibServer_I_REST
+
+component CarpMapsRestAPI as "Carp-MAPS-Rest-API"
+interface CarpMapsRestAPI_I_REST as "REST"
+CarpMapsRestAPI -LEFT- CarpMapsRestAPI_I_REST
+
+component CarpBmShell as "Carp-BM-Shell"
+CarpBmShell -UP-( CarpBmRestServer_I_REST
+
+component CarpBmGmSwingGui as "Carp-BM-GM-Swing-GUI"
+CarpBmGmSwingGui -UP-( CarpBmRestServer_I_REST
+
+CarpBmRestServer -RIGHT-( CarpBmRestLibServer_I_REST
+note top of CarpBmRestLibServer_I_REST
+	End point to get common
+	tokens, battle maps and other
+	data.
+end note
+
+CarpBmRestLibServer -RIGHT-( CarpMapsRestAPI_I_REST
+note top of CarpMapsRestAPI_I_REST
+	Import and update tokens
+	and battle maps from Carp-MAPS.
+end note
+
+@enduml

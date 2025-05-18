@@ -61,13 +61,13 @@ public class TokenController {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TokenDTO> createToken(
+	public ResponseEntity<TokenDTO> storeToken(
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
 		@RequestBody TokenDTO requestDTO
 	) {
-		LOG.info("server - createToken: " + requestDTO);
+		LOG.info("server - storeToken: " + requestDTO);
 		securityChecker.throwExceptionIfAccessTokenInvalid(accessToken);
-		Token token = tokenService.create(mapper.toModel(requestDTO));
+		Token token = tokenService.updateOrCreate(mapper.toModel(requestDTO));
 		return ResponseEntity.ok(mapper.toDTO(token));
 	}
 

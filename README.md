@@ -2,11 +2,26 @@
 An application for pen and paper role playing battle maps.
 
 
-## Planned Functionality
+## Planned Milestones
 
-* Manage maps & tokens.
-* Provide REST endpoints for battle map manipulation.
-* Provide REST endpoints to get player views.
+### Milestone 1
+* Manage maps & tokens:
+	* Add, remove and edit battle maps.
+	* Add, remove and edit tokens.
+	* Import tokens from Carp-BM web server.
+* Shows maps and tokens in two modes:
+	* GM Mode with controls for:
+		* Open and close a battle map.
+		* Add and remove tokens to a battle map.
+		* Set initiative and hit points for tokens.
+	* Player mode
+* A web server which provides tokens.
+
+### Milestone 2
+* Web client for players view.
+
+### Milestone 3
+* Connection to Carp-CM-5e
 
 
 ## Requirements

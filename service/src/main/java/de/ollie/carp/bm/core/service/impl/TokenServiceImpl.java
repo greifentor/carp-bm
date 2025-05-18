@@ -34,7 +34,6 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public Token create(Token token) {
-		token.setId(uuidFactory.create());
 		return tokenPersistencePort.create(token);
 	}
 
@@ -98,5 +97,10 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public Optional<BattleMapToken> findSelectedTokenByBattleMap(BattleMap battleMap) {
 		return selectedTokenPersistencePort.findSelectedTokenByBattleMap(battleMap).map(st -> st.getBattleMapToken());
+	}
+
+	@Override
+	public Token updateOrCreate(Token token) {
+		return token.getId() != null ? tokenPersistencePort.update(token) : tokenPersistencePort.create(token);
 	}
 }

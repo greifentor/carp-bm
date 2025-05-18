@@ -15,4 +15,6 @@ public interface TokenPersistencePort {
 	Optional<Token> findById(UUID uuid);
 
 	Optional<Token> findByName(String name);
+
+	Token update(Token token);
 }
